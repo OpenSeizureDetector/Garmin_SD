@@ -221,7 +221,7 @@ function start_simulator
         kill ${SIM_PID}
     fi
 
-    wine "${MB_HOME}/bin/simulator.exe" &
+    ${MB_HOME}/bin/simulator &
 }
 
 function push_prg
