@@ -55,7 +55,8 @@ class GarminSDApp extends App.AppBase {
 
     function onPhoneMsg(msg) {
       var i;
-      System.println("GarminSdApp.onPhoneMsg %s",msg.data.toString());
+      System.print("GarminSdApp.onPhoneMsg - ");
+      System.println(msg.data.toString());
     }
 
 }
