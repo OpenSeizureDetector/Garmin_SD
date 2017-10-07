@@ -1,0 +1,10 @@
+Issues with Garmin IQ SDK Documentation at:
+https://developer.garmin.com/connect-iq/programmers-guide/android-sdk-guide/
+
+
+1.  ConnectIQ.getInstance takes a context parameter which is not shown.
+2.  ConectIQListener needs an onInitializeError, not onInitializationError function as shown.
+3   ConnectIQListener expets an onSdkShutdown method.
+4   getApplicationInfo is now asynchronous so needs to use callbacks - very different from example.
+5   unregisterForAppEvents should be unregisterForApplicationEvents
+
