@@ -6,6 +6,9 @@
 
 using Toybox.WatchUi as Ui;
 using Toybox.Graphics as Gfx;
+using Toybox.Time;
+using Toybox.Time.Gregorian;
+using Toybox.Lang;
 
 class GarminSDView extends Ui.View {
   var accelHandler;
@@ -39,17 +42,37 @@ class GarminSDView extends Ui.View {
   // Update the view
   function onUpdate(dc) {
     System.println("GarminSDView.onUpdate()");
+    //var clockTime = System.getClockTime();
+    // Format current time for display
+    // see https://developer.garmin.com/downloads/connect-iq/monkey-c/doc/Toybox/Time.html
+    var dateTime = Gregorian.info(Time.now(), Time.FORMAT_MEDIUM);
+    var timeString = Lang.format(
+				 "$1$:$2$:$3$",
+				 [
+				  dateTime.hour,
+				  dateTime.min,
+				  dateTime.sec
+				  ]
+				 );
+    var sysStats = System.getSystemStats();
+    var batString = Lang.format("Bat = $1$%",[sysStats.battery.format("%02.0f")]);
+    var hrString = Lang.format("HR = $1$ bpm",[accelHandler.mHR]);
+    System.println(sysStats.battery);
+    System.println(sysStats.totalMemory);
+    System.println(timeString); // e.g. "16:28:32 Wed 1 Mar 2017"
     dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_RED);
     dc.clear();
     dc.setColor(Gfx.COLOR_BLUE, Gfx.COLOR_WHITE);
-    dc.drawText(width / 2,  height-20, Gfx.FONT_TINY, "OpenSeizureDetector",
+    dc.drawText(width / 2,  0, Gfx.FONT_TINY, "OpenSeizureDetector",
 		Gfx.TEXT_JUSTIFY_CENTER);
-    dc.drawText(width / 2,  height-40, Gfx.FONT_LARGE, accelHandler.nSamp,
+    dc.drawText(width / 2,  40, Gfx.FONT_SYSTEM_NUMBER_HOT, timeString,
 		Gfx.TEXT_JUSTIFY_CENTER);
-    dc.drawText(width / 2,  height-60, Gfx.FONT_LARGE, accelHandler.mHR,
+    dc.drawText(width / 2,  95, Gfx.FONT_LARGE, batString,
 		Gfx.TEXT_JUSTIFY_CENTER);
-    //View.onUpdate(dc);
-    System.println("GarminSDView.onUpdate() - complete");
+    dc.drawText(width / 2,  130, Gfx.FONT_LARGE, hrString,
+		Gfx.TEXT_JUSTIFY_CENTER);
+    dc.drawText(width / 2,  170, Gfx.FONT_LARGE, accelHandler.nSamp,
+		Gfx.TEXT_JUSTIFY_CENTER);
   }
   
   
