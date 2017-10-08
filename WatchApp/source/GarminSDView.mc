@@ -44,7 +44,7 @@ class GarminSDView extends Ui.View {
     dc.setColor(Gfx.COLOR_BLUE, Gfx.COLOR_WHITE);
     dc.drawText(width / 2,  height-20, Gfx.FONT_TINY, "OpenSeizureDetector",
 		Gfx.TEXT_JUSTIFY_CENTER);
-    dc.drawText(width / 2,  height-40, Gfx.FONT_SMALL, accelHandler.nSamp,
+    dc.drawText(width / 2,  height-40, Gfx.FONT_LARGE, accelHandler.nSamp,
 		Gfx.TEXT_JUSTIFY_CENTER);
     //View.onUpdate(dc);
     System.println("GarminSDView.onUpdate() - complete");

@@ -8,3 +8,12 @@ https://developer.garmin.com/connect-iq/programmers-guide/android-sdk-guide/
 4   getApplicationInfo is now asynchronous so needs to use callbacks - very different from example.
 5   unregisterForAppEvents should be unregisterForApplicationEvents
 
+
+
+
+
+
+
+IQ SDK for Watch Apps
+1.   Sensor.registerDataListener crashes if you specify 4 or 2 seconds (hangs watch and you need to power off) - works with 1 second.
+

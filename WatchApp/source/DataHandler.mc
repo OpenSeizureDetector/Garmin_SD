@@ -1,7 +1,5 @@
 using Toybox.Sensor;
 using Toybox.System;
-using Toybox.SensorLogging as SensorLogging;
-using Toybox.ActivityRecording as Fit;
 using Toybox.WatchUi as Ui;
 
 class DataHandler
@@ -10,23 +8,12 @@ class DataHandler
     var mSamplesY = [0];
     var mSamplesZ = [0];
 
-    var mLogger;
-    var mSession;
     var nSamp = 0;
 
     ///////////////
     // Constructor
     function initialize() {
       System.println("DataHandler.initialize()");
-      try {
-	mLogger = new SensorLogging.SensorLogger({:enableAccelerometer => true});
-	mSession = Fit.createSession({:name=>"GarminSD",
-	      :sport=>Fit.SPORT_GENERIC,
-	      :sensorLogger => mLogger});
-      } catch(e) {
-	System.println(e.getErrorMessage());
-      }
-      System.println("DataHandler.initialize - complete");      
     }
 
     // Prints acclerometer data that is recevied from the system
@@ -41,7 +28,6 @@ class DataHandler
       Toybox.System.println("Raw samples, Y axis: " + mSamplesY);
       Toybox.System.println("Raw samples, Z axis: " + mSamplesZ);
       Ui.requestUpdate();
-
     }
 
     
@@ -58,19 +44,16 @@ class DataHandler
 		       :enableAccelerometer => true};
         try {
             Sensor.registerSensorDataListener(method(:accel_callback), options);
-	    mSession.start();
 	    System.println("Registered for Sensor Data");
         }
         catch(e) {
             System.println(e.getErrorMessage());
         }
-	System.println("DataHandler.onStart() Complete");
     }
 
 
     function onStop() {
 	System.println("DataHandler.onStop()");
         Sensor.unregisterSensorDataListener();
-	mSession.stop();
     }
 }
