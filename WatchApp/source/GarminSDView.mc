@@ -49,21 +49,21 @@ class GarminSDView extends Ui.View {
     var timeString = Lang.format(
 				 "$1$:$2$:$3$",
 				 [
-				  dateTime.hour,
-				  dateTime.min,
-				  dateTime.sec
+				  dateTime.hour.format("%02d"),
+				  dateTime.min.format("%02d"),
+				  dateTime.sec.format("%02d")
 				  ]
 				 );
     var sysStats = System.getSystemStats();
     var batString = Lang.format("Bat = $1$%",[sysStats.battery.format("%02.0f")]);
     var hrString = Lang.format("HR = $1$ bpm",[accelHandler.mHR]);
-    System.println(sysStats.battery);
-    System.println(sysStats.totalMemory);
-    System.println(timeString); // e.g. "16:28:32 Wed 1 Mar 2017"
-    dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_RED);
+    //System.println(sysStats.battery);
+    //System.println(sysStats.totalMemory);
+    //System.println(timeString); // e.g. "16:28:32 Wed 1 Mar 2017"
+    dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_WHITE);
     dc.clear();
     dc.setColor(Gfx.COLOR_BLUE, Gfx.COLOR_WHITE);
-    dc.drawText(width / 2,  0, Gfx.FONT_TINY, "OpenSeizureDetector",
+    dc.drawText(width / 2,  0, Gfx.FONT_SMALL, "OpenSeizureDetector",
 		Gfx.TEXT_JUSTIFY_CENTER);
     dc.drawText(width / 2,  40, Gfx.FONT_SYSTEM_NUMBER_HOT, timeString,
 		Gfx.TEXT_JUSTIFY_CENTER);
