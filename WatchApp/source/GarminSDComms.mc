@@ -3,15 +3,28 @@ using Toybox.Communications as Comm;
 
 class GarminSDComms {
   var listener;
+  var mAccelHandler = null;
 
-  function initialize() {
+  function initialize(accelHandler) {
     listener = new CommListener();
+    mAccelHandler = accelHandler;
   }
 
   function onStart() {
     Comm.registerForPhoneAppMessages(method(:onMessageReceived));
     Comm.transmit("Hello World.", null, listener);
 
+  }
+
+  function sendAccelData() {
+    var dataObj = {
+      "HR"=> mAccelHandler.mHR,
+      "X" => mAccelHandler.mSamplesX,
+      "Y" => mAccelHandler.mSamplesY,
+      "Z" => mAccelHandler.mSamplesZ
+    };
+    // FIXME - THIS CRASHED WITH OUT OF MEMORY ERROR AFTER 5 or 10 minutes.
+    //Comm.transmit(dataObj,null,listener);
   }
 
   function onMessageReceived(msg) {
