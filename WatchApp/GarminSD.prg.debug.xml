@@ -5,206 +5,276 @@
 <entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagDelegate.mc" lineNum="13" pc="268435460" symbol="initialize"/>
 <entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagDelegate.mc" lineNum="14" pc="268435478" symbol="initialize"/>
 <entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagDelegate.mc" lineNum="17" pc="268435489" symbol="onSelect"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagDelegate.mc" lineNum="18" pc="268435493" symbol="onSelect"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDApp.mc" lineNum="14" pc="268435512" symbol="initialize"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDApp.mc" lineNum="15" pc="268435516" symbol="initialize"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDApp.mc" lineNum="18" pc="268435539" symbol="onComplete"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDApp.mc" lineNum="19" pc="268435543" symbol="onComplete"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDApp.mc" lineNum="22" pc="268435565" symbol="onError"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDApp.mc" lineNum="23" pc="268435569" symbol="onError"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDApp.mc" lineNum="28" pc="268435591" symbol="initialize"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDApp.mc" lineNum="29" pc="268435595" symbol="initialize"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDApp.mc" lineNum="30" pc="268435616" symbol="initialize"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDApp.mc" lineNum="32" pc="268435634" symbol="initialize"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDApp.mc" lineNum="33" pc="268435658" symbol="initialize"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDApp.mc" lineNum="34" pc="268435690" symbol="initialize"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDApp.mc" lineNum="39" pc="268435715" symbol="onStart"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDApp.mc" lineNum="40" pc="268435719" symbol="onStart"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDApp.mc" lineNum="44" pc="268435741" symbol="onStop"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDApp.mc" lineNum="45" pc="268435745" symbol="onStop"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDApp.mc" lineNum="49" pc="268435767" symbol="getInitialView"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDApp.mc" lineNum="50" pc="268435771" symbol="getInitialView"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDApp.mc" lineNum="51" pc="268435792" symbol="getInitialView"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDApp.mc" lineNum="52" pc="268435816" symbol="getInitialView"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDApp.mc" lineNum="53" pc="268435842" symbol="getInitialView"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDApp.mc" lineNum="56" pc="268435870" symbol="onPhoneMsg"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDApp.mc" lineNum="57" pc="268435874" symbol="onPhoneMsg"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDApp.mc" lineNum="58" pc="268435874" symbol="onPhoneMsg"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDApp.mc" lineNum="59" pc="268435895" symbol="onPhoneMsg"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="35" pc="268435929" symbol="initialize"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="36" pc="268435933" symbol="initialize"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="40" pc="268435952" symbol="onLayout"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="41" pc="268435956" symbol="onLayout"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="42" pc="268435990" symbol="onLayout"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="44" pc="268436031" symbol="onLayout"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="45" pc="268436050" symbol="onLayout"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="46" pc="268436069" symbol="onLayout"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="47" pc="268436091" symbol="onLayout"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="48" pc="268436113" symbol="onLayout"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="49" pc="268436126" symbol="onLayout"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="53" pc="268436140" symbol="onShow"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="57" pc="268436145" symbol="onUpdate"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="58" pc="268436149" symbol="onUpdate"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="59" pc="268436185" symbol="onUpdate"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="61" pc="268436197" symbol="onUpdate"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="62" pc="268436233" symbol="onUpdate"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="64" pc="268436287" symbol="onUpdate"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="65" pc="268436300" symbol="onUpdate"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="66" pc="268436300" symbol="onUpdate"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="67" pc="268436300" symbol="onUpdate"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="68" pc="268436300" symbol="onUpdate"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="70" pc="268436300" symbol="onUpdate"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="73" pc="268436336" symbol="onUpdate"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="74" pc="268436364" symbol="onUpdate"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="75" pc="268436392" symbol="onUpdate"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="78" pc="268436424" symbol="onUpdate"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="79" pc="268436458" symbol="onUpdate"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="80" pc="268436492" symbol="onUpdate"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="81" pc="268436505" symbol="onUpdate"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="82" pc="268436518" symbol="onUpdate"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="85" pc="268436550" symbol="onUpdate"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="86" pc="268436584" symbol="onUpdate"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="87" pc="268436618" symbol="onUpdate"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="88" pc="268436631" symbol="onUpdate"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="89" pc="268436644" symbol="onUpdate"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="92" pc="268436679" symbol="onUpdate"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="93" pc="268436715" symbol="onUpdate"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="94" pc="268436728" symbol="onUpdate"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="95" pc="268436803" symbol="onUpdate"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="96" pc="268436878" symbol="onUpdate"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="98" pc="268436956" symbol="onUpdate"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="101" pc="268437016" symbol="onUpdate"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="102" pc="268437029" symbol="onUpdate"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="103" pc="268437113" symbol="onUpdate"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="104" pc="268437197" symbol="onUpdate"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="106" pc="268437284" symbol="onUpdate"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="111" pc="268437354" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="112" pc="268437358" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="114" pc="268437375" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="115" pc="268437402" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="116" pc="268437418" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="117" pc="268437434" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="120" pc="268437456" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="121" pc="268437499" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="123" pc="268437518" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="124" pc="268437561" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="128" pc="268437580" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="129" pc="268437611" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="130" pc="268437642" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="131" pc="268437662" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="133" pc="268437719" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="135" pc="268437744" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="138" pc="268437757" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="139" pc="268437777" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="141" pc="268437834" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="143" pc="268437859" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="148" pc="268437872" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="149" pc="268437903" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="152" pc="268437934" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="153" pc="268437960" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="154" pc="268437991" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="155" pc="268438010" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="157" pc="268438073" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="158" pc="268438113" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="159" pc="268438132" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="162" pc="268438166" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="163" pc="268438192" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="164" pc="268438223" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="165" pc="268438242" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="167" pc="268438305" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="168" pc="268438345" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="169" pc="268438364" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="173" pc="268438401" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="174" pc="268438428" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="175" pc="268438444" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="176" pc="268438460" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="178" pc="268438482" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="180" pc="268438544" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="181" pc="268438555" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="182" pc="268438568" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="184" pc="268438584" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="185" pc="268438597" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="189" pc="268438613" symbol="timerCallback"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="192" pc="268438630" symbol="kickBall"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="194" pc="268438634" symbol="kickBall"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="195" pc="268438647" symbol="kickBall"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="196" pc="268438696" symbol="kickBall"/>
-<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="202" pc="268438749" symbol="onHide"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDApp.mc" lineNum="12" pc="268435494" symbol="initialize"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDApp.mc" lineNum="13" pc="268435498" symbol="initialize"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDApp.mc" lineNum="14" pc="268435519" symbol="initialize"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDApp.mc" lineNum="19" pc="268435538" symbol="onStart"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDApp.mc" lineNum="20" pc="268435542" symbol="onStart"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDApp.mc" lineNum="24" pc="268435564" symbol="onStop"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDApp.mc" lineNum="28" pc="268435569" symbol="getInitialView"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDApp.mc" lineNum="29" pc="268435573" symbol="getInitialView"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDApp.mc" lineNum="30" pc="268435594" symbol="getInitialView"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDApp.mc" lineNum="31" pc="268435618" symbol="getInitialView"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDApp.mc" lineNum="33" pc="268435644" symbol="getInitialView"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="35" pc="268435662" symbol="initialize"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="36" pc="268435666" symbol="initialize"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="40" pc="268435685" symbol="onLayout"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="41" pc="268435689" symbol="onLayout"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="42" pc="268435723" symbol="onLayout"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="44" pc="268435764" symbol="onLayout"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="45" pc="268435783" symbol="onLayout"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="46" pc="268435802" symbol="onLayout"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="47" pc="268435824" symbol="onLayout"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="48" pc="268435846" symbol="onLayout"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="49" pc="268435859" symbol="onLayout"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="53" pc="268435873" symbol="onShow"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="57" pc="268435878" symbol="onUpdate"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="58" pc="268435882" symbol="onUpdate"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="59" pc="268435918" symbol="onUpdate"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="61" pc="268435930" symbol="onUpdate"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="62" pc="268435966" symbol="onUpdate"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="64" pc="268436020" symbol="onUpdate"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="65" pc="268436033" symbol="onUpdate"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="66" pc="268436033" symbol="onUpdate"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="67" pc="268436033" symbol="onUpdate"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="68" pc="268436033" symbol="onUpdate"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="70" pc="268436033" symbol="onUpdate"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="73" pc="268436069" symbol="onUpdate"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="74" pc="268436097" symbol="onUpdate"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="75" pc="268436125" symbol="onUpdate"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="78" pc="268436157" symbol="onUpdate"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="79" pc="268436191" symbol="onUpdate"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="80" pc="268436225" symbol="onUpdate"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="81" pc="268436238" symbol="onUpdate"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="82" pc="268436251" symbol="onUpdate"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="85" pc="268436283" symbol="onUpdate"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="86" pc="268436317" symbol="onUpdate"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="87" pc="268436351" symbol="onUpdate"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="88" pc="268436364" symbol="onUpdate"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="89" pc="268436377" symbol="onUpdate"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="92" pc="268436412" symbol="onUpdate"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="93" pc="268436448" symbol="onUpdate"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="94" pc="268436461" symbol="onUpdate"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="95" pc="268436536" symbol="onUpdate"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="96" pc="268436611" symbol="onUpdate"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="98" pc="268436689" symbol="onUpdate"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="101" pc="268436749" symbol="onUpdate"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="102" pc="268436762" symbol="onUpdate"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="103" pc="268436846" symbol="onUpdate"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="104" pc="268436930" symbol="onUpdate"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="106" pc="268437017" symbol="onUpdate"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="111" pc="268437087" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="112" pc="268437091" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="114" pc="268437108" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="115" pc="268437135" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="116" pc="268437151" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="117" pc="268437167" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="120" pc="268437189" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="121" pc="268437232" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="123" pc="268437251" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="124" pc="268437294" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="128" pc="268437313" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="129" pc="268437344" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="130" pc="268437375" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="131" pc="268437395" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="133" pc="268437452" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="135" pc="268437477" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="138" pc="268437490" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="139" pc="268437510" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="141" pc="268437567" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="143" pc="268437592" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="148" pc="268437605" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="149" pc="268437636" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="152" pc="268437667" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="153" pc="268437693" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="154" pc="268437724" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="155" pc="268437743" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="157" pc="268437806" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="158" pc="268437846" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="159" pc="268437865" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="162" pc="268437899" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="163" pc="268437925" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="164" pc="268437956" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="165" pc="268437975" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="167" pc="268438038" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="168" pc="268438078" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="169" pc="268438097" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="173" pc="268438134" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="174" pc="268438161" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="175" pc="268438177" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="176" pc="268438193" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="178" pc="268438215" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="180" pc="268438277" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="181" pc="268438288" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="182" pc="268438301" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="184" pc="268438317" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="185" pc="268438330" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="189" pc="268438346" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="192" pc="268438363" symbol="kickBall"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="194" pc="268438367" symbol="kickBall"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="195" pc="268438380" symbol="kickBall"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="196" pc="268438429" symbol="kickBall"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/AccelMagView.mc" lineNum="202" pc="268438482" symbol="onHide"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/DataHandler.mc" lineNum="18" pc="268438487" symbol="initialize"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/DataHandler.mc" lineNum="19" pc="268438491" symbol="initialize"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/DataHandler.mc" lineNum="20" pc="268438512" symbol="initialize"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/DataHandler.mc" lineNum="21" pc="268438512" symbol="initialize"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/DataHandler.mc" lineNum="22" pc="268438562" symbol="initialize"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/DataHandler.mc" lineNum="26" pc="268438650" symbol="initialize"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/DataHandler.mc" lineNum="28" pc="268438689" symbol="initialize"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/DataHandler.mc" lineNum="32" pc="268438711" symbol="enableAccel"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/DataHandler.mc" lineNum="33" pc="268438715" symbol="enableAccel"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/DataHandler.mc" lineNum="34" pc="268438732" symbol="enableAccel"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/DataHandler.mc" lineNum="35" pc="268438753" symbol="enableAccel"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/DataHandler.mc" lineNum="38" pc="268438771" symbol="enableAccel"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/DataHandler.mc" lineNum="39" pc="268438812" symbol="enableAccel"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/DataHandler.mc" lineNum="40" pc="268438812" symbol="enableAccel"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/DataHandler.mc" lineNum="41" pc="268438846" symbol="enableAccel"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/DataHandler.mc" lineNum="44" pc="268438877" symbol="enableAccel"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/DataHandler.mc" lineNum="46" pc="268438916" symbol="enableAccel"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/DataHandler.mc" lineNum="50" pc="268438938" symbol="onAccelData"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/DataHandler.mc" lineNum="51" pc="268438942" symbol="onAccelData"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/DataHandler.mc" lineNum="52" pc="268438963" symbol="onAccelData"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/DataHandler.mc" lineNum="53" pc="268438985" symbol="onAccelData"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/DataHandler.mc" lineNum="54" pc="268439007" symbol="onAccelData"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/DataHandler.mc" lineNum="55" pc="268439029" symbol="onAccelData"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/DataHandler.mc" lineNum="57" pc="268439051" symbol="onAccelData"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/DataHandler.mc" lineNum="58" pc="268439089" symbol="onAccelData"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/DataHandler.mc" lineNum="59" pc="268439127" symbol="onAccelData"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/DataHandler.mc" lineNum="62" pc="268439166" symbol="disableAccel"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/DataHandler.mc" lineNum="63" pc="268439170" symbol="disableAccel"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/DataHandler.mc" lineNum="64" pc="268439186" symbol="disableAccel"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDView.mc" lineNum="23" pc="268439205" symbol="initialize"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDView.mc" lineNum="24" pc="268439209" symbol="initialize"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDView.mc" lineNum="25" pc="268439227" symbol="initialize"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDView.mc" lineNum="31" pc="268439258" symbol="onLayout"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDView.mc" lineNum="32" pc="268439262" symbol="onLayout"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDView.mc" lineNum="33" pc="268439296" symbol="onLayout"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDView.mc" lineNum="35" pc="268439337" symbol="onLayout"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDView.mc" lineNum="36" pc="268439356" symbol="onLayout"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDView.mc" lineNum="40" pc="268439376" symbol="onShow"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDView.mc" lineNum="41" pc="268439380" symbol="onShow"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDView.mc" lineNum="44" pc="268439398" symbol="onShow"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDView.mc" lineNum="49" pc="268439422" symbol="onUpdate"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDView.mc" lineNum="50" pc="268439426" symbol="onUpdate"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDView.mc" lineNum="51" pc="268439462" symbol="onUpdate"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDView.mc" lineNum="52" pc="268439474" symbol="onUpdate"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDView.mc" lineNum="54" pc="268439543" symbol="onUpdate"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDView.mc" lineNum="55" pc="268439579" symbol="onUpdate"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDView.mc" lineNum="60" pc="268439595" symbol="onUpdate"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDView.mc" lineNum="65" pc="268439656" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDView.mc" lineNum="75" pc="268439660" symbol="timerCallback"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDView.mc" lineNum="80" pc="268439677" symbol="onHide"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDView.mc" lineNum="81" pc="268439681" symbol="onHide"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDView.mc" lineNum="82" pc="268439704" symbol="onHide"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDView.mc" lineNum="86" pc="268439723" symbol="onMessageReceived"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDView.mc" lineNum="87" pc="268439727" symbol="onMessageReceived"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDView.mc" lineNum="88" pc="268439727" symbol="onMessageReceived"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDView.mc" lineNum="89" pc="268439750" symbol="onMessageReceived"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDView.mc" lineNum="96" pc="268439786" symbol="initialize"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDView.mc" lineNum="97" pc="268439790" symbol="initialize"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDView.mc" lineNum="100" pc="268439813" symbol="onComplete"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDView.mc" lineNum="101" pc="268439817" symbol="onComplete"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDView.mc" lineNum="104" pc="268439841" symbol="onError"/>
+<entry filename="/home/graham/OpenSeizureDetector/Garmin_SD/WatchApp/source/GarminSDView.mc" lineNum="105" pc="268439845" symbol="onError"/>
 </pcToLineNum>
 <symbolTable>
 <entry id="8388644" module="true" symbol="System"/>
-<entry field="true" id="23" symbol="wallLoss"/>
+<entry field="true" id="37" symbol="wallLoss"/>
 <entry id="8389124" method="true" symbol="onUpdate"/>
-<entry field="true" id="19" symbol="parentView"/>
+<entry field="true" id="27" symbol="parentView"/>
 <entry field="true" id="8388611" module="true" symbol="Toybox"/>
 <entry id="8389619" method="true" symbol="onSelect"/>
 <entry id="8388770" module="true" object="true" symbol="Strings"/>
 <entry id="8388643" module="true" symbol="Sensor"/>
-<entry field="true" id="25" symbol="hitForce"/>
+<entry field="true" id="39" symbol="hitForce"/>
 <entry id="8389280" method="true" symbol="getInitialView"/>
-<entry id="13" method="true" symbol="onPhoneMsg"/>
 <entry id="8388769" module="true" object="true" symbol="Rez"/>
 <entry id="8389123" method="true" symbol="onShow"/>
-<entry field="true" id="28" symbol="xVelocity"/>
+<entry field="true" id="41" symbol="xVelocity"/>
+<entry id="26" method="true" symbol="disableAccel"/>
+<entry id="8389808" symbol="period"/>
+<entry id="8390134" symbol="sampleRate"/>
 <entry id="8388702" method="true" symbol="initialize"/>
-<entry field="true" id="18" symbol="AppName"/>
+<entry field="true" id="17" symbol="AppName"/>
 <entry id="10" object="true" symbol="GarminSDApp"/>
+<entry id="8388890" symbol="sport"/>
+<entry field="true" id="8388892" symbol="name"/>
+<entry id="12" object="true" symbol="DataHandler"/>
 <entry field="true" id="8389605" symbol="accel"/>
 <entry id="8388641" module="true" symbol="Math"/>
-<entry field="true" id="17" symbol="LauncherIcon"/>
-<entry id="12" object="true" symbol="CommListener"/>
-<entry field="true" id="22" symbol="pcntFrict"/>
+<entry field="true" id="16" symbol="LauncherIcon"/>
+<entry id="32" object="true" symbol="CommListener"/>
+<entry field="true" id="36" symbol="pcntFrict"/>
 <entry id="8388646" module="true" object="true" symbol="Timer"/>
-<entry id="33" method="true" symbol="kickBall"/>
-<entry field="true" id="30" symbol="xMult"/>
+<entry id="45" method="true" symbol="kickBall"/>
+<entry field="true" id="43" symbol="xMult"/>
 <entry id="9" object="true" symbol="AccelMagDelegate"/>
 <entry id="8389281" method="true" symbol="onStop"/>
 <entry id="8388829" method="true" symbol="onComplete"/>
+<entry field="true" id="28" symbol="accelHandler"/>
 <entry id="8388771" module="true" object="true" symbol="Drawables"/>
 <entry id="8389122" method="true" symbol="onLayout"/>
+<entry field="true" id="22" symbol="mSession"/>
 <entry id="8389279" method="true" symbol="onStart"/>
-<entry field="true" id="24" symbol="arrowLen"/>
-<entry field="true" id="29" symbol="yVelocity"/>
+<entry field="true" id="38" symbol="arrowLen"/>
+<entry field="true" id="42" symbol="yVelocity"/>
+<entry field="true" id="20" symbol="mSamplesZ"/>
+<entry field="true" id="19" symbol="mSamplesY"/>
+<entry field="true" id="18" symbol="mSamplesX"/>
 <entry field="true" id="8389067" symbol="height"/>
-<entry id="16" module="true" symbol="Layouts"/>
-<entry field="true" id="31" symbol="yMult"/>
+<entry field="true" id="21" symbol="mLogger"/>
+<entry id="24" method="true" symbol="enableAccel"/>
+<entry id="15" module="true" symbol="Layouts"/>
+<entry id="8390175" module="true" symbol="SensorLogging"/>
+<entry id="31" method="true" symbol="onMessageReceived"/>
+<entry field="true" id="44" symbol="yMult"/>
+<entry field="true" id="23" symbol="nSamp"/>
 <entry id="8389125" method="true" symbol="onHide"/>
 <entry id="11" object="true" symbol="AccelMagView"/>
 <entry id="8388828" method="true" symbol="onError"/>
 <entry id="8390088" module="true" object="true" symbol="JsonData"/>
-<entry field="true" id="26" symbol="velocityToPix"/>
-<entry id="32" method="true" symbol="timerCallback"/>
-<entry field="true" id="27" symbol="dataTimer"/>
-<entry field="true" id="21" symbol="incrFrict"/>
+<entry field="true" id="40" symbol="velocityToPix"/>
+<entry id="30" method="true" symbol="timerCallback"/>
+<entry field="true" id="29" symbol="dataTimer"/>
+<entry field="true" id="35" symbol="incrFrict"/>
 <entry field="true" id="8389066" symbol="width"/>
 <entry field="true" id="8389606" symbol="mag"/>
-<entry id="15" module="true" symbol="Menus"/>
+<entry id="14" module="true" symbol="Menus"/>
+<entry id="25" method="true" symbol="onAccelData"/>
+<entry id="8390184" symbol="sensorLogger"/>
+<entry id="8390135" symbol="enableAccelerometer"/>
 <entry field="true" id="8390079" symbol="y"/>
 <entry field="true" id="8390078" symbol="x"/>
 <entry id="8388772" module="true" object="true" symbol="Fonts"/>
-<entry field="true" id="20" symbol="r"/>
+<entry field="true" id="34" symbol="r"/>
+<entry id="13" object="true" symbol="GarminSDView"/>
 </symbolTable>
 <localVars>
 <entry endPc="268435489" name="view" stackId="1" startPc="268435456"/>
-<entry endPc="268435714" name="listener" stackId="1" startPc="268435595"/>
-<entry endPc="268435741" name="state" stackId="1" startPc="268435715"/>
-<entry endPc="268435767" name="state" stackId="1" startPc="268435741"/>
-<entry endPc="268435869" name="mainView" stackId="1" startPc="268435771"/>
-<entry endPc="268435869" name="viewDelegate" stackId="2" startPc="268435771"/>
-<entry endPc="268435928" name="i" stackId="2" startPc="268435874"/>
-<entry endPc="268435929" name="msg" stackId="1" startPc="268435870"/>
-<entry endPc="268436140" name="dc" stackId="1" startPc="268435952"/>
-<entry endPc="268436676" name="xArrowTail" stackId="4" startPc="268436300"/>
-<entry endPc="268436676" name="yArrowTail" stackId="5" startPc="268436300"/>
-<entry endPc="268436676" name="yArrow" stackId="3" startPc="268436300"/>
-<entry endPc="268436676" name="xArrow" stackId="2" startPc="268436300"/>
-<entry endPc="268437354" name="dc" stackId="1" startPc="268436145"/>
-<entry endPc="268438398" name="yAccel" stackId="3" startPc="268437402"/>
-<entry endPc="268438398" name="xAccel" stackId="2" startPc="268437402"/>
-<entry endPc="268438610" name="yMag" stackId="5" startPc="268438428"/>
-<entry endPc="268438610" name="magMagnitude" stackId="6" startPc="268438428"/>
-<entry endPc="268438610" name="xMag" stackId="4" startPc="268438428"/>
-<entry endPc="268438629" name="info" stackId="1" startPc="268437358"/>
+<entry endPc="268435564" name="state" stackId="1" startPc="268435538"/>
+<entry endPc="268435569" name="state" stackId="1" startPc="268435564"/>
+<entry endPc="268435661" name="mainView" stackId="1" startPc="268435573"/>
+<entry endPc="268435661" name="viewDelegate" stackId="2" startPc="268435573"/>
+<entry endPc="268435873" name="dc" stackId="1" startPc="268435685"/>
+<entry endPc="268436409" name="xArrowTail" stackId="4" startPc="268436033"/>
+<entry endPc="268436409" name="yArrowTail" stackId="5" startPc="268436033"/>
+<entry endPc="268436409" name="yArrow" stackId="3" startPc="268436033"/>
+<entry endPc="268436409" name="xArrow" stackId="2" startPc="268436033"/>
+<entry endPc="268437087" name="dc" stackId="1" startPc="268435878"/>
+<entry endPc="268438131" name="yAccel" stackId="3" startPc="268437135"/>
+<entry endPc="268438131" name="xAccel" stackId="2" startPc="268437135"/>
+<entry endPc="268438343" name="yMag" stackId="5" startPc="268438161"/>
+<entry endPc="268438343" name="magMagnitude" stackId="6" startPc="268438161"/>
+<entry endPc="268438343" name="xMag" stackId="4" startPc="268438161"/>
+<entry endPc="268438362" name="info" stackId="1" startPc="268437091"/>
+<entry endPc="268438937" name="maxSampleRate" stackId="1" startPc="268438715"/>
+<entry endPc="268438937" name="options" stackId="2" startPc="268438715"/>
+<entry endPc="268439166" name="sensorData" stackId="1" startPc="268438938"/>
+<entry endPc="268439376" name="dc" stackId="1" startPc="268439258"/>
+<entry endPc="268439656" name="dc" stackId="1" startPc="268439422"/>
+<entry endPc="268439785" name="i" stackId="2" startPc="268439727"/>
+<entry endPc="268439786" name="msg" stackId="1" startPc="268439723"/>
 </localVars>
 <annotations/>
 <functions>
@@ -213,15 +283,6 @@
 <documentation/>
 </functionEntry>
 <functionEntry accessMode="public" name="onSelect" parent="AccelMagDelegate">
-<documentation/>
-</functionEntry>
-<functionEntry accessMode="public" name="initialize" parent="CommListener">
-<documentation/>
-</functionEntry>
-<functionEntry accessMode="public" name="onComplete" parent="CommListener">
-<documentation/>
-</functionEntry>
-<functionEntry accessMode="public" name="onError" parent="CommListener">
 <documentation/>
 </functionEntry>
 <functionEntry accessMode="public" name="initialize" parent="GarminSDApp">
@@ -236,10 +297,6 @@
 <documentation/>
 </functionEntry>
 <functionEntry accessMode="public" name="getInitialView" parent="GarminSDApp">
-<documentation/>
-</functionEntry>
-<functionEntry accessMode="public" name="onPhoneMsg" parent="GarminSDApp">
-<param id="msg"/>
 <documentation/>
 </functionEntry>
 <functionEntry accessMode="public" name="initialize" parent="AccelMagView">
@@ -265,19 +322,67 @@
 <functionEntry accessMode="public" name="onHide" parent="AccelMagView">
 <documentation/>
 </functionEntry>
+<functionEntry accessMode="public" name="initialize" parent="DataHandler">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="enableAccel" parent="DataHandler">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="onAccelData" parent="DataHandler">
+<param id="sensorData"/>
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="disableAccel" parent="DataHandler">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="initialize" parent="GarminSDView">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="onLayout" parent="GarminSDView">
+<param id="dc"/>
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="onShow" parent="GarminSDView">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="onUpdate" parent="GarminSDView">
+<param id="dc"/>
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="timerCallback" parent="GarminSDView">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="onHide" parent="GarminSDView">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="onMessageReceived" parent="GarminSDView">
+<param id="msg"/>
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="initialize" parent="CommListener">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="onComplete" parent="CommListener">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="onError" parent="CommListener">
+<documentation/>
+</functionEntry>
 </functions>
 <dataEntryOffsetMappings>
 <dataEntry offset="87" parentId="" symbolId="globals" type="module"/>
-<dataEntry offset="182" parentId="globals" symbolId="GarminSDApp" type="class"/>
-<dataEntry offset="277" parentId="GarminSDApp" symbolId="CommListener" type="class"/>
-<dataEntry offset="340" parentId="globals" symbolId="Rez" type="module"/>
-<dataEntry offset="419" parentId="Rez" symbolId="Drawables" type="module"/>
-<dataEntry offset="458" parentId="Rez" symbolId="Menus" type="module"/>
-<dataEntry offset="489" parentId="Rez" symbolId="Fonts" type="module"/>
-<dataEntry offset="520" parentId="Rez" symbolId="JsonData" type="module"/>
-<dataEntry offset="551" parentId="Rez" symbolId="Layouts" type="module"/>
-<dataEntry offset="582" parentId="Rez" symbolId="Strings" type="module"/>
-<dataEntry offset="621" parentId="globals" symbolId="AccelMagDelegate" type="class"/>
-<dataEntry offset="684" parentId="globals" symbolId="AccelMagView" type="class"/>
+<dataEntry offset="214" parentId="globals" symbolId="GarminSDApp" type="class"/>
+<dataEntry offset="285" parentId="globals" symbolId="Rez" type="module"/>
+<dataEntry offset="364" parentId="Rez" symbolId="Drawables" type="module"/>
+<dataEntry offset="403" parentId="Rez" symbolId="Menus" type="module"/>
+<dataEntry offset="434" parentId="Rez" symbolId="Fonts" type="module"/>
+<dataEntry offset="465" parentId="Rez" symbolId="JsonData" type="module"/>
+<dataEntry offset="496" parentId="Rez" symbolId="Layouts" type="module"/>
+<dataEntry offset="527" parentId="Rez" symbolId="Strings" type="module"/>
+<dataEntry offset="566" parentId="globals" symbolId="DataHandler" type="class"/>
+<dataEntry offset="685" parentId="globals" symbolId="AccelMagDelegate" type="class"/>
+<dataEntry offset="748" parentId="globals" symbolId="GarminSDView" type="class"/>
+<dataEntry offset="907" parentId="GarminSDView" symbolId="CommListener" type="class"/>
+<dataEntry offset="970" parentId="globals" symbolId="AccelMagView" type="class"/>
 </dataEntryOffsetMappings>
 </debugInfo>

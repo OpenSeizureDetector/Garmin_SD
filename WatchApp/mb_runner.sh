@@ -178,6 +178,7 @@ function concat_params_for_build
     PARAMS+="--unit-test "
     PARAMS+="--devices \"${DEVICES}\" "
     PARAMS+="--warn "
+    #PARAMS+="--debug "
     PARAMS+="--private-key \"${MB_PRIVATE_KEY}\" "
     PARAMS+="--rez \"${RESOURCES}\" "
 }

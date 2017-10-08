@@ -15,6 +15,6 @@ class AccelMagDelegate extends Ui.BehaviorDelegate {
     }
 
     function onSelect() {
-        parentView.kickBall();
+        //parentView.kickBall();
     }
 }

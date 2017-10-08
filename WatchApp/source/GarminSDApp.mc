@@ -6,57 +6,31 @@
 
 using Toybox.Application as App;
 using Toybox.System;
-using Toybox.Communications as Comm;
 
 class GarminSDApp extends App.AppBase {
+  
+  function initialize() {
+    System.println("GarminSdApp.initialize");
+    AppBase.initialize();
 
-  class CommListener extends Comm.ConnectionListener {
-    function initialize() {
-      Comm.ConnectionListener.initialize();
-    }
+  }
     
-    function onComplete() {
-      System.println("Transmit Complete");
-    }
-    
-    function onError() {
-      System.println("Transmit Failed");
-    }
+  // onStart() is called on application start up
+  function onStart(state) {
+    System.println("GarminSDApp.onStart");
   }
 
+  // onStop() is called when your application is exiting
+  function onStop(state) {
+  }
 
-  function initialize() {
-    	System.println("GarminSdApp.initialize");
-        AppBase.initialize();
-
-	var listener = new CommListener();
-	Comm.registerForPhoneAppMessages(method(:onPhoneMsg));
-	Comm.transmit("Hello World.", null, listener);
-
-    }
-    
-    // onStart() is called on application start up
-    function onStart(state) {
-      System.println("GarminSDApp.onStart");
-    }
-
-    // onStop() is called when your application is exiting
-    function onStop(state) {
-    	System.println("GarminSDApp.onStop");
-    }
-
-    // Return the initial view of your application here
-    function getInitialView() {
-    	System.println("GarminSDApp.getInitialView");
-        var mainView = new AccelMagView();
-        var viewDelegate = new AccelMagDelegate( mainView );
-        return [mainView, viewDelegate];
-    }
-
-    function onPhoneMsg(msg) {
-      var i;
-      System.print("GarminSdApp.onPhoneMsg - ");
-      System.println(msg.data.toString());
-    }
+  // Return the initial view of your application here
+  function getInitialView() {
+    System.println("GarminSDApp.getInitialView");
+    var mainView = new GarminSDView();
+    var viewDelegate = new AccelMagDelegate( mainView );
+    //return [mainView, viewDelegate];
+    return [mainView];
+  }
 
 }
