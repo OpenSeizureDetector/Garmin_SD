@@ -46,6 +46,8 @@ class GarminSDView extends Ui.View {
 		Gfx.TEXT_JUSTIFY_CENTER);
     dc.drawText(width / 2,  height-40, Gfx.FONT_LARGE, accelHandler.nSamp,
 		Gfx.TEXT_JUSTIFY_CENTER);
+    dc.drawText(width / 2,  height-60, Gfx.FONT_LARGE, accelHandler.mHR,
+		Gfx.TEXT_JUSTIFY_CENTER);
     //View.onUpdate(dc);
     System.println("GarminSDView.onUpdate() - complete");
   }

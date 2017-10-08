@@ -9,6 +9,7 @@ class DataHandler
     var mSamplesZ = [0];
 
     var nSamp = 0;
+    var mHR = 0;
 
     ///////////////
     // Constructor
@@ -30,6 +31,11 @@ class DataHandler
       Ui.requestUpdate();
     }
 
+    function heartrate_callback(sensorInfo) {
+      System.println("Heart Rate: " + sensorInfo.heartRate);
+      mHR = sensorInfo.heartRate;
+    }
+    
     
     // Initializes the view and registers for accelerometer data
     function onStart() {
@@ -49,11 +55,16 @@ class DataHandler
         catch(e) {
             System.println(e.getErrorMessage());
         }
+
+	// Intialise heart rate monitoring.
+	Sensor.setEnabledSensors([Sensor.SENSOR_HEARTRATE]);
+	Sensor.enableSensorEvents(method(:heartrate_callback));
     }
 
 
     function onStop() {
 	System.println("DataHandler.onStop()");
         Sensor.unregisterSensorDataListener();
+	Sensor.setEnabledSensors([]);
     }
 }
