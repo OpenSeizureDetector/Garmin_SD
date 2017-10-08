@@ -15,6 +15,6 @@ https://developer.garmin.com/connect-iq/programmers-guide/android-sdk-guide/
 
 
 IQ SDK for Watch Apps
-1.   Sensor.registerDataListener crashes if you specify 4 or 2 seconds (hangs watch and you need to power off) - works with 1 second.
+1.   Sensor.registerSensorDataListener crashes if you specify 4 or 2 seconds (hangs watch and you need to power off) - works with 1 second.
 2.   monkeyc does not catch very many errors - e.g. accidentally referring to sensorInfor rather than sensorInfo compiled ok but gave a run-time error.
 

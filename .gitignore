@@ -1,3 +1,4 @@
 *~
 *#
-
+*.prg
+*.prg.debug.xml
