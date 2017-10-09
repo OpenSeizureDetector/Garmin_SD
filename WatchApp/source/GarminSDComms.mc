@@ -24,7 +24,7 @@ class GarminSDComms {
       "Z" => mAccelHandler.mSamplesZ
     };
     // FIXME - THIS CRASHED WITH OUT OF MEMORY ERROR AFTER 5 or 10 minutes.
-    //Comm.transmit(dataObj,null,listener);
+    Comm.transmit(dataObj,null,listener);
   }
 
   function onMessageReceived(msg) {

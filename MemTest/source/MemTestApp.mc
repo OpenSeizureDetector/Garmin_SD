@@ -4,47 +4,74 @@
 // Application Developer Agreement.
 //
 
+using Toybox.Application as App;
+using Toybox.System;
 using Toybox.WatchUi as Ui;
 using Toybox.Graphics as Gfx;
 using Toybox.Time;
 using Toybox.Time.Gregorian;
 using Toybox.Lang;
+using Toybox.Timer;
+using Toybox.Communications as Comm;
 
-class GarminSDView extends Ui.View {
-  var accelHandler;
-  var accel;
+class MemTestApp extends App.AppBase {
+  function initialize() {
+    AppBase.initialize();
+  }
+    
+  function onStart(state) {
+  }
+
+  function onStop(state) {
+  }
+
+  function getInitialView() {
+    var mainView = new MemTestView();
+    return [mainView];
+  }
+
+}
+
+
+class MemTestView extends Ui.View {
   var width;
   var height;
+  var myTimer;
+  var listener;
   
   function initialize() {
-    System.println("GarminSDView.initialize()");
     View.initialize();
-    accelHandler = new DataHandler();
-    System.println("GarminSDView.initialize() - complete");    
+    listener = new Comm.ConnectionListener();
   }
   
+function timerCallback() {
+  var dataObj = {
+    "HR"=> 60,
+    "X" => 0,
+    "Y" => 0,
+    "Z" => 0
+  };
+  // FIXME - THIS CRASHED WITH OUT OF MEMORY ERROR AFTER 5 or 10 minutes.
+  Comm.transmit(dataObj,null,listener);
+  Ui.requestUpdate();
+}
+
+
   // Load your resources here
   function onLayout(dc) {
-    System.println("GarminSDView.onLayout()");
     width = dc.getWidth();
     height = dc.getHeight();
-    System.println("GarminSDView.onLayout() - complete");
+    myTimer = new Timer.Timer();
+    myTimer.start(method(:timerCallback), 1000, true);
   }
   
   // Restore the state of the app and prepare the view to be shown
   function onShow() {
-    System.println("GarminSDView.onShow()");
-    accelHandler.onStart();
-    //Ui.requestUpdate();
-    System.println("GarminSDView.onShow() - finishing");
   }
   
   // Update the view
   function onUpdate(dc) {
     System.println("GarminSDView.onUpdate()");
-    //var clockTime = System.getClockTime();
-    // Format current time for display
-    // see https://developer.garmin.com/downloads/connect-iq/monkey-c/doc/Toybox/Time.html
     var dateTime = Gregorian.info(Time.now(), Time.FORMAT_MEDIUM);
     var timeString = Lang.format(
 				 "$1$:$2$:$3$",
@@ -56,25 +83,16 @@ class GarminSDView extends Ui.View {
 				 );
     var sysStats = System.getSystemStats();
     var batString = Lang.format("Bat = $1$%",[sysStats.battery.format("%02.0f")]);
-    var hrString = Lang.format("HR = $1$ bpm",[accelHandler.mHR]);
     var memStr = Lang.format("Mem = $1$",[sysStats.freeMemory]);
-    //System.println(sysStats.battery);
-    //System.println(sysStats.totalMemory);
-    //System.println(timeString); // e.g. "16:28:32 Wed 1 Mar 2017"
+    var usedMemStr = Lang.format("Used = $1$",[sysStats.usedMemory]);
     dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_WHITE);
     dc.clear();
     dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
-    dc.drawText(width / 2,  0, Gfx.FONT_MEDIUM, "OpenSeizure",
-		Gfx.TEXT_JUSTIFY_CENTER);
-    dc.drawText(width / 2,  20, Gfx.FONT_MEDIUM, "Detector",
-		Gfx.TEXT_JUSTIFY_CENTER);
     dc.drawText(width / 2,  40, Gfx.FONT_SYSTEM_NUMBER_HOT, timeString,
 		Gfx.TEXT_JUSTIFY_CENTER);
     dc.drawText(width / 2,  85, Gfx.FONT_LARGE, batString,
 		Gfx.TEXT_JUSTIFY_CENTER);
-    dc.drawText(width / 2,  110, Gfx.FONT_LARGE, hrString,
-		Gfx.TEXT_JUSTIFY_CENTER);
-    dc.drawText(width / 2,  130, Gfx.FONT_LARGE, accelHandler.nSamp,
+    dc.drawText(width / 2,  130, Gfx.FONT_LARGE, usedMemStr,
 		Gfx.TEXT_JUSTIFY_CENTER);
     dc.drawText(width / 2,  160, Gfx.FONT_LARGE, memStr,
 		Gfx.TEXT_JUSTIFY_CENTER);
@@ -82,14 +100,8 @@ class GarminSDView extends Ui.View {
   
   
 
-  // Called when this View is removed from the screen. Save the
-  // state of your app here.
   function onHide() {
-    System.println("GarminSDView.onHide");
-    accelHandler.onStop();
-    System.println("GarminSDView.onHide - Complete");
+    myTimer.stop();
   }
-  
-  
-
 }
+
