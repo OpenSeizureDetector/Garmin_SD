@@ -24,8 +24,36 @@ class GarminSDComms {
       "Z" => mAccelHandler.mSamplesZ
     };
     // FIXME - THIS CRASHED WITH OUT OF MEMORY ERROR AFTER 5 or 10 minutes.
-    Comm.transmit(dataObj,null,listener);
+    // Comm.transmit(dataObj,null,listener);
+
+    // Try makeWebRequest instead to see if that avoids the memory leak
+    Comm.makeWebRequest(
+			"http:192.168.0.84:8080/data",
+			{
+			  "dataType" => "raw",
+			    "data" => "[1,2,3,4,5,6,7,8,9,10]"
+			    },
+			{
+			  :method => Communications.HTTP_REQUEST_METHOD_POST,
+			    :headers => {
+			    "Content-Type" => Comm.REQUEST_CONTENT_TYPE_URL_ENCODED
+			  }
+			},
+			method(:onReceive));
   }
+
+  // Receive the data from the web request
+  function onReceive(responseCode, data) {
+    if (responseCode == 200) {
+      System.println("onReceive() success - data =");
+      System.println(data);
+    } else {
+      System.println("onReceive() Failue - code =");
+      System.println(responseCode.toString());
+    }
+  }
+  
+
 
   function onMessageReceived(msg) {
     var i;

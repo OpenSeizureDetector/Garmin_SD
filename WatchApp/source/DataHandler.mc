@@ -79,8 +79,9 @@ class DataHandler {
     }
 
     // Intialise heart rate monitoring.
-    Sensor.setEnabledSensors([Sensor.SENSOR_HEARTRATE]);
-    Sensor.enableSensorEvents(method(:heartrate_callback));
+    // FIXME - does this drain the battery a lot?
+    //Sensor.setEnabledSensors([Sensor.SENSOR_HEARTRATE]);
+    //Sensor.enableSensorEvents(method(:heartrate_callback));
   }
   
 
