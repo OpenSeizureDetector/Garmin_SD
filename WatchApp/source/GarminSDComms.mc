@@ -17,22 +17,15 @@ class GarminSDComms {
   }
 
   function sendAccelData() {
-    var dataObj = {
-      "HR"=> mAccelHandler.mHR,
-      "X" => mAccelHandler.mSamplesX,
-      "Y" => mAccelHandler.mSamplesY,
-      "Z" => mAccelHandler.mSamplesZ
-    };
+    var dataObj = mAccelHandler.toJson();
+    
     // FIXME - THIS CRASHED WITH OUT OF MEMORY ERROR AFTER 5 or 10 minutes.
     // Comm.transmit(dataObj,null,listener);
 
     // Try makeWebRequest instead to see if that avoids the memory leak
     Comm.makeWebRequest(
 			"http:192.168.0.84:8080/data",
-			{
-			  "dataType" => "raw",
-			    "data" => "[1,2,3,4,5,6,7,8,9,10]"
-			    },
+			{"dataObj"=>dataObj},
 			{
 			  :method => Communications.HTTP_REQUEST_METHOD_POST,
 			    :headers => {

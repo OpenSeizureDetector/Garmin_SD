@@ -25,6 +25,28 @@ class GarminSDDataHandler {
       
   }
 
+  // Return the current set of data as a JSON String
+  function toJson() {
+    var i;
+    var jsonStr = "{ dataType: 'raw', data: [";
+
+    for (var i = 0; i<ANALYSIS_PERIOD*SAMPLE_FREQUENCY; i=i+1) {
+      if (i>0) {
+	jsonStr = jsonStr + ", ";
+      }
+      jsonStr = jsonStr + (mSamplesX[i]*mSamplesX[i]
+			   +mSamplesY[i]*mSamplesY[i]
+			   +mSamplesZ[i]*mSamplesZ[i]);
+    }
+
+    jsonStr = jsonStr + "], HR:"+mHR;
+
+    jsonStr = jsonStr + " }";
+    
+    return jsonStr;
+  }
+
+  
   // Prints acclerometer data that is recevied from the system
   function accel_callback(sensorData) {
     System.println("accel_callback()");
