@@ -2,7 +2,7 @@ using Toybox.Sensor;
 using Toybox.System;
 using Toybox.WatchUi as Ui;
 
-class DataHandler {
+class GarminSDDataHandler {
   const ANALYSIS_PERIOD = 5;
   const SAMPLE_PERIOD = 1;
   const SAMPLE_FREQUENCY = 25;

@@ -19,7 +19,7 @@ class GarminSDView extends Ui.View {
   function initialize() {
     System.println("GarminSDView.initialize()");
     View.initialize();
-    accelHandler = new DataHandler();
+    accelHandler = new GarminSDDataHandler();
     System.println("GarminSDView.initialize() - complete");    
   }
   
