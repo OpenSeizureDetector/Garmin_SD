@@ -26,33 +26,37 @@ class GarminSDDataHandler {
   }
 
   // Return the current set of data as a JSON String
-  function toJson() {
+  function getDataJson() {
     var i;
     var jsonStr = "{ dataType: 'raw', data: [";
-
+    
     for (var i = 0; i<ANALYSIS_PERIOD*SAMPLE_FREQUENCY; i=i+1) {
       if (i>0) {
 	jsonStr = jsonStr + ", ";
       }
-      jsonStr = jsonStr + (mSamplesX[i]*mSamplesX[i]
-			   +mSamplesY[i]*mSamplesY[i]
-			   +mSamplesZ[i]*mSamplesZ[i]);
+      jsonStr = jsonStr + (mSamplesX[i].abs()
+			   +mSamplesY[i].abs()
+			   +mSamplesZ[i].abs());
     }
-
     jsonStr = jsonStr + "], HR:"+mHR;
-
     jsonStr = jsonStr + " }";
-    
     return jsonStr;
   }
 
+
+    // Return the current set of data as a JSON String
+  function getSettingsJson() {
+    var jsonStr = "{ dataType: 'settings', analysisPeriod: "+ANALYSIS_PERIOD;
+    jsonStr = jsonStr + ", sampleFreq: "+SAMPLE_FREQUENCY+"}";
+    return jsonStr;
+  }
   
   // Prints acclerometer data that is recevied from the system
   function accel_callback(sensorData) {
-    System.println("accel_callback()");
+    //System.println("accel_callback()");
 
     var iStart = nSamp*SAMPLE_PERIOD*SAMPLE_FREQUENCY;
-    System.println(Lang.format("iStart=$1$, ns=$2$, nSamp=$3$",[iStart,SAMPLE_PERIOD*SAMPLE_FREQUENCY,nSamp]));
+    //System.println(Lang.format("iStart=$1$, ns=$2$, nSamp=$3$",[iStart,SAMPLE_PERIOD*SAMPLE_FREQUENCY,nSamp]));
     for (var i = 0; i<SAMPLE_PERIOD*SAMPLE_FREQUENCY; i=i+1) {
       mSamplesX[iStart+i] = sensorData.accelerometerData.x[i];
       mSamplesY[iStart+i] = sensorData.accelerometerData.y[i];
@@ -60,9 +64,9 @@ class GarminSDDataHandler {
     }
     nSamp = nSamp + 1;
 
-    Toybox.System.println("Raw samples, X axis: " + mSamplesX);
-    Toybox.System.println("Raw samples, Y axis: " + mSamplesY);
-    Toybox.System.println("Raw samples, Z axis: " + mSamplesZ);
+    //Toybox.System.println("Raw samples, X axis: " + mSamplesX);
+    //Toybox.System.println("Raw samples, Y axis: " + mSamplesY);
+    //Toybox.System.println("Raw samples, Z axis: " + mSamplesZ);
     Ui.requestUpdate();
     
     if (nSamp*SAMPLE_PERIOD == ANALYSIS_PERIOD) {

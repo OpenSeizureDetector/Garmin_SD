@@ -17,7 +17,7 @@ class GarminSDComms {
   }
 
   function sendAccelData() {
-    var dataObj = mAccelHandler.toJson();
+    var dataObj = mAccelHandler.getDataJson();
     
     // FIXME - THIS CRASHED WITH OUT OF MEMORY ERROR AFTER 5 or 10 minutes.
     // Comm.transmit(dataObj,null,listener);
@@ -35,11 +35,30 @@ class GarminSDComms {
 			method(:onReceive));
   }
 
+  function sendSettings() {
+    var dataObj = mAccelHandler.getSettingsJson();
+    System.println("sendSettings() - dataObj="+dataObj);
+    Comm.makeWebRequest(
+			"http:192.168.0.84:8080/settings",
+			{"dataObj"=>dataObj},
+			{
+			  :method => Communications.HTTP_REQUEST_METHOD_POST,
+			    :headers => {
+			    "Content-Type" => Comm.REQUEST_CONTENT_TYPE_URL_ENCODED
+			  }
+			},
+			method(:onReceive));    
+  }
+
   // Receive the data from the web request
   function onReceive(responseCode, data) {
     if (responseCode == 200) {
-      System.println("onReceive() success - data =");
-      System.println(data);
+      System.println("onReceive() success - data ="+data);
+      //System.println(data);
+      if (data.equals("sendSettings")) {
+	System.println("Sending Settings");
+	sendSettings();
+      }
     } else {
       System.println("onReceive() Failue - code =");
       System.println(responseCode.toString());
