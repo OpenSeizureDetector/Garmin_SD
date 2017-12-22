@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -34,6 +35,7 @@ public class MainActivity extends Activity {
     private Context mContext;
     private Timer mUiTimer;
     private Handler mHandler = new Handler();   // used to update ui from mUiTimer
+    private SdDataBroadcastReceiver sdDataBroadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +82,11 @@ public class MainActivity extends Activity {
                 }
             }
         });
+
+        sdDataBroadcastReceiver = new SdDataBroadcastReceiver();
+        //uk.org.openseizuredetector.SdDataReceived
+        IntentFilter filter = new IntentFilter("uk.org.openseizuredetector.SdDataReceived");
+        this.registerReceiver(sdDataBroadcastReceiver, filter);
     }
 
     @Override
