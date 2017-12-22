@@ -46,8 +46,12 @@ class GarminSDDataHandler {
 
     // Return the current set of data as a JSON String
   function getSettingsJson() {
-    var jsonStr = "{ dataType: 'settings', analysisPeriod: "+ANALYSIS_PERIOD;
-    jsonStr = jsonStr + ", sampleFreq: "+SAMPLE_FREQUENCY+"}";
+    var sysStats = System.getSystemStats();
+    var jsonStr = "{ dataType: 'settings'";
+    jsonStr = jsonStr + ", analysisPeriod: "+ANALYSIS_PERIOD;
+    jsonStr = jsonStr + ", sampleFreq: "+SAMPLE_FREQUENCY;
+    jsonStr = jsonStr + ", battery: "+sysStats.battery;
+    jsonStr = jsonStr + "}";
     return jsonStr;
   }
   

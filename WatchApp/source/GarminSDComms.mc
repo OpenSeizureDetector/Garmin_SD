@@ -4,6 +4,7 @@ using Toybox.Communications as Comm;
 class GarminSDComms {
   var listener;
   var mAccelHandler = null;
+  var serverUrl = "http:192.168.43.1:8080";
 
   function initialize(accelHandler) {
     listener = new CommListener();
@@ -23,8 +24,8 @@ class GarminSDComms {
     // Comm.transmit(dataObj,null,listener);
 
     // Try makeWebRequest instead to see if that avoids the memory leak
-    Comm.makeWebRequest(
-			"http:192.168.0.84:8080/data",
+    /*Comm.makeWebRequest(
+			serverUrl+"/data",
 			{"dataObj"=>dataObj},
 			{
 			  :method => Communications.HTTP_REQUEST_METHOD_POST,
@@ -33,13 +34,15 @@ class GarminSDComms {
 			  }
 			},
 			method(:onReceive));
+    */
+    Comm.transmit(dataObj,null,listener);
   }
 
   function sendSettings() {
     var dataObj = mAccelHandler.getSettingsJson();
     System.println("sendSettings() - dataObj="+dataObj);
-    Comm.makeWebRequest(
-			"http:192.168.0.84:8080/settings",
+    /*Comm.makeWebRequest(
+			serverUrl+"/settings",
 			{"dataObj"=>dataObj},
 			{
 			  :method => Communications.HTTP_REQUEST_METHOD_POST,
@@ -48,6 +51,8 @@ class GarminSDComms {
 			  }
 			},
 			method(:onReceive));    
+    */
+    Comm.transmit(dataObj,null,listener);
   }
 
   // Receive the data from the web request
@@ -61,7 +66,9 @@ class GarminSDComms {
       }
     } else {
       System.println("onReceive() Failue - code =");
+      System.println(responseCode);
       System.println(responseCode.toString());
+      System.println(data);
     }
   }
   

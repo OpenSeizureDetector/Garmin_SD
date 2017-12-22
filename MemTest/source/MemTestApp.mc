@@ -63,10 +63,10 @@ class MemTestView extends Ui.View {
       "Z" => 0
     };
     // FIXME - THIS CRASHED WITH OUT OF MEMORY ERROR AFTER 5 or 10 minutes.
-    //Comm.transmit(dataObj,null,listener);
+    Comm.transmit(dataObj,null,listener);
 
     // Try makeWebRequest instead to see if that avoids the memory leak
-    Comm.makeWebRequest(
+    /*Comm.makeWebRequest(
 			"http:192.168.0.84:8080/data",
 			{
 			  "dataType" => "raw",
@@ -76,6 +76,7 @@ class MemTestView extends Ui.View {
 			  "Content-Type" => Comm.REQUEST_CONTENT_TYPE_URL_ENCODED
 			    },
 			method(:onReceive));
+    */
     Ui.requestUpdate(); 
   }
 
