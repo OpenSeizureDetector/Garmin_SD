@@ -203,10 +203,10 @@ public class GarminDataSourceService extends Service {
             // was a SUCCESS.  If not then the status will indicate why there
             // was an issue receiving the message from the Connect IQ application.
             if (status == ConnectIQ.IQMessageStatus.SUCCESS) {
-                Log.v(TAG, "Message Received " + messageData.toString());
+                Log.v(TAG, "Message Received " + messageData.get(0).toString());
                 Intent intent = new Intent();
                 intent.setAction("uk.org.openseizuredetector.SdDataReceived");
-                intent.putExtra("data",messageData.toString());
+                intent.putExtra("data",messageData.get(0).toString());
                 sendBroadcast(intent);
 
                 // Send a message back
