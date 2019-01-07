@@ -64,6 +64,7 @@ class MemTestView extends Ui.View {
     };
     // FIXME - THIS CRASHED WITH OUT OF MEMORY ERROR AFTER 5 or 10 minutes.
     Comm.transmit(dataObj,null,listener);
+    dataObj = null;
 
     // Try makeWebRequest instead to see if that avoids the memory leak
     /*Comm.makeWebRequest(

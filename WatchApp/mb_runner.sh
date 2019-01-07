@@ -1,62 +1,43 @@
 #!/bin/bash
 
-# This is just a little helper-script to enable ConnectIQ-development on
-# UNIX-systems.
+# This is just a little helper-script to make ConnectIQ-development on UNIX-systems easier (without using the Eclipse-plugin).
 #
-# Based on the (Windows) ConnectIQ SDK 2.2.5
+# Based on the (Linux) ConnectIQ SDK 2.4.2
+# ( https://developer.garmin.com/downloads/connect-iq/sdks/connectiq-sdk-lin-2.4.2.zip )
 #
 # The following tasks can be invoked:
 #   * compiling (re)sources and building a PRG-file for testing
 #   * run unit-tests (requires a running simulator)
 #   * creating a signed IQ-file package for publishing
 #   * cleaning up previously built files
-#   * starting the ConnectIQ-simulator (using wine)
+#   * starting the ConnectIQ-simulator
 #   * pushing the generated PRG-file to the running simulator
-#
-# This script requires the following tools/packages:
-#   * wine
-#   * dos2unix
-#   (sudo apt-get install wine dos2unix)
 #
 # Usage:
 #   mb_runner.sh {build|test|package|clean|simulator|push} [full-path-to-ciq-project-root] [relative-resources-folder-path] [relative-source-folder-path]
 #
-# Example (using default-values):
+# Example (for a standard project with jungle-file; script directly run from within project-root):
 #   mb_runner.sh package
 #
-# Example (using custom paths/folders):
+# Example (for a standard project with jungle-file; using a specified project-root):
+#   mb_runner.sh package /home/achim/projects/HueCIQ
+#
+# Example (for a "legacy" project WITHOUT jungle file; using custom paths for root/resources/sources):
 #   mb_runner.sh package /home/achim/projects/HueCIQ resources source
 
 # **********
 # env checks
 # **********
 
-if [[ ! ${MB_HOME} ]]; then
-    echo "MB_HOME not set!"
-    exit 1
-fi
-
-if [[ ! ${MB_PRIVATE_KEY} ]]; then
-    echo "MB_PRIVATE_KEY not set!"
-    exit 1
-fi
+[ -z "${MB_HOME}" ] && { echo "MB_HOME not set!"; exit 1; }
+[ -z "${MB_PRIVATE_KEY}" ] && { echo "MB_PRIVATE_KEY not set!"; exit 1; }
 
 # ***********
 # param check
 # ***********
 
 case "${1}" in
-   build)
-      ;;
-   test)
-      ;;
-   package)
-      ;;
-   clean)
-      ;;
-   simulator)
-      ;;
-   push)
+   build|test|package|clean|simulator|push)
       ;;
    *)
       echo "Usage: `basename ${0}` {build|test|package|clean|simulator|push} [full-path-to-ciq-project-root] [relative-resources-folder-path] [relative-source-folder-path]"
@@ -64,7 +45,7 @@ case "${1}" in
       ;;
 esac
 
-if [ ! -n ${2} ]; then
+if [ -n "${2}" ]; then
    PROJECT_HOME="${2}"
 else
    PROJECT_HOME="${PWD}"
@@ -82,12 +63,12 @@ else
    SOURCE_FOLDER="source"
 fi
 
-# **************
-# other settings
-# **************
+# *****************
+# defaults & config
+# *****************
 
-# config-file ...
-
+JUNGLE_FILES="${PROJECT_HOME}/monkey.jungle"
+MANIFEST_FILE="${PROJECT_HOME}/manifest.xml"
 CONFIG_FILE="${PROJECT_HOME}/mb_runner.cfg"
 
 if [ ! -e "${CONFIG_FILE}" ] ; then
@@ -97,25 +78,26 @@ else
     source "${CONFIG_FILE}"
 fi
 
-# *************
-# project stuff
-# *************
+[ -z "${APP_NAME}" ] && { echo "APP_NAME not set!"; exit 1; }
 
-# manifest ...
+# check if jungle-file(s) exist; if not prepare (re)sources manually ...
 
-MANIFEST_FILE="${PROJECT_HOME}/manifest.xml"
+JUNGLE_FILE_EXISTS=true
 
-if [ ! -e "${MANIFEST_FILE}" ] ; then
-    echo "Manifest file \"${MANIFEST_FILE}\" not found!"
-    exit 1
+for JUNGLE_FILE in ${JUNGLE_FILES}; do
+    if [ ! -e "${JUNGLE_FILE}" ]; then
+        JUNGLE_FILE_EXISTS=false
+    fi
+done
+
+if [ "${JUNGLE_FILE_EXISTS}" = false ] ; then
+    RESOURCES="`cd /; find \"${PROJECT_HOME}/${RESOURCES_FOLDER}\"* -iname '*.xml' | tr '\n' ':'`"
+    SOURCES="`cd /; find \"${PROJECT_HOME}/${SOURCE_FOLDER}\" -iname '*.mc' | tr '\n' ' '`"
 fi
 
-# (re)sources ...
-
-RESOURCES="`cd /; find \"${PROJECT_HOME}/${RESOURCES_FOLDER}\"* -iname '*.xml' | tr '\n' ':'`"
-SOURCES="`cd /; find \"${PROJECT_HOME}/${SOURCE_FOLDER}\" -iname '*.mc' | tr '\n' ' '`"
-
-# sdk-specific ...
+# ******************
+# sdk specific stuff
+# ******************
 
 API_DB="${MB_HOME}/bin/api.db"
 PROJECT_INFO="${MB_HOME}/bin/projectInfo.xml"
@@ -125,21 +107,6 @@ DEVICES="${MB_HOME}/bin/devices.xml"
 # **********
 # processing
 # **********
-
-# prepare sdk executables and apply "wine-ification", if not already done so ...
-
-if [ ! -e "${MB_HOME}/bin/monkeydo.bak" ] ; then
-    cp -a "${MB_HOME}/bin/monkeydo" "${MB_HOME}/bin/monkeydo.bak"
-    dos2unix "${MB_HOME}/bin/monkeydo"
-    chmod +x "${MB_HOME}/bin/monkeydo"
-    sed -i -e 's/"\$MB_HOME"\/shell/wine "\$MB_HOME"\/shell.exe/g' "${MB_HOME}/bin/monkeydo"
-fi
-
-if [ ! -e "${MB_HOME}/bin/monkeyc.bak" ] ; then
-    cp -a "${MB_HOME}/bin/monkeyc" "${MB_HOME}/bin/monkeyc.bak"
-    chmod +x "${MB_HOME}/bin/monkeyc"
-    dos2unix "${MB_HOME}/bin/monkeyc"
-fi
 
 # possible parameters ...
 
@@ -152,7 +119,7 @@ fi
 #PARAMS+="--excludes-map-file <arg> "
 #PARAMS+="--import-dbg \"${API_DEBUG}\" "
 #PARAMS+="--write-db "
-#PARAMS+="--manifest \"${MANIFEST_FILE}\" "
+#PARAMS+="--manifest <arg> "
 #PARAMS+="--api-version <arg> "
 #PARAMS+="--output \"${APP_NAME}.prg\" "
 #PARAMS+="--project-info \"${PROJECT_INFO}\" "
@@ -164,72 +131,79 @@ fi
 #PARAMS+="--warn "
 #PARAMS+="--excludes <arg> "
 #PARAMS+="--private-key \"${MB_PRIVATE_KEY}\" "
-#PARAMS+="--rez \"${RESOURCES}\" "
+#PARAMS+="--rez <arg> "
 
-function concat_params_for_build
+function params_for_build
 {
-    PARAMS+="--apidb \"${API_DB}\" "
     PARAMS+="--device \"${TARGET_DEVICE}\" "
-    PARAMS+="--import-dbg \"${API_DEBUG}\" "
-    PARAMS+="--manifest \"${MANIFEST_FILE}\" "
     PARAMS+="--output \"${APP_NAME}.prg\" "
-    PARAMS+="--project-info \"${PROJECT_INFO}\" "
     PARAMS+="--sdk-version \"${TARGET_SDK_VERSION}\" "
-    PARAMS+="--unit-test "
-    PARAMS+="--devices \"${DEVICES}\" "
-    PARAMS+="--warn "
-    #PARAMS+="--debug "
     PARAMS+="--private-key \"${MB_PRIVATE_KEY}\" "
-    PARAMS+="--rez \"${RESOURCES}\" "
+
+    PARAMS+="--apidb \"${API_DB}\" "
+    PARAMS+="--import-dbg \"${API_DEBUG}\" "
+    PARAMS+="--project-info \"${PROJECT_INFO}\" "
+    PARAMS+="--devices \"${DEVICES}\" "
+
+    PARAMS+="--unit-test "
+    PARAMS+="--warn "
+
+    if [ "${JUNGLE_FILE_EXISTS}" = false ] ; then
+        PARAMS+="--manifest \"${MANIFEST_FILE}\" "
+        PARAMS+="--rez \"${RESOURCES}\" "
+        PARAMS+="${SOURCES} "
+    else
+        PARAMS+="--jungles \"${JUNGLE_FILES}\" "
+    fi
 }
 
-function concat_params_for_package
+function params_for_package
 {
-    PARAMS+="--package-app "
-    PARAMS+="--manifest \"${MANIFEST_FILE}\" "
     PARAMS+="--output \"${APP_NAME}.iq\" "
+    PARAMS+="--private-key \"${MB_PRIVATE_KEY}\" "
+
+    PARAMS+="--package-app "
     PARAMS+="--release "
     PARAMS+="--warn "
-    PARAMS+="--private-key \"${MB_PRIVATE_KEY}\" "
-    PARAMS+="--rez \"${RESOURCES}\" "
+
+    if [ "${JUNGLE_FILE_EXISTS}" = false ] ; then
+        PARAMS+="--manifest \"${MANIFEST_FILE}\" "
+        PARAMS+="--rez \"${RESOURCES}\" "
+        PARAMS+="${SOURCES} "
+    else
+        PARAMS+="--jungles \"${JUNGLE_FILES}\" "
+    fi
 }
 
-function run_mb_jar
+function compile
 {
-    java -jar "${MB_HOME}/bin/monkeybrains.jar" ${PARAMS} ${SOURCES}
+    "${MB_HOME}/bin/monkeyc" ${PARAMS}
 }
 
-function run_tests
+function tests
 {
     "${MB_HOME}/bin/monkeydo" "${PROJECT_HOME}/${APP_NAME}.prg" -t
 }
 
 function clean
 {
-    cd ${PROJECT_HOME}
-
     rm -f "${PROJECT_HOME}/${APP_NAME}"*.prg*
     rm -f "${PROJECT_HOME}/${APP_NAME}"*.iq
     rm -f "${PROJECT_HOME}/${APP_NAME}"*.json
     rm -f "${PROJECT_HOME}/sys.nfm"
 }
 
-function start_simulator
+function simulator
 {
-    SIM_PID=$(ps aux | grep simulator.exe | grep -v "grep" | awk '{print $2}')
+    SIM_PID=$(ps aux | grep simulator | grep -v "grep" | grep -v `basename "${0}"` | awk '{print $2}')
+    [[ ${SIM_PID} ]] && kill ${SIM_PID}
 
-    if [[ ${SIM_PID} ]]; then
-        kill ${SIM_PID}
-    fi
-
-    ${MB_HOME}/bin/simulator &
+    "${MB_HOME}/bin/connectiq" &
 }
 
-function push_prg
+function push
 {
-    if [ -e "${PROJECT_HOME}/${APP_NAME}.prg" ] ; then
-        "${MB_HOME}/bin/monkeydo" "${PROJECT_HOME}/${APP_NAME}.prg" "${TARGET_DEVICE}"
-    fi
+    [ -e "${PROJECT_HOME}/${APP_NAME}.prg" ] && "${MB_HOME}/bin/monkeydo" "${PROJECT_HOME}/${APP_NAME}.prg" "${TARGET_DEVICE}" &
 }
 
 ###
@@ -238,25 +212,25 @@ cd ${PROJECT_HOME}
 
 case "${1}" in
    build)
-        concat_params_for_build
-        run_mb_jar
+        params_for_build
+        compile
         ;;
    test)
-        concat_params_for_build
-        run_mb_jar
-        run_tests
+        params_for_build
+        compile
+        tests
         ;;
    package)
-        concat_params_for_package
-        run_mb_jar
+        params_for_package
+        compile
         ;;
    clean)
         clean
         ;;
    simulator)
-        start_simulator
+        simulator
         ;;
    push)
-        push_prg
+        push
         ;;
 esac
