@@ -21,10 +21,6 @@ class GarminSDComms {
   function sendAccelData() {
     var dataObj = mAccelHandler.getDataJson();
     
-    // FIXME - THIS CRASHED WITH OUT OF MEMORY ERROR AFTER 5 or 10 minutes.
-    // Comm.transmit(dataObj,null,listener);
-
-    // Try makeWebRequest instead to see if that avoids the memory leak
     Comm.makeWebRequest(
 			serverUrl+"/data",
 			{"dataObj"=>dataObj},
@@ -35,13 +31,12 @@ class GarminSDComms {
 			  }
 			},
 			method(:onReceive));
-      //Comm.transmit(dataObj,null,listener);
   }
 
   function sendSettings() {
     var dataObj = mAccelHandler.getSettingsJson();
     System.println("sendSettings() - dataObj="+dataObj);
-    /*Comm.makeWebRequest(
+    Comm.makeWebRequest(
 			serverUrl+"/settings",
 			{"dataObj"=>dataObj},
 			{
@@ -51,8 +46,6 @@ class GarminSDComms {
 			  }
 			},
 			method(:onReceive));    
-    */
-    Comm.transmit(dataObj,null,listener);
   }
 
   // Receive the data from the web request

@@ -76,6 +76,7 @@ class GarminSDDataHandler {
     if (nSamp*SAMPLE_PERIOD == ANALYSIS_PERIOD) {
       System.println("Doing Analysis....");
       mComms.sendAccelData();
+      mHR = -1;
       nSamp = 0;
     }
   }
@@ -110,8 +111,8 @@ class GarminSDDataHandler {
 
     // Intialise heart rate monitoring.
     // FIXME - does this drain the battery a lot?
-    //Sensor.setEnabledSensors([Sensor.SENSOR_HEARTRATE]);
-    //Sensor.enableSensorEvents(method(:heartrate_callback));
+    Sensor.setEnabledSensors([Sensor.SENSOR_HEARTRATE]);
+    Sensor.enableSensorEvents(method(:heartrate_callback));
   }
   
 
