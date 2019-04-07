@@ -28,9 +28,11 @@ class GarminSDApp extends App.AppBase {
   function getInitialView() {
     System.println("GarminSDApp.getInitialView");
     var mainView = new GarminSDView();
-    var viewDelegate = new AccelMagDelegate( mainView );
-    //return [mainView, viewDelegate];
-    return [mainView];
+    var viewDelegate = new SdDelegate();
+    return [mainView, viewDelegate];
+    //return [mainView];
   }
 
 }
+
+

@@ -90,6 +90,53 @@ class GarminSDView extends Ui.View {
     System.println("GarminSDView.onHide - Complete");
   }
   
-  
-
 }
+
+
+class SdDelegate extends Ui.BehaviorDelegate {
+  function initialize() {
+    System.println("SdDelegate.initialize()");
+    BehaviorDelegate.initialize();
+  }
+
+  // When a back behavior occurs, onBack() is called.
+    // @return [Boolean] true if handled, false otherwise
+  function onBack() {
+    System.println("SdDelegate.onBack()");
+    var quitString = "Exit OSD App?";			
+    var cd = new Ui.Confirmation( quitString );
+    Ui.pushView( cd, new QuitDelegate(), Ui.SLIDE_IMMEDIATE );
+    return true;
+  }
+
+  // Detect Menu button input
+  function onKey(keyEvent) {
+    System.println(keyEvent.getKey()); // e.g. KEY_MENU = 7
+    return true;
+  }
+}
+
+
+class QuitDelegate extends Ui.ConfirmationDelegate
+{	
+    function initialize()
+    {
+      System.println("QuitDelegate.initialize()");
+      Ui.ConfirmationDelegate.initialize();
+    }
+    
+    function onResponse(value)
+    {
+      System.println("QuitDelegate.onResponse()"+value);
+        if( value == CONFIRM_YES )
+        {
+            // pop the confirmation dialog associated with this delegate
+            Ui.popView(Ui.SLIDE_IMMEDIATE);    		    	
+
+            // the system will automatically pop the top level dialog
+        }
+
+        return true;
+    }
+}
+
