@@ -1,3 +1,27 @@
+/*
+  Garmin_sd - a data source for OpenSeizureDetector that runs on a
+  Garmin ConnectIQ watch.
+
+  See http://openseizuredetector.org for more information.
+
+  Copyright Graham Jones, 2019.
+
+  This file is part of Garmin_sd.
+
+  Garmin_sd is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  Garmin_sd is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with Garmin_sd.  If not, see <http://www.gnu.org/licenses/>.
+
+*/
 using Toybox.Sensor;
 using Toybox.System;
 using Toybox.WatchUi as Ui;
@@ -6,6 +30,8 @@ class GarminSDDataHandler {
   const ANALYSIS_PERIOD = 5;
   const SAMPLE_PERIOD = 1;
   const SAMPLE_FREQUENCY = 25;
+  // const MUTE_TIMER_PERIOD = 5 * 60 * 1000;   // 5 min in ms
+  const MUTE_TIMER_PERIOD = 20 * 1000;   // 20 sec in ms
 
   var mSamplesX = new [ANALYSIS_PERIOD*SAMPLE_FREQUENCY];
   var mSamplesY = new [ANALYSIS_PERIOD*SAMPLE_FREQUENCY];
@@ -13,13 +39,16 @@ class GarminSDDataHandler {
 
   var nSamp = 0;
   var mHR = 0;
-
+  var mMute = 0;
+  var mMuteTimer;
+  var mStatusStr = "---";
   var mComms = null;
 
   ///////////////
   // Constructor
-  function initialize() {
+  function initialize(versionStr) {
     System.println("DataHandler.initialize()");
+    mStatusStr = versionStr;
     mComms = new GarminSDComms(self);
     mComms.onStart();
       
@@ -39,6 +68,7 @@ class GarminSDDataHandler {
 			   +mSamplesZ[i].abs());
     }
     jsonStr = jsonStr + "], HR:"+mHR;
+    jsonStr = jsonStr + ", Mute:"+mMute;
     jsonStr = jsonStr + " }";
     return jsonStr;
   }
@@ -54,6 +84,24 @@ class GarminSDDataHandler {
     jsonStr = jsonStr + "}";
     return jsonStr;
   }
+
+
+  function muteTimerCallback() {
+    System.println("muteTimerCallback()");
+    mMute = 0;
+  }
+
+  function muteAlarms() {
+    System.println("muteAlarms()");
+    // If the timer is already running, stop it then re-start it.
+    if (mMute == 1) {
+      mMuteTimer.stop();
+    }
+    mMuteTimer = new Timer.Timer();
+    mMuteTimer.start(method(:muteTimerCallback),MUTE_TIMER_PERIOD,false);
+    mMute = 1;
+  }
+
   
   // Prints acclerometer data that is recevied from the system
   function accel_callback(sensorData) {
@@ -76,13 +124,13 @@ class GarminSDDataHandler {
     if (nSamp*SAMPLE_PERIOD == ANALYSIS_PERIOD) {
       System.println("Doing Analysis....");
       mComms.sendAccelData();
-      mHR = -1;
+      //mHR = -1;
       nSamp = 0;
     }
   }
 
   function heartrate_callback(sensorInfo) {
-    System.println("HeartRate: " + sensorInfo.heartRate);
+    //System.println("HeartRate: " + sensorInfo.heartRate);
     mHR = sensorInfo.heartRate;
   }
     
