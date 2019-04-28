@@ -30,8 +30,8 @@ class GarminSDDataHandler {
   const ANALYSIS_PERIOD = 5;
   const SAMPLE_PERIOD = 1;
   const SAMPLE_FREQUENCY = 25;
-  // const MUTE_TIMER_PERIOD = 5 * 60 * 1000;   // 5 min in ms
-  const MUTE_TIMER_PERIOD = 20 * 1000;   // 20 sec in ms
+  const MUTE_TIMER_PERIOD = 5 * 60 * 1000;   // 5 min in ms
+  //const MUTE_TIMER_PERIOD = 20 * 1000;   // 20 sec in ms
 
   var mSamplesX = new [ANALYSIS_PERIOD*SAMPLE_FREQUENCY];
   var mSamplesY = new [ANALYSIS_PERIOD*SAMPLE_FREQUENCY];
