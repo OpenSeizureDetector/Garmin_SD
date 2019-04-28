@@ -1,5 +1,29 @@
-using Toybox.Communications as Comm;
+/*
+  Garmin_sd - a data source for OpenSeizureDetector that runs on a
+  Garmin ConnectIQ watch.
 
+  See http://openseizuredetector.org for more information.
+
+  Copyright Graham Jones, 2019.
+
+  This file is part of Garmin_sd.
+
+  Garmin_sd is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  Garmin_sd is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with Garmin_sd.  If not, see <http://www.gnu.org/licenses/>.
+
+*/
+using Toybox.Communications as Comm;
+using Toybox.Attention as Attention;
 
 class GarminSDComms {
   var listener;
@@ -48,14 +72,50 @@ class GarminSDComms {
 			method(:onReceive));    
   }
 
-  // Receive the data from the web request
+  function getSdStatus() {
+    System.println("getStStatus()");
+    Comm.makeJsonRequest(
+			serverUrl+"/data",
+			{},
+			{
+			  :method => Communications.HTTP_REQUEST_METHOD_GET,
+			    :headers => {
+			    "Content-Type" => Comm.HTTP_RESPONSE_CONTENT_TYPE_JSON
+			  }
+			},
+			method(:onSdStatusReceive));    
+  }
+
+
+  // Receive the data from the web request - should be a json string
+  function onSdStatusReceive(responseCode, data) {
+    if (responseCode == 200) {
+      System.println("onSdDataReceive() success - data ="+data);
+      System.println("onSdDataReceive() Status ="+data.get("alarmPhrase"));
+      mAccelHandler.mStatusStr = data.get("alarmPhrase");
+      if (data.get("alarmState") != 0) {
+	if (Attention has :backlight) {
+	  Attention.backlight(true);
+	}
+      }
+    } else {
+      System.println("onReceive() Failue - code =");
+      System.println(responseCode);
+      System.println(responseCode.toString());
+      System.println(data);
+    }
+  }
+
+  
+  // Receive the response from the sendAccelData or sendSettings web request.
   function onReceive(responseCode, data) {
     if (responseCode == 200) {
       System.println("onReceive() success - data ="+data);
-      //System.println(data);
       if (data.equals("sendSettings")) {
 	System.println("Sending Settings");
 	sendSettings();
+      } else {
+	getSdStatus();
       }
     } else {
       System.println("onReceive() Failue - code =");
