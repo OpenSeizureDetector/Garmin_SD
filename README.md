@@ -2,25 +2,27 @@ Garmin_SD
 =========
 
 This is an OpenSeizureDetector data source that uses a Garmin IQ enabled
-watch such as a Vivoactive HR.
+watch such as a Vivoactive HR - it needs a ConnectIQ SDK Level 2 or higher
+device - it has been tested on a VivoActive HR and a ForeRunner 735xt.
 
-The watch simply collects 5 seconds worth of acceleromater and heart rate data
+The watch app is relatively simple, as processing is now carried out on the
+phone.
+The watch collects 5 seconds worth of acceleromater and heart rate data
 and sends it to the phone.   The seizure detector processing is carried out
-on the phone.
+on the phone using the web server built into the OpenSeizureDetector Android 
+App.
 
-This is a proof-of-concept at the moment.   It shows that we can:
+The testing that has been carried out so far suggests that seizure detection
+reliability is comparable to the Pebble, and the connection reliability
+between the watch and the phone is good.   Battery life is also better than
+the pebble - about 24 hours.
 
-  1  Collect accelerometer data at a high enough frequency (>=25Hz).
-  2  Send and receive messages to/from the phone
-  3  Write something to the watch screen so you know it is working.
-
-To get it to be a viable replacement for Pebble for OpenSeizureDetector we
-need to:
-  1  Check the battery consumption when sending data to the phone every 5 seconds - we need at least 12 hours battery life for it to be useful.
-  2  Send real data to the phone (not just 'hello world' to prove we can send
-  something!).
-  3  The phone app needs to do the seizure detection calculation, and send
-     the output to the OpenSeizureDetector alarm system.
-  4  Work out how to publish the watch app.
-  5  Test the reliability.
+There are a few features of the Pebble Watch app that are missing from
+this Garmin one:
+ * The results of the analysis (OK, ALARM etc)  are not displayed on the watch
+ * The 'mute' and 'manual alarm' functions are not present.
+ * The display on the screen is a bit messy because it was used to display
+   debugging information during testing.
+   
+   
 
