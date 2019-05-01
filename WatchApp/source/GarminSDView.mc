@@ -29,7 +29,7 @@ using Toybox.Time;
 using Toybox.Time.Gregorian;
 using Toybox.Lang;
 
-const VERSION_STR = "V0.3";
+const VERSION_STR = "V0.4";
 
 class GarminSDView extends Ui.View {
   var accelHandler;
@@ -107,15 +107,13 @@ class GarminSDView extends Ui.View {
   function onHide() {
     System.println("GarminSDView.onHide");
     accelHandler.onStop();
-    System.println("GarminSDView.onHide - Complete");
+    //System.println("GarminSDView.onHide - Complete");
   }
   
 }
 
 
 class SdDelegate extends Ui.BehaviorDelegate {
-  const KEY_MUTE = 4; 
-  var muteKeyDownTime;
   var mSdView;
   
   function initialize(sdView) {
@@ -125,8 +123,12 @@ class SdDelegate extends Ui.BehaviorDelegate {
   }
 
   function onMenu() {
-    System.println("SdDelegate.onMenu() - Sending Mute Signal");
-    mSdView.accelHandler.muteAlarms();
+    System.println("SdDelegate.onMenu() - Showing confirm dialog");
+    var msgStr = "Mute Alarms (for 5 min)?";			
+    var cd = new Ui.Confirmation( msgStr );
+    Ui.pushView( cd,
+    		 new MuteDelegate(mSdView.accelHandler),
+    		 Ui.SLIDE_IMMEDIATE );
     return true;
   }
 
@@ -140,70 +142,93 @@ class SdDelegate extends Ui.BehaviorDelegate {
     Ui.pushView( cd, new QuitDelegate(), Ui.SLIDE_IMMEDIATE );
     return true;
   }
-
-  // Detect Menu button input
-  //function onKey(keyEvent) {
-  //  System.println(Lang.format("onKey() - key=$1$", [keyEvent.getKey()])); // e.g. KEY_MENU = 7
-  //  return false;
-  //}
-
-  function onKeyPressed(evt) {
-    var key = evt.getKey();
-    System.println(Lang.format("onKeyPressed() - key=$1$", [key])); 
-    if (key == KEY_MUTE) {
-      System.println("Mute Key Pressed");
-      muteKeyDownTime = Sys.getTimer();
-      
-    }
-    return true;
-  }
-
-  function onKeyReleased(evt) {
-    var key = evt.getKey();
-    System.println(Lang.format("onKeyReleased() - key=$1$", [key])); 
-    if (key == KEY_MUTE) {
-      var now = Sys.getTimer();
-      var delta = now - muteKeyDownTime;
-      System.println(Lang.format("Key $1$ held for $2$ ms", [KEY_MUTE, delta]));
-    }
-    return true;
-  }
 }
-
 
 class QuitDelegate extends Ui.ConfirmationDelegate
 {
   const QUIT_TIMEOUT = 10 * 1000;  // Milliseconds
   var mTimer;
-    function initialize()
+  var mResponseReceived;
+
+  function initialize()
     {
       System.println("QuitDelegate.initialize()");
       Ui.ConfirmationDelegate.initialize();
-
+      
       // Start a timer to timeout this dialog - calls timerCallback
       mTimer = new Timer.Timer();
       mTimer.start(method(:timerCallback),QUIT_TIMEOUT,false);
+      mResponseReceived = false;
     }
 
   function timerCallback() {
-    // Dismiss the dialog
     System.println("timerCallback()");
-    Ui.popView(Ui.SLIDE_IMMEDIATE);    		    	
+    if (mResponseReceived == false) {
+      System.println("Response has not been received - closing dialog");      
+      // Dismiss the dialog
+      Ui.popView(Ui.SLIDE_IMMEDIATE);
+    } else {
+      System.println("Response has been received - doing nothing");
+    }
   }
+    
+    function onResponse(value)
+    {
+      System.println("QuitDelegate.onResponse() - "+value);
+      mResponseReceived = true;
+      if( value == CONFIRM_YES )
+        {
+	  // pop the confirmation dialog associated with this delegate
+	  Ui.popView(Ui.SLIDE_IMMEDIATE);    		    	
+	  // the system will automatically pop the top level dialog
+        }
+      
+      return true;
+    }
+}
+
+class MuteDelegate extends Ui.ConfirmationDelegate
+{
+  const DIALOG_TIMEOUT = 10 * 1000;  // Milliseconds
+  var mTimer;
+  var mAccelHandler;
+  var mResponseReceived;
+    function initialize(accelHandler)
+    {
+      System.println("MuteDelegate.initialize()");
+      Ui.ConfirmationDelegate.initialize();
+      mAccelHandler = accelHandler;
+      
+      // Start a timer to timeout this dialog - calls timerCallback
+      mTimer = new Timer.Timer();
+      mTimer.start(method(:muteTimerCallback),DIALOG_TIMEOUT,false);
+      mResponseReceived = false;
+    }
+
+    function muteTimerCallback() {
+      // Dismiss the dialog
+      System.println("muteDelegate.muteTimerCallback()");
+      //Ui.popView(Ui.SLIDE_IMMEDIATE);    		    	
+      if (mResponseReceived == false) {
+	System.println("Response has not been received - closing dialog");      
+	// Dismiss the dialog
+	Ui.popView(Ui.SLIDE_IMMEDIATE);
+      } else {
+	System.println("Response has been received - doing nothing");
+	
+      }
+    }
 
     
     function onResponse(value)
     {
-      System.println("QuitDelegate.onResponse()"+value);
-        if( value == CONFIRM_YES )
+      System.println("MuteDelegate.onResponse() - "+value);
+      mResponseReceived = true;
+      if( value == CONFIRM_YES )
         {
-            // pop the confirmation dialog associated with this delegate
-            Ui.popView(Ui.SLIDE_IMMEDIATE);    		    	
-
-            // the system will automatically pop the top level dialog
+	  mAccelHandler.muteAlarms();
         }
-
-        return true;
+      return true;
     }
 }
 
