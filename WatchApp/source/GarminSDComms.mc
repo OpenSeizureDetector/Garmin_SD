@@ -29,7 +29,7 @@ class GarminSDComms {
   var listener;
   var mAccelHandler = null;
   //var serverUrl = "http:192.168.43.1:8080";
-  var serverUrl = "http:localhost:8080";
+  var serverUrl = "http:127.0.0.1:8080";
 
   function initialize(accelHandler) {
     listener = new CommListener();
