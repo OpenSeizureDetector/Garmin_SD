@@ -1,4 +1,6 @@
-
+GarminSD CHANGELOG
+==================
+v0.6 - 21oct2019: Fixed problem with Vivoactive3 hardware button exiting app without prompt, and adjusted position of fields on screen.
 
 v0.2 - 07apr2019 - added confirmation dialog to make it harder to exit the
      app accidentally.

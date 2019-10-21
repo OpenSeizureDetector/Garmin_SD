@@ -29,7 +29,7 @@ using Toybox.Time;
 using Toybox.Time.Gregorian;
 using Toybox.Lang;
 
-const VERSION_STR = "V0.5";
+const VERSION_STR = "V0.6";
 
 class GarminSDView extends Ui.View {
   var accelHandler;
@@ -85,17 +85,17 @@ class GarminSDView extends Ui.View {
 		Gfx.TEXT_JUSTIFY_CENTER);
     dc.drawText(width / 2,  20, Gfx.FONT_MEDIUM, "Detector",
 		Gfx.TEXT_JUSTIFY_CENTER);
-    dc.drawText(width / 2,  40, Gfx.FONT_SYSTEM_NUMBER_HOT, timeString,
+    dc.drawText(width / 2,  45, Gfx.FONT_SYSTEM_NUMBER_HOT, timeString,
 		Gfx.TEXT_JUSTIFY_CENTER);
-    dc.drawText(width / 2,  85, Gfx.FONT_LARGE, batString,
+    dc.drawText(width / 2,  180, Gfx.FONT_LARGE, batString,
 		Gfx.TEXT_JUSTIFY_CENTER);
-    dc.drawText(width / 2,  110, Gfx.FONT_LARGE, hrString,
+    dc.drawText(width / 2,  120, Gfx.FONT_LARGE, hrString,
 		Gfx.TEXT_JUSTIFY_CENTER);
     if (accelHandler.mMute) {
-      dc.drawText(width / 2,  140, Gfx.FONT_LARGE, "MUTE",
+      dc.drawText(width / 2,  150, Gfx.FONT_LARGE, "MUTE",
 		  Gfx.TEXT_JUSTIFY_CENTER);
     } else {
-      dc.drawText(width / 2,  140, Gfx.FONT_LARGE, accelHandler.mStatusStr,
+      dc.drawText(width / 2,  150, Gfx.FONT_LARGE, accelHandler.mStatusStr,
 		  Gfx.TEXT_JUSTIFY_CENTER);
     }
   }
@@ -140,6 +140,23 @@ class SdDelegate extends Ui.BehaviorDelegate {
     var quitString = "Exit OSD App?";			
     var cd = new Ui.Confirmation( quitString );
     Ui.pushView( cd, new QuitDelegate(), Ui.SLIDE_IMMEDIATE );
+    return true;
+  }
+
+  // Detect Menu button input
+  function onKey(keyEvent) {
+    if (keyEvent.getKey() == KEY_START) {
+      var quitString = "Exit OSD App?";			
+      var cd = new Ui.Confirmation( quitString );
+      Ui.pushView( cd, new QuitDelegate(), Ui.SLIDE_IMMEDIATE );
+      return true;
+    } else if (keyEvent.getKey() == KEY_ENTER) {
+      var quitString = "Exit OSD App?";			
+      var cd = new Ui.Confirmation( quitString );
+      Ui.pushView( cd, new QuitDelegate(), Ui.SLIDE_IMMEDIATE );
+      return true;
+    }
+    System.println(keyEvent.getKey()); // e.g. KEY_MENU = 7
     return true;
   }
 }

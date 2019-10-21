@@ -2,7 +2,7 @@
   <iq:application entry="GarminSDApp"
 		  id="a863c9aa-d62d-477d-a478-c35d99297ea3"
 		  launcherIcon="@Drawables.LauncherIcon"
-		  minSdkVersion="1.2.0"
+		  minSdkVersion="2.4.0"
 		  name="@Strings.AppName"
 		  type="watch-app">
         <iq:products>
