@@ -25,6 +25,7 @@
 using Toybox.Sensor;
 using Toybox.System;
 using Toybox.WatchUi as Ui;
+using Toybox.Timer;
 
 class GarminSDDataHandler {
   const ANALYSIS_PERIOD = 5;
@@ -122,7 +123,7 @@ class GarminSDDataHandler {
     Ui.requestUpdate();
     
     if (nSamp*SAMPLE_PERIOD == ANALYSIS_PERIOD) {
-      System.println("Doing Analysis....");
+      //System.println("Doing Analysis....");
       mComms.sendAccelData();
       //mHR = -1;
       nSamp = 0;
