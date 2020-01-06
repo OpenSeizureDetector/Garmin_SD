@@ -1,5 +1,10 @@
 GarminSD CHANGELOG
 ==================
+v1.0 - 06jan2020:
+	- Added system info to settings http response for improved logging.
+	- Changed acceleration output to be true vector magnitude, not the
+	  approximation we used on the Pebble.
+
 v0.7 - 10nov2019:
          -  Explicitly switches off gps position logging in case it is
             on by default (a user reported this to be the case on a Vivoactive 4

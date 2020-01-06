@@ -30,11 +30,10 @@ using Toybox.Time.Gregorian;
 using Toybox.Timer;
 using Toybox.Lang;
 
-const VERSION_STR = "V0.7";
+const VERSION_STR = "V1.0";
 
 class GarminSDView extends Ui.View {
   var accelHandler;
-  //var accel;
   var width;
   var height;
   
@@ -57,14 +56,11 @@ class GarminSDView extends Ui.View {
   function onShow() {
     System.println("GarminSDView.onShow()");
     accelHandler.onStart();
-    //Ui.requestUpdate();
     System.println("GarminSDView.onShow() - finishing");
   }
   
   // Update the view
   function onUpdate(dc) {
-    //System.println("GarminSDView.onUpdate()");
-
     // see https://developer.garmin.com/downloads/connect-iq/monkey-c/doc/Toybox/Time.html
     var dateTime = Gregorian.info(Time.now(), Time.FORMAT_MEDIUM);
     var timeString = Lang.format(
@@ -108,7 +104,6 @@ class GarminSDView extends Ui.View {
   function onHide() {
     System.println("GarminSDView.onHide");
     accelHandler.onStop();
-    //System.println("GarminSDView.onHide - Complete");
   }
   
 }

@@ -26,6 +26,7 @@ using Toybox.Sensor;
 using Toybox.System;
 using Toybox.WatchUi as Ui;
 using Toybox.Timer;
+using Toybox.Math;
 
 class GarminSDDataHandler {
   const ANALYSIS_PERIOD = 5;
@@ -44,11 +45,14 @@ class GarminSDDataHandler {
   var mMuteTimer;
   var mStatusStr = "---";
   var mComms = null;
+  var mVersionStr = "";
 
   ///////////////
   // Constructor
   function initialize(versionStr) {
     System.println("DataHandler.initialize()");
+    mVersionStr = versionStr;
+    // On Start-up we show the app version number in place of satus.
     mStatusStr = versionStr;
     mComms = new GarminSDComms(self);
     mComms.onStart();
@@ -64,9 +68,12 @@ class GarminSDDataHandler {
       if (i>0) {
 	jsonStr = jsonStr + ", ";
       }
-      jsonStr = jsonStr + (mSamplesX[i].abs()
-			   +mSamplesY[i].abs()
-			   +mSamplesZ[i].abs());
+      //jsonStr = jsonStr + (mSamplesX[i].abs()
+      //                   +mSamplesY[i].abs()
+      //		   +mSamplesZ[i].abs());
+      jsonStr = jsonStr + Math.sqrt( mSamplesX[i] * mSamplesX[i]
+			   +mSamplesY[i] * mSamplesY[i]
+			   +mSamplesZ[i] * mSamplesZ[i]);
     }
     jsonStr = jsonStr + "], HR:"+mHR;
     jsonStr = jsonStr + ", Mute:"+mMute;
@@ -78,10 +85,17 @@ class GarminSDDataHandler {
     // Return the current set of data as a JSON String
   function getSettingsJson() {
     var sysStats = System.getSystemStats();
+    var deviceSettings = System.getDeviceSettings();
+    var ciqVer = deviceSettings.monkeyVersion;
+    var ciqVerStr = Lang.format("$1$.$2$.$3$", ciqVer);
     var jsonStr = "{ dataType: 'settings'";
     jsonStr = jsonStr + ", analysisPeriod: "+ANALYSIS_PERIOD;
     jsonStr = jsonStr + ", sampleFreq: "+SAMPLE_FREQUENCY;
     jsonStr = jsonStr + ", battery: "+sysStats.battery;
+    jsonStr = jsonStr + ", watchPartNo: "+deviceSettings.partNumber;
+    jsonStr = jsonStr + ", watchFwVersion: "+ciqVerStr;
+    jsonStr = jsonStr + ", sdVersion: " + mVersionStr;
+    jsonStr = jsonStr + ", sdName: GarminSD";
     jsonStr = jsonStr + "}";
     return jsonStr;
   }
