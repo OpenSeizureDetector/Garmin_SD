@@ -28,8 +28,9 @@ using Toybox.Attention as Attention;
 class GarminSDComms {
   var listener;
   var mAccelHandler = null;
-  var lastOnReceiveResponse = 200;
-  var lastOnSdStatusReceiveResponse = 200;
+  var lastOnReceiveResponse = 0;
+  var lastOnReceiveData = "";
+  var lastOnSdStatusReceiveResponse = 0;
   //var serverUrl = "http:192.168.43.1:8080";
   var serverUrl = "http:127.0.0.1:8080";
 
@@ -76,26 +77,29 @@ class GarminSDComms {
   }
 
   function getSdStatus() {
-    //System.println("getStStatus()");
-    Comm.makeJsonRequest(
+    // System.println("getSdStatus()");
+    Comm.makeWebRequest(
 			serverUrl+"/data",
-			{},
+			{ },
 			{
 			  :method => Communications.HTTP_REQUEST_METHOD_GET,
-			    :headers => {
-			    "Content-Type" => Comm.HTTP_RESPONSE_CONTENT_TYPE_JSON
-			  }
-			},
-			method(:onSdStatusReceive));    
+			    :headers => {                                    
+			    "Content-Type" => Communications.REQUEST_CONTENT_TYPE_URL_ENCODED },
+			    :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON	
+			       },
+			method(:onSdStatusReceive)
+      );
+    //System.println("getSdStatus Exiting");
   }
 
 
   // Receive the data from the web request - should be a json string
   function onSdStatusReceive(responseCode, data) {
+    //System.println("onSdStatusReceive - ResponseCode="+responseCode);
     if (responseCode == 200) {
       if (responseCode != lastOnSdStatusReceiveResponse) {
-	System.println("onSdDataReceive() success - data ="+data);
-	System.println("onSdDataReceive() Status ="+data.get("alarmPhrase"));
+	System.println("onSdStatusReceive() success - data ="+data);
+	System.println("onSdStatusReceive() Status ="+data.get("alarmPhrase"));
       }
       mAccelHandler.mStatusStr = data.get("alarmPhrase");
       if (data.get("alarmState") != 0) {
@@ -108,8 +112,7 @@ class GarminSDComms {
       if (responseCode != lastOnSdStatusReceiveResponse) {
 	System.println("onSdStatusReceive() Failue - code =");
 	System.println(responseCode);
-	//System.println(responseCode.toString());
-	//System.println(data);
+	System.println("onSdStatusReceive() Failure - data ="+data);
       } else {
 	System.print(".");
       }
@@ -121,13 +124,16 @@ class GarminSDComms {
   // Receive the response from the sendAccelData or sendSettings web request.
   function onReceive(responseCode, data) {
     if (responseCode == 200) {
-      if (responseCode != lastOnReceiveResponse) {
+      if ((responseCode != lastOnReceiveResponse) || (data != lastOnReceiveData) ) {	
 	System.println("onReceive() success - data ="+data);
+      } else {
+	System.print(".");
       }
       if (data.equals("sendSettings")) {
 	//System.println("Sending Settings");
 	sendSettings();
       } else {
+	//System.println("getting sd status");
 	getSdStatus();
       }
     } else {
@@ -135,13 +141,12 @@ class GarminSDComms {
       if (responseCode != lastOnReceiveResponse) {
 	System.println("onReceive() Failue - code =");
 	System.println(responseCode);
-	//System.println(responseCode.toString());
-	//System.println(data);
       } else {
 	System.print(".");
       }
     }
     lastOnReceiveResponse = responseCode;
+    lastOnReceiveData = data;
   }
   
 

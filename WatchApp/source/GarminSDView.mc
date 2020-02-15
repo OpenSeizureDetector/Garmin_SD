@@ -30,7 +30,7 @@ using Toybox.Time.Gregorian;
 using Toybox.Timer;
 using Toybox.Lang;
 
-const VERSION_STR = "V1.0";
+const VERSION_STR = "V0.8";
 
 class GarminSDView extends Ui.View {
   var accelHandler;
@@ -74,6 +74,8 @@ class GarminSDView extends Ui.View {
     var sysStats = System.getSystemStats();
     var batString = Lang.format("Bat = $1$%",[sysStats.battery.format("%02.0f")]);
     var hrString = Lang.format("HR = $1$ bpm",[accelHandler.mHR]);
+    var hrBatStr = Lang.format("$1$ bpm / $2$%",[accelHandler.mHR,
+						 sysStats.battery.format("%02.0f")]);
 
     dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_WHITE);
     dc.clear();
@@ -84,9 +86,9 @@ class GarminSDView extends Ui.View {
 		Gfx.TEXT_JUSTIFY_CENTER);
     dc.drawText(width / 2,  45, Gfx.FONT_SYSTEM_NUMBER_HOT, timeString,
 		Gfx.TEXT_JUSTIFY_CENTER);
-    dc.drawText(width / 2,  180, Gfx.FONT_LARGE, batString,
-		Gfx.TEXT_JUSTIFY_CENTER);
-    dc.drawText(width / 2,  120, Gfx.FONT_LARGE, hrString,
+    //dc.drawText(width / 2,  180, Gfx.FONT_LARGE, batString,
+    //	Gfx.TEXT_JUSTIFY_CENTER);
+    dc.drawText(width / 2,  120, Gfx.FONT_LARGE, hrBatStr,
 		Gfx.TEXT_JUSTIFY_CENTER);
     if (accelHandler.mMute) {
       dc.drawText(width / 2,  150, Gfx.FONT_LARGE, "MUTE",

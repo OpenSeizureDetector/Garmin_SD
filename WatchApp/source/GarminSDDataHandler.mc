@@ -68,12 +68,12 @@ class GarminSDDataHandler {
       if (i>0) {
 	jsonStr = jsonStr + ", ";
       }
-      //jsonStr = jsonStr + (mSamplesX[i].abs()
-      //                   +mSamplesY[i].abs()
-      //		   +mSamplesZ[i].abs());
-      jsonStr = jsonStr + Math.sqrt( mSamplesX[i] * mSamplesX[i]
-			   +mSamplesY[i] * mSamplesY[i]
-			   +mSamplesZ[i] * mSamplesZ[i]);
+      jsonStr = jsonStr + (mSamplesX[i].abs()
+                         +mSamplesY[i].abs()
+      		   +mSamplesZ[i].abs());
+      //jsonStr = jsonStr + Math.sqrt( mSamplesX[i] * mSamplesX[i]
+      //		   +mSamplesY[i] * mSamplesY[i]
+      //		   +mSamplesZ[i] * mSamplesZ[i]);
     }
     jsonStr = jsonStr + "], HR:"+mHR;
     jsonStr = jsonStr + ", Mute:"+mMute;

@@ -5,6 +5,13 @@ v1.0 - 06jan2020:
 	- Changed acceleration output to be true vector magnitude, not the
 	  approximation we used on the Pebble.
 
+v0.8 - 16feb2020:
+	- Added system info to settings http response for improved logging.
+	- Changed getStatus to use the makeWebRequest rather than makeJsonRequest function, which is deprecated.
+	- Moved battery percentage to same line as heart rate so it 'should'
+	fit on smaller screens.
+
+
 v0.7 - 10nov2019:
          -  Explicitly switches off gps position logging in case it is
             on by default (a user reported this to be the case on a Vivoactive 4
