@@ -30,7 +30,7 @@ using Toybox.Time.Gregorian;
 using Toybox.Timer;
 using Toybox.Lang;
 
-const VERSION_STR = "V0.8";
+const VERSION_STR = "V0.9";
 
 class GarminSDView extends Ui.View {
   var accelHandler;

@@ -28,11 +28,11 @@ using Toybox.Attention as Attention;
 class GarminSDComms {
   var listener;
   var mAccelHandler = null;
-  var lastOnReceiveResponse = 0;
+  var lastOnReceiveResponse = -1;
   var lastOnReceiveData = "";
-  var lastOnSdStatusReceiveResponse = 0;
+  var lastOnSdStatusReceiveResponse = -1;
   //var serverUrl = "http:192.168.43.1:8080";
-  var serverUrl = "http:127.0.0.1:8080";
+  var serverUrl = "http://127.0.0.1:8080";
 
   function initialize(accelHandler) {
     listener = new CommListener();
