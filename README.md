@@ -1,28 +1,36 @@
 Garmin_SD
 =========
 
-This is an OpenSeizureDetector data source that uses a Garmin IQ enabled
-watch such as a Vivoactive HR - it needs a ConnectIQ SDK Level 2 or higher
-device - it has been tested on a VivoActive HR and a ForeRunner 735xt.
+This is an app that runs on a ConnectIQ V2 or higher Garmin Smart Watch,
+such as a Vivoactive 3, Vivoactive 4/4s, Vivoactive HR or ForRunner 735xt.
 
-The watch app is relatively simple, as processing is now carried out on the
-phone.
+The app collects accelerometer and heart rate data, and sends it to the 
+[OpenSeizureDetector phone app](https://github.com/OpenSeizureDetector/Android_Pebble_SD) that runs on a connected Android Phone.
+
 The watch collects 5 seconds worth of acceleromater and heart rate data
 and sends it to the phone.   The seizure detector processing is carried out
 on the phone using the web server built into the OpenSeizureDetector Android 
-App.
+App.  The proprietary [Garmin Connect App](https://play.google.com/store/apps/details?id=com.garmin.android.apps.connectmobile&hl=en_GB) is used to provide the link between the watch and the OpenSeizureDetector phone app.
 
-The testing that has been carried out so far suggests that seizure detection
-reliability is comparable to the Pebble, and the connection reliability
-between the watch and the phone is good.   Battery life is also better than
-the pebble - about 24 hours.
+The watch displays either the results of the seizure analysis (OK, ALARM etc.) or an [error code](https://developer.garmin.com/connect-iq/api-docs/Toybox/Communications.html) that is generated from the garmin software.
 
-There are a few features of the Pebble Watch app that are missing from
-this Garmin one:
- * The results of the analysis (OK, ALARM etc)  are not displayed on the watch
- * The 'mute' and 'manual alarm' functions are not present.
- * The display on the screen is a bit messy because it was used to display
-   debugging information during testing.
+If the user is doing an activity that is likely to result in a false alarm he/she can press one of the watch buttons or screen to mute the system for 5 minutes to avoid a false alarm.
+
+# Build Instructions
+Clone this repository.
+Chnage to the watch app directory.
+execute ./mb_runner.sh buid   (requires the Garmin SDK to be installed).
+
+It should generate a GarminSD.pkg file.
+
+
+# Installation Instructions
+Copy GarminSD.pkg into the folder GARMIN/APS on the watch.   GarminSD should appear as an app on the watch (like Running, Bike etc.).
+
+# Contact
+Email graham@openseizuredetector.org.uk 
+
+
    
    
 
