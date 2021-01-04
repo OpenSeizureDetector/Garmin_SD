@@ -4,6 +4,6 @@
   <string id="Beats_per_minute_abbrev">bpm</string>
   <string id="Error_abbrev">BŁĄD</string>
   <string id="Mute_label">WYCISZ</string>
-  <string id="Mute_alarms_confirmation">Czas alarmy?</string>
-  <string id="Exit_app_confirmation">Zatrzymaj OSD Apka?</string>
+  <string id="Mute_alarms_confirmation">Wyciszyć alarmy?</string>
+  <string id="Exit_app_confirmation">Wyłączyć GarminSD?</string>
 </resources>
