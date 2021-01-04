@@ -108,7 +108,7 @@ class GarminSDComms {
 	}
       }
     } else {
-      mAccelHandler.mStatusStr = "ERR: " + responseCode.toString();
+      mAccelHandler.mStatusStr = Rez.Strings.Error_abbrev + ": " + responseCode.toString();
       if (responseCode != lastOnSdStatusReceiveResponse) {
 	System.println("onSdStatusReceive() Failue - code =");
 	System.println(responseCode);

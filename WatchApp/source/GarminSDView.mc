@@ -30,8 +30,6 @@ using Toybox.Time.Gregorian;
 using Toybox.Timer;
 using Toybox.Lang;
 
-const VERSION_STR = "V0.9";
-
 class GarminSDView extends Ui.View {
   var accelHandler;
   var width;
@@ -40,7 +38,7 @@ class GarminSDView extends Ui.View {
   function initialize() {
     System.println("GarminSDView.initialize()");
     View.initialize();
-    accelHandler = new GarminSDDataHandler(VERSION_STR);
+    accelHandler = new GarminSDDataHandler(Ui.loadResource(Rez.Strings.VersionId));
     System.println("GarminSDView.initialize() - complete");    
   }
   
@@ -72,9 +70,11 @@ class GarminSDView extends Ui.View {
 				  ]
 				 );
     var sysStats = System.getSystemStats();
-    var batString = Lang.format("Bat = $1$%",[sysStats.battery.format("%02.0f")]);
-    var hrString = Lang.format("HR = $1$ bpm",[accelHandler.mHR]);
-    var hrBatStr = Lang.format("$1$ bpm / $2$%",[accelHandler.mHR,
+    //var batString = Lang.format("%s = $1$%",[Ui.loadResource(Rez.Strings.Battery_abbrev),sysStats.battery.format("%02.0f")]);
+    //var hrString = Lang.format("%s = $1$ %s",[
+    //					      Ui.loadResource(Rez.Strings.HR_abbrev), accelHandler.mHR, Ui.loadResource(Rez.Strings.Beats_per_minute_abbrev)]);
+    var hrBatStr = Lang.format("$1$ $2$ / $3$%",[accelHandler.mHR,
+						Ui.loadResource(Rez.Strings.Beats_per_minute_abbrev),
 						 sysStats.battery.format("%02.0f")]);
 
     dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_WHITE);
@@ -91,7 +91,7 @@ class GarminSDView extends Ui.View {
     dc.drawText(width / 2,  120, Gfx.FONT_LARGE, hrBatStr,
 		Gfx.TEXT_JUSTIFY_CENTER);
     if (accelHandler.mMute) {
-      dc.drawText(width / 2,  150, Gfx.FONT_LARGE, "MUTE",
+      dc.drawText(width / 2,  150, Gfx.FONT_LARGE, Ui.loadResource(Rez.Strings.Mute_label),
 		  Gfx.TEXT_JUSTIFY_CENTER);
     } else {
       dc.drawText(width / 2,  150, Gfx.FONT_LARGE, accelHandler.mStatusStr,
@@ -122,7 +122,7 @@ class SdDelegate extends Ui.BehaviorDelegate {
 
   function onMenu() {
     System.println("SdDelegate.onMenu() - Showing confirm dialog");
-    var msgStr = "Mute Alarms (for 5 min)?";			
+    var msgStr = Ui.loadResource(Rez.Strings.Mute_alarms_confirmation);			
     var cd = new Ui.Confirmation( msgStr );
     Ui.pushView( cd,
     		 new MuteDelegate(mSdView.accelHandler),
@@ -135,7 +135,7 @@ class SdDelegate extends Ui.BehaviorDelegate {
     // @return [Boolean] true if handled, false otherwise
   function onBack() {
     System.println("SdDelegate.onBack()");
-    var quitString = "Exit OSD App?";			
+    var quitString = Ui.loadResource(Rez.Strings.Exit_app_confirmation);
     var cd = new Ui.Confirmation( quitString );
     Ui.pushView( cd, new QuitDelegate(), Ui.SLIDE_IMMEDIATE );
     return true;
@@ -144,12 +144,12 @@ class SdDelegate extends Ui.BehaviorDelegate {
   // Detect Menu button input
   function onKey(keyEvent) {
     if (keyEvent.getKey() == KEY_START) {
-      var quitString = "Exit OSD App?";			
+      var quitString = Ui.loadResource(Rez.Strings.Exit_app_confirmation);
       var cd = new Ui.Confirmation( quitString );
       Ui.pushView( cd, new QuitDelegate(), Ui.SLIDE_IMMEDIATE );
       return true;
     } else if (keyEvent.getKey() == KEY_ENTER) {
-      var quitString = "Exit OSD App?";			
+      var quitString = Ui.loadResource(Rez.Strings.Exit_app_confirmation);
       var cd = new Ui.Confirmation( quitString );
       Ui.pushView( cd, new QuitDelegate(), Ui.SLIDE_IMMEDIATE );
       return true;

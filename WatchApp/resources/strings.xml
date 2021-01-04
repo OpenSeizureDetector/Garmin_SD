@@ -1,3 +1,9 @@
 <resources>
-    <string id="AppName">GarminSD</string>
+  <string id="AppName">GarminSD</string>
+  <string id="VersionId">V1.0a</string>
+  <string id="Beats_per_minute_abbrev">bpm</string>
+  <string id="Error_abbrev">ERR</string>
+  <string id="Mute_label">MUTE</string>
+  <string id="Mute_alarms_confirmation">Mute Alarms (for 5 min)?</string>
+  <string id="Exit_app_confirmation">Exit OSD App?</string>
 </resources>
