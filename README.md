@@ -18,7 +18,7 @@ If the user is doing an activity that is likely to result in a false alarm he/sh
 
 # Build Instructions
 Clone this repository.
-Chnage to the watch app directory.
+Change to the watch app directory.
 execute ./mb_runner.sh buid   (requires the Garmin SDK to be installed).
 
 It should generate a GarminSD.pkg file.
