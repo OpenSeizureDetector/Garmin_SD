@@ -73,8 +73,9 @@ class GarminSDView extends Ui.View {
     //var batString = Lang.format("%s = $1$%",[Ui.loadResource(Rez.Strings.Battery_abbrev),sysStats.battery.format("%02.0f")]);
     //var hrString = Lang.format("%s = $1$ %s",[
     //					      Ui.loadResource(Rez.Strings.HR_abbrev), accelHandler.mHR, Ui.loadResource(Rez.Strings.Beats_per_minute_abbrev)]);
-    var hrBatStr = Lang.format("$1$ $2$ / $3$%",[accelHandler.mHR,
+    var hrBatStr = Lang.format("$1$ $2$ / %3% / $4$%",[accelHandler.mHR,
 						Ui.loadResource(Rez.Strings.Beats_per_minute_abbrev),
+						 accelHandler.mO2sat,
 						 sysStats.battery.format("%02.0f")]);
 
     dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_WHITE);

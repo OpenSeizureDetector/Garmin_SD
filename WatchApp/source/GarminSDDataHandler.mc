@@ -21,6 +21,9 @@
   You should have received a copy of the GNU General Public License
   along with Garmin_sd.  If not, see <http://www.gnu.org/licenses/>.
 
+  November 2021 - Added support for blood oxygen saturation based on work
+          by Steve Lee.
+
 */
 using Toybox.Sensor;
 using Toybox.System;
@@ -41,6 +44,7 @@ class GarminSDDataHandler {
 
   var nSamp = 0;
   var mHR = 0;
+  var mO2sat = -1;
   var mMute = 0;
   var mMuteTimer;
   var mStatusStr = "---";
@@ -76,6 +80,7 @@ class GarminSDDataHandler {
       //		   +mSamplesZ[i] * mSamplesZ[i]);
     }
     jsonStr = jsonStr + "], HR:"+mHR;
+    jsonStr = jsonStr + ", O2sat:"+mO2sat;
     jsonStr = jsonStr + ", Mute:"+mMute;
     jsonStr = jsonStr + " }";
     return jsonStr;
@@ -146,7 +151,9 @@ class GarminSDDataHandler {
 
   function heartrate_callback(sensorInfo) {
     //System.println("HeartRate: " + sensorInfo.heartRate);
+    //System.println("O2Sat: " + sensorInfo.oxygenSaturation);
     mHR = sensorInfo.heartRate;
+    mO2sat = sensorInfo.oxygenSaturation;
   }
     
     
@@ -174,7 +181,7 @@ class GarminSDDataHandler {
 
     // Intialise heart rate monitoring.
     // FIXME - does this drain the battery a lot?
-    Sensor.setEnabledSensors([Sensor.SENSOR_HEARTRATE]);
+    Sensor.setEnabledSensors([Sensor.SENSOR_HEARTRATE, Sensor.SENSOR_PULSE_OXIMETRY]);
     Sensor.enableSensorEvents(method(:heartrate_callback));
   }
   
