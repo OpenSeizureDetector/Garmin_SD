@@ -41,6 +41,7 @@ class GarminSDDataHandler {
 
   var nSamp = 0;
   var mHR = 0;
+  var mO2Sat = 0;
   var mMute = 0;
   var mMuteTimer;
   var mStatusStr = "---";
@@ -64,7 +65,7 @@ class GarminSDDataHandler {
     var i;
     var jsonStr = "{ dataType: 'raw', data: [";
     
-    for (var i = 0; i<ANALYSIS_PERIOD*SAMPLE_FREQUENCY; i=i+1) {
+    for (i = 0; i<ANALYSIS_PERIOD*SAMPLE_FREQUENCY; i=i+1) {
       if (i>0) {
 	jsonStr = jsonStr + ", ";
       }
@@ -77,7 +78,9 @@ class GarminSDDataHandler {
     }
     jsonStr = jsonStr + "], HR:"+mHR;
     jsonStr = jsonStr + ", Mute:"+mMute;
+    jsonStr = jsonStr + ", O2Sat:"+mO2Sat;
     jsonStr = jsonStr + " }";
+    System.println(jsonStr);
     return jsonStr;
   }
 
@@ -145,9 +148,12 @@ class GarminSDDataHandler {
   }
 
   function heartrate_callback(sensorInfo) {
-    //System.println("HeartRate: " + sensorInfo.heartRate);
+    System.println("HeartRate: " + sensorInfo.heartRate);
+    System.println("Oxygen Saturation: " + sensorInfo.oxygenSaturation);
     mHR = sensorInfo.heartRate;
+    mO2Sat = sensorInfo.oxygenSaturation;
   }
+
     
     
   // Initializes the view and registers for accelerometer data
@@ -174,8 +180,9 @@ class GarminSDDataHandler {
 
     // Intialise heart rate monitoring.
     // FIXME - does this drain the battery a lot?
-    Sensor.setEnabledSensors([Sensor.SENSOR_HEARTRATE]);
+    Sensor.setEnabledSensors([Sensor.SENSOR_HEARTRATE, Sensor.SENSOR_PULSE_OXIMETRY]);
     Sensor.enableSensorEvents(method(:heartrate_callback));
+
   }
   
 
