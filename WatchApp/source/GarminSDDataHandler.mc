@@ -69,13 +69,23 @@ class GarminSDDataHandler {
       if (i>0) {
 	jsonStr = jsonStr + ", ";
       }
-      jsonStr = jsonStr + (mSamplesX[i].abs()
-                         +mSamplesY[i].abs()
-      		   +mSamplesZ[i].abs());
-      //jsonStr = jsonStr + Math.sqrt( mSamplesX[i] * mSamplesX[i]
-      //		   +mSamplesY[i] * mSamplesY[i]
-      //		   +mSamplesZ[i] * mSamplesZ[i]);
+      //jsonStr = jsonStr + (mSamplesX[i].abs()
+      //                   +mSamplesY[i].abs()
+      //		   +mSamplesZ[i].abs());
+      jsonStr = jsonStr + Math.sqrt( mSamplesX[i] * mSamplesX[i]
+      		   +mSamplesY[i] * mSamplesY[i]
+      		   +mSamplesZ[i] * mSamplesZ[i]);
     }
+    jsonStr = jsonStr + "], data3d: [";
+    for (i = 0; i<ANALYSIS_PERIOD*SAMPLE_FREQUENCY; i=i+1) {
+      if (i>0) {
+	jsonStr = jsonStr + ", ";
+      }
+      jsonStr = jsonStr + mSamplesX[i] + ", ";
+      jsonStr = jsonStr + mSamplesY[i] + ", ";
+      jsonStr = jsonStr + mSamplesZ[i];
+    }
+    
     jsonStr = jsonStr + "], HR:"+mHR;
     jsonStr = jsonStr + ", Mute:"+mMute;
     jsonStr = jsonStr + ", O2Sat:"+mO2Sat;
@@ -180,7 +190,11 @@ class GarminSDDataHandler {
 
     // Intialise heart rate monitoring.
     // FIXME - does this drain the battery a lot?
-    Sensor.setEnabledSensors([Sensor.SENSOR_HEARTRATE, Sensor.SENSOR_PULSE_OXIMETRY]);
+    if (Sensor has Sensor.SENSOR_PULSE_OXYMETRY) {
+      Sensor.setEnabledSensors([Sensor.SENSOR_HEARTRATE, Sensor.SENSOR_PULSE_OXIMETRY]);
+    } else {
+      Sensor.setEnabledSensors([Sensor.SENSOR_HEARTRATE]);
+    }
     Sensor.enableSensorEvents(method(:heartrate_callback));
 
   }
