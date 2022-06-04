@@ -70,15 +70,20 @@ class GarminSDView extends Ui.View {
 				  ]
 				 );
     var sysStats = System.getSystemStats();
-    //var batString = Lang.format("%s = $1$%",[Ui.loadResource(Rez.Strings.Battery_abbrev),sysStats.battery.format("%02.0f")]);
-    //var hrString = Lang.format("%s = $1$ %s",[
-    //					      Ui.loadResource(Rez.Strings.HR_abbrev), accelHandler.mHR, Ui.loadResource(Rez.Strings.Beats_per_minute_abbrev)]);
-    //var hrBatStr = Lang.format("$1$ $2$ / $3$%",[accelHandler.mHR,
-		//				Ui.loadResource(Rez.Strings.Beats_per_minute_abbrev),
-		//				 sysStats.battery.format("%02.0f")]);
-    var hrO2Str = Lang.format("$1$ $2$ / $3$% Ox" ,[accelHandler.mHR,
-						Ui.loadResource(Rez.Strings.Beats_per_minute_abbrev), accelHandler.mO2Sat]);
-    var batStr = Lang.format("$1$% bat",[sysStats.battery.format("%02.0f")]);
+    var hrO2Str = Lang.format("$1$ $2$ / $3$% Ox" ,
+			      [accelHandler.mHR,
+			       Ui.loadResource(Rez.Strings.Beats_per_minute_abbrev),
+			       accelHandler.mO2sat]);
+
+    //var hrBatStr = Lang.format("$1$ $2$ / %3% / $4$%",[accelHandler.mHR,
+    //					Ui.loadResource(Rez.Strings.Beats_per_minute_abbrev),
+    //						 accelHandler.mO2sat,
+    //						 sysStats.battery.format("%02.0f")]);
+    var hrBatStr = Lang.format("$1$: $2$%",
+			       [
+				Ui.loadResource(Rez.Strings.Battery_abbrev),
+				sysStats.battery.format("%02.0f")]);
+
     dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_WHITE);
     dc.clear();
     dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
@@ -91,7 +96,7 @@ class GarminSDView extends Ui.View {
     //dc.drawText(width / 2,  180, Gfx.FONT_LARGE, batString,
     //	Gfx.TEXT_JUSTIFY_CENTER);
     dc.drawText(width / 2,  120, Gfx.FONT_LARGE, hrO2Str, Gfx.TEXT_JUSTIFY_CENTER);
-    dc.drawText(width / 2,  150, Gfx.FONT_LARGE, batStr, Gfx.TEXT_JUSTIFY_CENTER);
+    dc.drawText(width / 2,  150, Gfx.FONT_LARGE, hrBatStr, Gfx.TEXT_JUSTIFY_CENTER);
     if (accelHandler.mMute) {
       dc.drawText(width / 2,  180, Gfx.FONT_LARGE, Ui.loadResource(Rez.Strings.Mute_label),
 		  Gfx.TEXT_JUSTIFY_CENTER);

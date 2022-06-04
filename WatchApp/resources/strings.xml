@@ -2,6 +2,7 @@
   <string id="AppName">GarminSD</string>
   <string id="VersionId">V1.1a</string>
   <string id="Beats_per_minute_abbrev">bpm</string>
+  <string id="Battery_abbrev">bat</string>
   <string id="Error_abbrev">ERR</string>
   <string id="Mute_label">MUTE</string>
   <string id="Mute_alarms_confirmation">Mute Alarms (for 5 min)?</string>

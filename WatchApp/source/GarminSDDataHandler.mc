@@ -4,7 +4,7 @@
 
   See http://openseizuredetector.org for more information.
 
-  Copyright Graham Jones, 2019.
+  Copyright Graham Jones, 2019, 2022.
 
   This file is part of Garmin_sd.
 
@@ -20,6 +20,9 @@
 
   You should have received a copy of the GNU General Public License
   along with Garmin_sd.  If not, see <http://www.gnu.org/licenses/>.
+
+  November 2021 - Added support for blood oxygen saturation based on work
+          by Steve Lee.
 
 */
 using Toybox.Sensor;
@@ -41,7 +44,7 @@ class GarminSDDataHandler {
 
   var nSamp = 0;
   var mHR = 0;
-  var mO2Sat = 0;
+  var mO2sat = 0;
   var mMute = 0;
   var mMuteTimer;
   var mStatusStr = "---";
@@ -64,14 +67,10 @@ class GarminSDDataHandler {
   function getDataJson() {
     var i;
     var jsonStr = "{ dataType: 'raw', data: [";
-    
     for (i = 0; i<ANALYSIS_PERIOD*SAMPLE_FREQUENCY; i=i+1) {
       if (i>0) {
 	jsonStr = jsonStr + ", ";
       }
-      //jsonStr = jsonStr + (mSamplesX[i].abs()
-      //                   +mSamplesY[i].abs()
-      //		   +mSamplesZ[i].abs());
       jsonStr = jsonStr + Math.sqrt( mSamplesX[i] * mSamplesX[i]
       		   +mSamplesY[i] * mSamplesY[i]
       		   +mSamplesZ[i] * mSamplesZ[i]);
@@ -85,12 +84,11 @@ class GarminSDDataHandler {
       jsonStr = jsonStr + mSamplesY[i] + ", ";
       jsonStr = jsonStr + mSamplesZ[i];
     }
-    
+
     jsonStr = jsonStr + "], HR:"+mHR;
+    jsonStr = jsonStr + ", O2sat:"+mO2sat;
     jsonStr = jsonStr + ", Mute:"+mMute;
-    jsonStr = jsonStr + ", O2Sat:"+mO2Sat;
     jsonStr = jsonStr + " }";
-    System.println(jsonStr);
     return jsonStr;
   }
 
@@ -158,12 +156,15 @@ class GarminSDDataHandler {
   }
 
   function heartrate_callback(sensorInfo) {
-    System.println("HeartRate: " + sensorInfo.heartRate);
-    System.println("Oxygen Saturation: " + sensorInfo.oxygenSaturation);
+    //System.println("HeartRate: " + sensorInfo.heartRate);
+    //System.println("O2Sat: " + sensorInfo.oxygenSaturation);
     mHR = sensorInfo.heartRate;
-    mO2Sat = sensorInfo.oxygenSaturation;
+    if (sensorInfo has :oxygenSaturation) {
+      mO2sat = sensorInfo.oxygenSaturation;
+    } else {
+      mO2sat = 0;
+    }
   }
-
     
     
   // Initializes the view and registers for accelerometer data
@@ -190,13 +191,14 @@ class GarminSDDataHandler {
 
     // Intialise heart rate monitoring.
     // FIXME - does this drain the battery a lot?
-    if (Sensor has Sensor.SENSOR_PULSE_OXYMETRY) {
-      Sensor.setEnabledSensors([Sensor.SENSOR_HEARTRATE, Sensor.SENSOR_PULSE_OXIMETRY]);
+    if (Sensor has :SENSOR_PULSE_OXYMETRY) {
+      Sensor.setEnabledSensors([Sensor.SENSOR_HEARTRATE,
+				Sensor.SENSOR_PULSE_OXIMETRY]);
     } else {
       Sensor.setEnabledSensors([Sensor.SENSOR_HEARTRATE]);
     }
-    Sensor.enableSensorEvents(method(:heartrate_callback));
 
+    Sensor.enableSensorEvents(method(:heartrate_callback));
   }
   
 
