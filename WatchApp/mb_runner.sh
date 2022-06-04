@@ -177,6 +177,7 @@ function params_for_package
 
 function compile
 {
+    echo "PARAMS="${PARAMS}
     "${MB_HOME}/bin/monkeyc" ${PARAMS}
 }
 

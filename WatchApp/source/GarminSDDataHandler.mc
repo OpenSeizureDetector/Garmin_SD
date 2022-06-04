@@ -75,7 +75,7 @@ class GarminSDDataHandler {
       		   +mSamplesY[i] * mSamplesY[i]
       		   +mSamplesZ[i] * mSamplesZ[i]);
     }
-    jsonStr = jsonStr + "], data3d: [";
+    jsonStr = jsonStr + "], data3D: [";
     for (i = 0; i<ANALYSIS_PERIOD*SAMPLE_FREQUENCY; i=i+1) {
       if (i>0) {
 	jsonStr = jsonStr + ", ";
