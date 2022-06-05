@@ -4,7 +4,7 @@
 
   See http://openseizuredetector.org for more information.
 
-  Copyright Graham Jones, 2019.
+  Copyright Graham Jones, 2019, 2022
 
   This file is part of Garmin_sd.
 
@@ -75,10 +75,6 @@ class GarminSDView extends Ui.View {
 			       Ui.loadResource(Rez.Strings.Beats_per_minute_abbrev),
 			       accelHandler.mO2sat]);
 
-    //var hrBatStr = Lang.format("$1$ $2$ / %3% / $4$%",[accelHandler.mHR,
-    //					Ui.loadResource(Rez.Strings.Beats_per_minute_abbrev),
-    //						 accelHandler.mO2sat,
-    //						 sysStats.battery.format("%02.0f")]);
     var hrBatStr = Lang.format("$1$: $2$%",
 			       [
 				Ui.loadResource(Rez.Strings.Battery_abbrev),
@@ -93,8 +89,6 @@ class GarminSDView extends Ui.View {
 		Gfx.TEXT_JUSTIFY_CENTER);
     dc.drawText(width / 2,  45, Gfx.FONT_SYSTEM_NUMBER_HOT, timeString,
 		Gfx.TEXT_JUSTIFY_CENTER);
-    //dc.drawText(width / 2,  180, Gfx.FONT_LARGE, batString,
-    //	Gfx.TEXT_JUSTIFY_CENTER);
     dc.drawText(width / 2,  120, Gfx.FONT_LARGE, hrO2Str, Gfx.TEXT_JUSTIFY_CENTER);
     dc.drawText(width / 2,  150, Gfx.FONT_LARGE, hrBatStr, Gfx.TEXT_JUSTIFY_CENTER);
     if (accelHandler.mMute) {
