@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <iq:manifest xmlns:iq="http://www.garmin.com/xml/connectiq" version="3">
-    <iq:application entry="GarminSDApp" id="9bb13795-613a-4019-80ed-4b8e340ef084" launcherIcon="@Drawables.LauncherIcon" minSdkVersion="3.2.0" name="@Strings.AppName" type="watch-app">
+    <iq:application entry="GarminSDApp" id="9bb13795-613a-4019-80ed-4b8e340ef084" launcherIcon="@Drawables.LauncherIcon" minSdkVersion="2.4.0" name="@Strings.AppName" type="watch-app">
         <iq:products>
             <iq:product id="legacyherocaptainmarvel"/>
             <iq:product id="d2air"/>
