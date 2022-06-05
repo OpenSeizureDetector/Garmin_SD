@@ -103,8 +103,12 @@ class GarminSDComms {
       }
       mAccelHandler.mStatusStr = data.get("alarmPhrase");
       if (data.get("alarmState") != 0) {
-	if (Attention has :backlight) {
-	  Attention.backlight(true);
+	try {
+	  if (Attention has :backlight) {
+	    Attention.backlight(true);
+	  }
+	} catch( ex ) {
+	  // We might get a Toybox.Attention.BacklightOnTooLongException
 	}
       }
     } else {
