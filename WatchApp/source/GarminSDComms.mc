@@ -110,6 +110,22 @@ class GarminSDComms {
 	} catch( ex ) {
 	  // We might get a Toybox.Attention.BacklightOnTooLongException
 	}
+	if (Attention has :playTone) {
+	  Attention.playTone(Attention.TONE_ALERT_HI);
+	}
+      }
+      if (data.get("alarmState") == 2) { // ALARM
+	if (Attention has :vibrate) {
+	  var vibeData =
+	    [
+	     new Attention.VibeProfile(50, 500),
+	     new Attention.VibeProfile(0, 500),  
+	     new Attention.VibeProfile(50, 500), 
+	     new Attention.VibeProfile(0, 500),  
+	     new Attention.VibeProfile(50, 500)  
+	     ];
+	  Attention.vibrate(vibeData);
+	}
       }
     } else {
       mAccelHandler.mStatusStr = Rez.Strings.Error_abbrev + ": " + responseCode.toString();
@@ -142,6 +158,22 @@ class GarminSDComms {
       }
     } else {
       mAccelHandler.mStatusStr = "ERR: " + responseCode.toString();
+      if (Attention has :playTone) {
+	Attention.playTone(Attention.TONE_LOUD_BEEP);
+      }
+      if (Attention has :vibrate) {
+	 var vibeData =
+	  [
+	   new Attention.VibeProfile(50, 200),
+	   new Attention.VibeProfile(0, 200),  
+	   new Attention.VibeProfile(50, 200), 
+	   new Attention.VibeProfile(0, 200),  
+	   new Attention.VibeProfile(50, 200)  
+	   ];
+	 Attention.vibrate(vibeData);
+      }
+
+
       if (responseCode != lastOnReceiveResponse) {
 	System.println("onReceive() Failue - code =");
 	System.println(responseCode);
