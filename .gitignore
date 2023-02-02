@@ -2,3 +2,4 @@
 *#
 *.prg.debug.xml
 temp
+WatchApp/bin
