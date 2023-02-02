@@ -89,19 +89,34 @@ class GarminSDView extends Ui.View {
     dc.clear();
     dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
     dc.drawText(width / 2,  0, Gfx.FONT_MEDIUM, "OpenSeizure",
-		Gfx.TEXT_JUSTIFY_CENTER);
+		  Gfx.TEXT_JUSTIFY_CENTER);
     dc.drawText(width / 2,  20 * heightScale, Gfx.FONT_MEDIUM, "Detector",
-		Gfx.TEXT_JUSTIFY_CENTER);
-    dc.drawText(width / 2,  45 * heightScale, Gfx.FONT_SYSTEM_NUMBER_HOT, timeString,
-		Gfx.TEXT_JUSTIFY_CENTER);
-    dc.drawText(width / 2,  120 * heightScale, Gfx.FONT_LARGE, hrO2Str, Gfx.TEXT_JUSTIFY_CENTER);
-    dc.drawText(width / 2,  150 * heightScale, Gfx.FONT_LARGE, hrBatStr, Gfx.TEXT_JUSTIFY_CENTER);
+		  Gfx.TEXT_JUSTIFY_CENTER);
+    // There is an issue with some devices having different font sizes, so
+    // we check the width of the text for our preferred font size, and if it is too long
+    // we use a smaller font.
+    var timeTextDims = dc.getTextDimensions(timeString, Gfx.FONT_SYSTEM_NUMBER_HOT);
+    if (timeTextDims[0]<width) {
+      dc.drawText(width / 2,  45 * heightScale, Gfx.FONT_SYSTEM_NUMBER_HOT, timeString,
+  		Gfx.TEXT_JUSTIFY_CENTER);
+    } else {
+      dc.drawText(width / 2,  45 * heightScale, Gfx.FONT_SYSTEM_NUMBER_MEDIUM, timeString,
+  		Gfx.TEXT_JUSTIFY_CENTER);
+    }
+    var hrTextDims = dc.getTextDimensions(hrO2Str, Gfx.FONT_LARGE);
+    if (hrTextDims[0]<width) {
+      dc.drawText(width / 2,  120 * heightScale, Gfx.FONT_LARGE, hrO2Str, Gfx.TEXT_JUSTIFY_CENTER);
+      dc.drawText(width / 2,  150 * heightScale, Gfx.FONT_LARGE, hrBatStr, Gfx.TEXT_JUSTIFY_CENTER);
+    } else {
+      dc.drawText(width / 2,  120 * heightScale, Gfx.FONT_SMALL, hrO2Str, Gfx.TEXT_JUSTIFY_CENTER);
+      dc.drawText(width / 2,  150 * heightScale, Gfx.FONT_SMALL, hrBatStr, Gfx.TEXT_JUSTIFY_CENTER);
+    }
     if (accelHandler.mMute) {
       dc.drawText(width / 2,  180 * heightScale, Gfx.FONT_LARGE, Ui.loadResource(Rez.Strings.Mute_label),
-		  Gfx.TEXT_JUSTIFY_CENTER);
+		    Gfx.TEXT_JUSTIFY_CENTER);
     } else {
       dc.drawText(width / 2,  180 * heightScale, Gfx.FONT_LARGE, accelHandler.mStatusStr,
-		  Gfx.TEXT_JUSTIFY_CENTER);
+		    Gfx.TEXT_JUSTIFY_CENTER);
     }
   }
   
