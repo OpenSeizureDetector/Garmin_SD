@@ -60,6 +60,11 @@ class GarminSDView extends Ui.View {
   // Update the view
   function onUpdate(dc) {
     // see https://developer.garmin.com/downloads/connect-iq/monkey-c/doc/Toybox/Time.html
+    var heightScale = height / 240.0;   // Nominal height of display for positioning text - values are for a 240px high display.
+    System.print("height = ");
+    System.println(height);
+    System.print("heightScale = ");
+    System.println(heightScale);
     var dateTime = Gregorian.info(Time.now(), Time.FORMAT_MEDIUM);
     var timeString = Lang.format(
 				 "$1$:$2$:$3$",
@@ -85,17 +90,17 @@ class GarminSDView extends Ui.View {
     dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
     dc.drawText(width / 2,  0, Gfx.FONT_MEDIUM, "OpenSeizure",
 		Gfx.TEXT_JUSTIFY_CENTER);
-    dc.drawText(width / 2,  20, Gfx.FONT_MEDIUM, "Detector",
+    dc.drawText(width / 2,  20 * heightScale, Gfx.FONT_MEDIUM, "Detector",
 		Gfx.TEXT_JUSTIFY_CENTER);
-    dc.drawText(width / 2,  45, Gfx.FONT_SYSTEM_NUMBER_HOT, timeString,
+    dc.drawText(width / 2,  45 * heightScale, Gfx.FONT_SYSTEM_NUMBER_HOT, timeString,
 		Gfx.TEXT_JUSTIFY_CENTER);
-    dc.drawText(width / 2,  120, Gfx.FONT_LARGE, hrO2Str, Gfx.TEXT_JUSTIFY_CENTER);
-    dc.drawText(width / 2,  150, Gfx.FONT_LARGE, hrBatStr, Gfx.TEXT_JUSTIFY_CENTER);
+    dc.drawText(width / 2,  120 * heightScale, Gfx.FONT_LARGE, hrO2Str, Gfx.TEXT_JUSTIFY_CENTER);
+    dc.drawText(width / 2,  150 * heightScale, Gfx.FONT_LARGE, hrBatStr, Gfx.TEXT_JUSTIFY_CENTER);
     if (accelHandler.mMute) {
-      dc.drawText(width / 2,  180, Gfx.FONT_LARGE, Ui.loadResource(Rez.Strings.Mute_label),
+      dc.drawText(width / 2,  180 * heightScale, Gfx.FONT_LARGE, Ui.loadResource(Rez.Strings.Mute_label),
 		  Gfx.TEXT_JUSTIFY_CENTER);
     } else {
-      dc.drawText(width / 2,  180, Gfx.FONT_LARGE, accelHandler.mStatusStr,
+      dc.drawText(width / 2,  180 * heightScale, Gfx.FONT_LARGE, accelHandler.mStatusStr,
 		  Gfx.TEXT_JUSTIFY_CENTER);
     }
   }
