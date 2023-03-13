@@ -3,7 +3,7 @@ Garmin_SD
 
 Development version of a seizure detector that will run on a Garmin Vivoactive HR smartwatch.
 
-Useful info on command line complation is here: https://developer.garmin.com/index.php/blog/post/connect-iq-pro-tip-connect-iq-and-travis-ci
+Useful info on command line complation is here: [https://developer.garmin.com/connect-iq/connect-iq-faq/how-do-i-integrate-connect-iq-and-travis-ci/](https://developer.garmin.com/connect-iq/connect-iq-faq/how-do-i-integrate-connect-iq-and-travis-ci/)
 
 Compile with
 ./mb_runner.sh build
