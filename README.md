@@ -33,8 +33,8 @@ Note, this used to be easy until Garmin introduced the SDK manager - now you nee
 
 # Build Instructions (Visual Studio Code)
   * Clone this repository
-  * Install Visual Studio Code, and start it, opening the WatchApp folder of this repository
-  * Install the Monkey C extension
+  * Install [Visual Studio Code](https://code.visualstudio.com/), and start it, opening the WatchApp folder of this repository
+  * Install the Monkey C extension from within vscode.
   * Set up the Monkey C extension to use the installed SDK.
   * Press the Run and Debug (triangle) icon on the left hand side of the screen).   This opens an extra panel with a Run (triangle) icon at the top of the screen.
   * Select Run (Triange Icon)
