@@ -1,1 +1,1 @@
-GarminSD_v1.3.prg
+GarminSD_v1.3.2.prg
