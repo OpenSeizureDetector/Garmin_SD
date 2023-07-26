@@ -149,9 +149,16 @@ class GarminSDDataHandler {
     
     if (nSamp*SAMPLE_PERIOD == ANALYSIS_PERIOD) {
       //System.println("Doing Analysis....");
-      mComms.sendAccelData();
-      //mHR = -1;
+      // Force reading of current heart rate and o2sat values in case the heart rate
+      // freezing issue
+      mHR = Sensor.getInfo().heartRate;
+      if (Sensor.getInfo() has :oxygenSaturation) {
+        mO2sat = Sensor.getInfo().oxygenSaturation;
+      } else {
+        mO2sat = 0;
+      }
       nSamp = 0;
+      mComms.sendAccelData();
     }
   }
 
