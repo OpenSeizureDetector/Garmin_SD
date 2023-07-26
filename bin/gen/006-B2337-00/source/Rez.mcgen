@@ -1,0 +1,34 @@
+import Toybox.Lang;
+using Toybox.WatchUi;
+using Toybox.WatchUi as Ui;
+using Toybox.Graphics;
+using Toybox.Graphics as Gfx;
+
+module Rez {
+    module Drawables {
+        (:initialized) var LauncherIcon as Symbol;
+    } // Drawables
+
+    module Fonts {
+    } // Fonts
+
+    module JsonData {
+    } // JsonData
+
+    module Layouts {
+    } // Layouts
+
+    module Menus {
+    } // Menus
+
+    module Strings {
+        (:initialized) var VersionId as Symbol;
+        (:initialized) var Error_abbrev as Symbol;
+        (:initialized) var Exit_app_confirmation as Symbol;
+        (:initialized) var Mute_alarms_confirmation as Symbol;
+        (:initialized) var Battery_abbrev as Symbol;
+        (:initialized) var Mute_label as Symbol;
+        (:initialized) var Beats_per_minute_abbrev as Symbol;
+        (:initialized) var AppName as Symbol;
+    } // Strings
+} // Rez

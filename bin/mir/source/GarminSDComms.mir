@@ -1,0 +1,671 @@
+[ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc"; @line = 25; ]
+using Toybox.Communications as :Comm;
+[ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc"; @line = 26; ]
+using Toybox.Attention as :Attention;
+[ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc"; @line = 28; ]
+class GarminSDComms{
+    [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc"; @line = 28; ]
+    <init> {
+    }
+    [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc"; @line = 28; ]
+    static
+    <init> {
+    }
+    [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc"; @line = 29; @position = 6; ]
+    var listener;
+    [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc"; @line = 30; @position = 6; ]
+    var mAccelHandler = null;
+    [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc"; @line = 31; @position = 6; ]
+    var lastOnReceiveResponse = -1;
+    [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc"; @line = 32; @position = 6; ]
+    var lastOnReceiveData = "";
+    [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc"; @line = 33; @position = 6; ]
+    var lastOnSdStatusReceiveResponse = -1;
+    [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc"; @line = 35; @position = 6; ]
+    var serverUrl = "http://127.0.0.1:8080";
+    [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc"; @line = 37; ]
+    function initialize(accelHandler) as Void {
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_37_36_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 38 4 ]
+        %tmp.4 = getv ? :CommListener;
+        %tmp.1 = newc %tmp.4 ();
+        putv self :listener %tmp.1;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 39 4 ]
+        %tmp.6 = lgetv %accelHandler;
+        putv self :mAccelHandler %tmp.6;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_37_36_stop:
+    }
+    [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc"; @line = 42; ]
+    function onStart() {
+    }
+    [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc"; @line = 49; ]
+    function sendAccelData() {
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_49_27_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 50 4 ]
+        [ "_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_49_27_start" "_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_49_27_stop" ]
+        %dataObj.1 = local;
+        %tmp.2 = getv ? :mAccelHandler;
+        %tmp.3 = getv function %tmp.2 :getDataJson;
+        %tmp.4 = invoke %tmp.2 %tmp.3();
+        lputv %dataObj.1 %tmp.4;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 52 4 ]
+        %tmp.5 = getm $.Toybox.Communications;
+        %tmp.6 = getv function %tmp.5 :makeWebRequest;
+        %tmp.8 = getv ? :serverUrl;
+        %tmp.9 = "/data";
+        %tmp.10 = add %tmp.8 %tmp.9;
+        %tmp.11 = newd 1;
+        %tmp.12 = "dataObj";
+        %tmp.14 = lgetv %dataObj.1;
+        %tmp.15 = dup %tmp.11;
+        %tmp.16 = aputv %tmp.15 %tmp.12 %tmp.14;
+        %tmp.17 = newd 2;
+        %tmp.19 = const :method;
+        %tmp.21 = getv ? :Communications;
+        %tmp.22 = getv %tmp.21 :HTTP_REQUEST_METHOD_POST;
+        %tmp.23 = dup %tmp.17;
+        %tmp.24 = aputv %tmp.23 %tmp.19 %tmp.22;
+        %tmp.26 = const :headers;
+        %tmp.27 = newd 1;
+        %tmp.28 = "Content-Type";
+        %tmp.29 = getm $.Toybox.Communications;
+        %tmp.30 = getv %tmp.29 :REQUEST_CONTENT_TYPE_URL_ENCODED;
+        %tmp.31 = dup %tmp.27;
+        %tmp.32 = aputv %tmp.31 %tmp.28 %tmp.30;
+        %tmp.33 = dup %tmp.24;
+        %tmp.34 = aputv %tmp.33 %tmp.26 %tmp.32;
+        %tmp.35 = self;
+        %tmp.36 = getv function %tmp.35 :method;
+        %tmp.38 = const :onReceive;
+        %tmp.39 = invoke %tmp.35 %tmp.36(%tmp.38);
+        invoke %tmp.5 %tmp.6(%tmp.10, %tmp.16, %tmp.34, %tmp.39);
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_49_27_stop:
+    }
+    [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc"; @line = 64; ]
+    function sendSettings() {
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_64_26_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 65 4 ]
+        [ "_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_64_26_start" "_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_64_26_stop" ]
+        %dataObj.1 = local;
+        %tmp.2 = getv ? :mAccelHandler;
+        %tmp.3 = getv function %tmp.2 :getSettingsJson;
+        %tmp.4 = invoke %tmp.2 %tmp.3();
+        lputv %dataObj.1 %tmp.4;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 67 4 ]
+        %tmp.5 = getm $.Toybox.Communications;
+        %tmp.6 = getv function %tmp.5 :makeWebRequest;
+        %tmp.8 = getv ? :serverUrl;
+        %tmp.9 = "/settings";
+        %tmp.10 = add %tmp.8 %tmp.9;
+        %tmp.11 = newd 1;
+        %tmp.12 = "dataObj";
+        %tmp.14 = lgetv %dataObj.1;
+        %tmp.15 = dup %tmp.11;
+        %tmp.16 = aputv %tmp.15 %tmp.12 %tmp.14;
+        %tmp.17 = newd 2;
+        %tmp.19 = const :method;
+        %tmp.21 = getv ? :Communications;
+        %tmp.22 = getv %tmp.21 :HTTP_REQUEST_METHOD_POST;
+        %tmp.23 = dup %tmp.17;
+        %tmp.24 = aputv %tmp.23 %tmp.19 %tmp.22;
+        %tmp.26 = const :headers;
+        %tmp.27 = newd 1;
+        %tmp.28 = "Content-Type";
+        %tmp.29 = getm $.Toybox.Communications;
+        %tmp.30 = getv %tmp.29 :REQUEST_CONTENT_TYPE_URL_ENCODED;
+        %tmp.31 = dup %tmp.27;
+        %tmp.32 = aputv %tmp.31 %tmp.28 %tmp.30;
+        %tmp.33 = dup %tmp.24;
+        %tmp.34 = aputv %tmp.33 %tmp.26 %tmp.32;
+        %tmp.35 = self;
+        %tmp.36 = getv function %tmp.35 :method;
+        %tmp.38 = const :onReceive;
+        %tmp.39 = invoke %tmp.35 %tmp.36(%tmp.38);
+        invoke %tmp.5 %tmp.6(%tmp.10, %tmp.16, %tmp.34, %tmp.39);
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_64_26_stop:
+    }
+    [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc"; @line = 79; ]
+    function getSdStatus() {
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_79_25_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 81 4 ]
+        %tmp.1 = getm $.Toybox.Communications;
+        %tmp.2 = getv function %tmp.1 :makeWebRequest;
+        %tmp.4 = getv ? :serverUrl;
+        %tmp.5 = "/data";
+        %tmp.6 = add %tmp.4 %tmp.5;
+        %tmp.7 = newd 0;
+        %tmp.8 = newd 3;
+        %tmp.10 = const :method;
+        %tmp.12 = getv ? :Communications;
+        %tmp.13 = getv %tmp.12 :HTTP_REQUEST_METHOD_GET;
+        %tmp.14 = dup %tmp.8;
+        %tmp.15 = aputv %tmp.14 %tmp.10 %tmp.13;
+        %tmp.17 = const :headers;
+        %tmp.18 = newd 1;
+        %tmp.19 = "Content-Type";
+        %tmp.21 = getv ? :Communications;
+        %tmp.22 = getv %tmp.21 :REQUEST_CONTENT_TYPE_URL_ENCODED;
+        %tmp.23 = dup %tmp.18;
+        %tmp.24 = aputv %tmp.23 %tmp.19 %tmp.22;
+        %tmp.25 = dup %tmp.15;
+        %tmp.26 = aputv %tmp.25 %tmp.17 %tmp.24;
+        %tmp.28 = const :responseType;
+        %tmp.30 = getv ? :Communications;
+        %tmp.31 = getv %tmp.30 :HTTP_RESPONSE_CONTENT_TYPE_JSON;
+        %tmp.32 = dup %tmp.26;
+        %tmp.33 = aputv %tmp.32 %tmp.28 %tmp.31;
+        %tmp.34 = self;
+        %tmp.35 = getv function %tmp.34 :method;
+        %tmp.37 = const :onSdStatusReceive;
+        %tmp.38 = invoke %tmp.34 %tmp.35(%tmp.37);
+        invoke %tmp.1 %tmp.2(%tmp.6, %tmp.7, %tmp.33, %tmp.38);
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_79_25_stop:
+    }
+    [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc"; @line = 97; ]
+    function onSdStatusReceive(responseCode, data) {
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_97_49_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 99 4 ]
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_99_4_if_stmt:
+        %tmp.2 = lgetv %responseCode;
+        %tmp.3 = 200;
+        %tmp.4 = eq %tmp.2 %tmp.3;
+        bf %tmp.4 @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_99_4_if_false;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_99_4_if_true:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_99_29_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 100 6 ]
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_100_6_if_stmt:
+        %tmp.6 = lgetv %responseCode;
+        %tmp.8 = getv ? :lastOnSdStatusReceiveResponse;
+        %tmp.9 = ne %tmp.6 %tmp.8;
+        bf %tmp.9 @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_100_6_if_end;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_100_6_if_true:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_100_57_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 101 1 ]
+        %tmp.11 = getv ? :System;
+        %tmp.12 = getv function %tmp.11 :println;
+        %tmp.13 = "onSdStatusReceive() success - data =";
+        %tmp.15 = lgetv %data;
+        %tmp.16 = add %tmp.13 %tmp.15;
+        invoke %tmp.11 %tmp.12(%tmp.16);
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 102 1 ]
+        %tmp.18 = getv ? :System;
+        %tmp.19 = getv function %tmp.18 :println;
+        %tmp.20 = "onSdStatusReceive() Status =";
+        %tmp.21 = lgetv %data;
+        %tmp.22 = getv function %tmp.21 :get;
+        %tmp.23 = "alarmPhrase";
+        %tmp.24 = invoke %tmp.21 %tmp.22(%tmp.23);
+        %tmp.25 = add %tmp.20 %tmp.24;
+        invoke %tmp.18 %tmp.19(%tmp.25);
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_100_57_stop:
+        goto @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_100_6_if_end;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_100_6_if_end:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 104 6 ]
+        %tmp.26 = getv self :mAccelHandler;
+        %tmp.27 = lgetv %data;
+        %tmp.28 = getv function %tmp.27 :get;
+        %tmp.29 = "alarmPhrase";
+        %tmp.30 = invoke %tmp.27 %tmp.28(%tmp.29);
+        putv %tmp.26 :mStatusStr %tmp.30;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 105 6 ]
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_105_6_if_stmt:
+        %tmp.31 = lgetv %data;
+        %tmp.32 = getv function %tmp.31 :get;
+        %tmp.33 = "alarmState";
+        %tmp.34 = invoke %tmp.31 %tmp.32(%tmp.33);
+        %tmp.35 = 0;
+        %tmp.36 = ne %tmp.34 %tmp.35;
+        bf %tmp.36 @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_105_6_if_end;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_105_6_if_true:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_105_39_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 106 1 ]
+        try @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_106_1_beginTry @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_106_1_endTry @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_106_1_catch @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_106_1_finally;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_106_1_beginTry:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_106_5_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 107 3 ]
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_107_3_if_stmt:
+        %tmp.38 = getm $.Toybox.Attention;
+        %tmp.40 = const :backlight;
+        %tmp.41 = canhazplz %tmp.38 %tmp.40;
+        bf %tmp.41 @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_107_3_if_end;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_107_3_if_true:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_107_33_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 108 5 ]
+        %tmp.42 = getm $.Toybox.Attention;
+        %tmp.43 = getv function %tmp.42 :backlight;
+        %tmp.44 = true;
+        invoke %tmp.42 %tmp.43(%tmp.44);
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_107_33_stop:
+        goto @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_107_3_if_end;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_107_3_if_end:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_106_5_stop:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_106_1_endTry:
+        jsr @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_106_1_finally;
+        goto @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_106_1_end;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_106_1_catch:
+        %tmp.45 = exception;
+        push %tmp.45;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 110 3 ]
+        [ "_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_106_1_catch" "_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_110_3_end" ]
+        %ex.1 = local;
+        %tmp.46 = dup %tmp.45;
+        lputv %ex.1 %tmp.46;
+        jsr @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_106_1_finally;
+        pop;
+        goto @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_106_1_end;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_110_3_end:
+        try @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_106_1_catch @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_110_3_end @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_110_3_end @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_106_1_finally;
+        jsr @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_106_1_finally;
+        throw %tmp.45;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_106_1_finally:
+        jsrret;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_106_1_end:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 113 1 ]
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_113_1_if_stmt:
+        %tmp.48 = getm $.Toybox.Attention;
+        %tmp.50 = const :playTone;
+        %tmp.51 = canhazplz %tmp.48 %tmp.50;
+        bf %tmp.51 @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_113_1_if_end;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_113_1_if_true:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_113_30_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 114 3 ]
+        %tmp.52 = getm $.Toybox.Attention;
+        %tmp.53 = getv function %tmp.52 :playTone;
+        %tmp.54 = getm $.Toybox.Attention;
+        %tmp.55 = getv %tmp.54 :TONE_ALERT_HI;
+        invoke %tmp.52 %tmp.53(%tmp.55);
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_113_30_stop:
+        goto @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_113_1_if_end;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_113_1_if_end:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_105_39_stop:
+        goto @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_105_6_if_end;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_105_6_if_end:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 117 6 ]
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_117_6_if_stmt:
+        %tmp.56 = lgetv %data;
+        %tmp.57 = getv function %tmp.56 :get;
+        %tmp.58 = "alarmState";
+        %tmp.59 = invoke %tmp.56 %tmp.57(%tmp.58);
+        %tmp.60 = 2;
+        %tmp.61 = eq %tmp.59 %tmp.60;
+        bf %tmp.61 @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_117_6_if_end;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_117_6_if_true:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_117_39_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 118 1 ]
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_118_1_if_stmt:
+        %tmp.63 = getm $.Toybox.Attention;
+        %tmp.65 = const :vibrate;
+        %tmp.66 = canhazplz %tmp.63 %tmp.65;
+        bf %tmp.66 @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_118_1_if_end;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_118_1_if_true:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_118_29_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 119 3 ]
+        [ "_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_118_29_start" "_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_118_29_stop" ]
+        %vibeData.2 = local;
+        %tmp.67 = newa 5;
+        %tmp.70 = getm $.Toybox.Attention;
+        %tmp.71 = getv function ? %tmp.70 :VibeProfile;
+        %tmp.72 = 50;
+        %tmp.73 = 500;
+        %tmp.68 = newc %tmp.71 (%tmp.72, %tmp.73);
+        %tmp.74 = dup %tmp.67;
+        %tmp.75 = aputv %tmp.74 0 %tmp.68;
+        %tmp.78 = getm $.Toybox.Attention;
+        %tmp.79 = getv function ? %tmp.78 :VibeProfile;
+        %tmp.80 = 0;
+        %tmp.81 = 500;
+        %tmp.76 = newc %tmp.79 (%tmp.80, %tmp.81);
+        %tmp.82 = dup %tmp.75;
+        %tmp.83 = aputv %tmp.82 1 %tmp.76;
+        %tmp.86 = getm $.Toybox.Attention;
+        %tmp.87 = getv function ? %tmp.86 :VibeProfile;
+        %tmp.88 = 50;
+        %tmp.89 = 500;
+        %tmp.84 = newc %tmp.87 (%tmp.88, %tmp.89);
+        %tmp.90 = dup %tmp.83;
+        %tmp.91 = aputv %tmp.90 2 %tmp.84;
+        %tmp.94 = getm $.Toybox.Attention;
+        %tmp.95 = getv function ? %tmp.94 :VibeProfile;
+        %tmp.96 = 0;
+        %tmp.97 = 500;
+        %tmp.92 = newc %tmp.95 (%tmp.96, %tmp.97);
+        %tmp.98 = dup %tmp.91;
+        %tmp.99 = aputv %tmp.98 3 %tmp.92;
+        %tmp.102 = getm $.Toybox.Attention;
+        %tmp.103 = getv function ? %tmp.102 :VibeProfile;
+        %tmp.104 = 50;
+        %tmp.105 = 500;
+        %tmp.100 = newc %tmp.103 (%tmp.104, %tmp.105);
+        %tmp.106 = dup %tmp.99;
+        %tmp.107 = aputv %tmp.106 4 %tmp.100;
+        lputv %vibeData.2 %tmp.107;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 127 3 ]
+        %tmp.108 = getm $.Toybox.Attention;
+        %tmp.109 = getv function %tmp.108 :vibrate;
+        %tmp.111 = lgetv %vibeData.2;
+        invoke %tmp.108 %tmp.109(%tmp.111);
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_118_29_stop:
+        goto @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_118_1_if_end;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_118_1_if_end:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_117_39_stop:
+        goto @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_117_6_if_end;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_117_6_if_end:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_99_29_stop:
+        goto @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_99_4_if_end;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_99_4_if_false:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_130_11_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 131 6 ]
+        %tmp.112 = getv self :mAccelHandler;
+        %tmp.114 = getv ? :Rez;
+        %tmp.115 = getv %tmp.114 :Strings;
+        %tmp.116 = getv %tmp.115 :Error_abbrev;
+        %tmp.117 = ": ";
+        %tmp.118 = add %tmp.116 %tmp.117;
+        %tmp.119 = lgetv %responseCode;
+        %tmp.120 = getv function %tmp.119 :toString;
+        %tmp.121 = invoke %tmp.119 %tmp.120();
+        %tmp.122 = add %tmp.118 %tmp.121;
+        putv %tmp.112 :mStatusStr %tmp.122;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 132 6 ]
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_132_6_if_stmt:
+        %tmp.124 = lgetv %responseCode;
+        %tmp.126 = getv ? :lastOnSdStatusReceiveResponse;
+        %tmp.127 = ne %tmp.124 %tmp.126;
+        bf %tmp.127 @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_132_6_if_false;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_132_6_if_true:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_132_57_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 133 1 ]
+        %tmp.129 = getv ? :System;
+        %tmp.130 = getv function %tmp.129 :println;
+        %tmp.131 = "onSdStatusReceive() Failue - code =";
+        invoke %tmp.129 %tmp.130(%tmp.131);
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 134 1 ]
+        %tmp.133 = getv ? :System;
+        %tmp.134 = getv function %tmp.133 :println;
+        %tmp.136 = lgetv %responseCode;
+        invoke %tmp.133 %tmp.134(%tmp.136);
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 135 1 ]
+        %tmp.138 = getv ? :System;
+        %tmp.139 = getv function %tmp.138 :println;
+        %tmp.140 = "onSdStatusReceive() Failure - data =";
+        %tmp.142 = lgetv %data;
+        %tmp.143 = add %tmp.140 %tmp.142;
+        invoke %tmp.138 %tmp.139(%tmp.143);
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_132_57_stop:
+        goto @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_132_6_if_end;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_132_6_if_false:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_136_13_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 137 1 ]
+        %tmp.145 = getv ? :System;
+        %tmp.146 = getv function %tmp.145 :print;
+        %tmp.147 = ".";
+        invoke %tmp.145 %tmp.146(%tmp.147);
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_136_13_stop:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_132_6_if_end:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_130_11_stop:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_99_4_if_end:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 140 4 ]
+        %tmp.149 = lgetv %responseCode;
+        putv self :lastOnSdStatusReceiveResponse %tmp.149;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_97_49_stop:
+    }
+    [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc"; @line = 145; ]
+    function onReceive(responseCode, data) {
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_145_41_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 146 4 ]
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_146_4_if_stmt:
+        %tmp.2 = lgetv %responseCode;
+        %tmp.3 = 200;
+        %tmp.4 = eq %tmp.2 %tmp.3;
+        bf %tmp.4 @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_146_4_if_false;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_146_4_if_true:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_146_29_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 147 6 ]
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_147_6_if_stmt:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_147_10_begin:
+        %tmp.6 = lgetv %responseCode;
+        %tmp.8 = getv ? :lastOnReceiveResponse;
+        %tmp.9 = ne %tmp.6 %tmp.8;
+        %tmp.10 = dup %tmp.9;
+        bt %tmp.10 @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_147_53_end;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_147_53_false:
+        %tmp.12 = lgetv %data;
+        %tmp.14 = getv ? :lastOnReceiveData;
+        %tmp.15 = ne %tmp.12 %tmp.14;
+        %tmp.16 = or %tmp.9 %tmp.15;
+        push %tmp.16;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_147_53_end:
+        %tmp.17 = phi [%tmp.10 @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_147_10_begin] [%tmp.16 @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_147_53_false] [%tmp.17 @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_147_53_end];
+        bf %tmp.17 @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_147_6_if_false;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_147_6_if_true:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_147_83_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 148 1 ]
+        %tmp.19 = getv ? :System;
+        %tmp.20 = getv function %tmp.19 :println;
+        %tmp.21 = "onReceive() success - data =";
+        %tmp.23 = lgetv %data;
+        %tmp.24 = add %tmp.21 %tmp.23;
+        invoke %tmp.19 %tmp.20(%tmp.24);
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_147_83_stop:
+        goto @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_147_6_if_end;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_147_6_if_false:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_149_13_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 150 1 ]
+        %tmp.26 = getv ? :System;
+        %tmp.27 = getv function %tmp.26 :print;
+        %tmp.28 = ".";
+        invoke %tmp.26 %tmp.27(%tmp.28);
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_149_13_stop:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_147_6_if_end:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 152 6 ]
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_152_6_if_stmt:
+        %tmp.29 = lgetv %data;
+        %tmp.30 = getv function %tmp.29 :equals;
+        %tmp.31 = "sendSettings";
+        %tmp.32 = invoke %tmp.29 %tmp.30(%tmp.31);
+        bf %tmp.32 @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_152_6_if_false;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_152_6_if_true:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_152_39_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 154 1 ]
+        %tmp.33 = self;
+        %tmp.34 = getv function %tmp.33 :sendSettings;
+        invoke %tmp.33 %tmp.34();
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_152_39_stop:
+        goto @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_152_6_if_end;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_152_6_if_false:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_155_13_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 157 1 ]
+        %tmp.35 = self;
+        %tmp.36 = getv function %tmp.35 :getSdStatus;
+        invoke %tmp.35 %tmp.36();
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_155_13_stop:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_152_6_if_end:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_146_29_stop:
+        goto @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_146_4_if_end;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_146_4_if_false:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_159_11_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 160 6 ]
+        %tmp.37 = getv self :mAccelHandler;
+        %tmp.38 = "ERR: ";
+        %tmp.39 = lgetv %responseCode;
+        %tmp.40 = getv function %tmp.39 :toString;
+        %tmp.41 = invoke %tmp.39 %tmp.40();
+        %tmp.42 = add %tmp.38 %tmp.41;
+        putv %tmp.37 :mStatusStr %tmp.42;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 161 6 ]
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_161_6_if_stmt:
+        %tmp.44 = getm $.Toybox.Attention;
+        %tmp.46 = const :playTone;
+        %tmp.47 = canhazplz %tmp.44 %tmp.46;
+        bf %tmp.47 @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_161_6_if_end;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_161_6_if_true:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_161_35_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 162 1 ]
+        %tmp.48 = getm $.Toybox.Attention;
+        %tmp.49 = getv function %tmp.48 :playTone;
+        %tmp.50 = getm $.Toybox.Attention;
+        %tmp.51 = getv %tmp.50 :TONE_LOUD_BEEP;
+        invoke %tmp.48 %tmp.49(%tmp.51);
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_161_35_stop:
+        goto @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_161_6_if_end;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_161_6_if_end:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 164 6 ]
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_164_6_if_stmt:
+        %tmp.53 = getm $.Toybox.Attention;
+        %tmp.55 = const :vibrate;
+        %tmp.56 = canhazplz %tmp.53 %tmp.55;
+        bf %tmp.56 @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_164_6_if_end;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_164_6_if_true:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_164_34_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 165 2 ]
+        [ "_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_164_34_start" "_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_164_34_stop" ]
+        %vibeData.1 = local;
+        %tmp.57 = newa 5;
+        %tmp.60 = getm $.Toybox.Attention;
+        %tmp.61 = getv function ? %tmp.60 :VibeProfile;
+        %tmp.62 = 50;
+        %tmp.63 = 200;
+        %tmp.58 = newc %tmp.61 (%tmp.62, %tmp.63);
+        %tmp.64 = dup %tmp.57;
+        %tmp.65 = aputv %tmp.64 0 %tmp.58;
+        %tmp.68 = getm $.Toybox.Attention;
+        %tmp.69 = getv function ? %tmp.68 :VibeProfile;
+        %tmp.70 = 0;
+        %tmp.71 = 200;
+        %tmp.66 = newc %tmp.69 (%tmp.70, %tmp.71);
+        %tmp.72 = dup %tmp.65;
+        %tmp.73 = aputv %tmp.72 1 %tmp.66;
+        %tmp.76 = getm $.Toybox.Attention;
+        %tmp.77 = getv function ? %tmp.76 :VibeProfile;
+        %tmp.78 = 50;
+        %tmp.79 = 200;
+        %tmp.74 = newc %tmp.77 (%tmp.78, %tmp.79);
+        %tmp.80 = dup %tmp.73;
+        %tmp.81 = aputv %tmp.80 2 %tmp.74;
+        %tmp.84 = getm $.Toybox.Attention;
+        %tmp.85 = getv function ? %tmp.84 :VibeProfile;
+        %tmp.86 = 0;
+        %tmp.87 = 200;
+        %tmp.82 = newc %tmp.85 (%tmp.86, %tmp.87);
+        %tmp.88 = dup %tmp.81;
+        %tmp.89 = aputv %tmp.88 3 %tmp.82;
+        %tmp.92 = getm $.Toybox.Attention;
+        %tmp.93 = getv function ? %tmp.92 :VibeProfile;
+        %tmp.94 = 50;
+        %tmp.95 = 200;
+        %tmp.90 = newc %tmp.93 (%tmp.94, %tmp.95);
+        %tmp.96 = dup %tmp.89;
+        %tmp.97 = aputv %tmp.96 4 %tmp.90;
+        lputv %vibeData.1 %tmp.97;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 173 2 ]
+        %tmp.98 = getm $.Toybox.Attention;
+        %tmp.99 = getv function %tmp.98 :vibrate;
+        %tmp.101 = lgetv %vibeData.1;
+        invoke %tmp.98 %tmp.99(%tmp.101);
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_164_34_stop:
+        goto @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_164_6_if_end;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_164_6_if_end:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 177 6 ]
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_177_6_if_stmt:
+        %tmp.103 = lgetv %responseCode;
+        %tmp.105 = getv ? :lastOnReceiveResponse;
+        %tmp.106 = ne %tmp.103 %tmp.105;
+        bf %tmp.106 @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_177_6_if_false;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_177_6_if_true:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_177_49_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 178 1 ]
+        %tmp.108 = getv ? :System;
+        %tmp.109 = getv function %tmp.108 :println;
+        %tmp.110 = "onReceive() Failue - code =";
+        invoke %tmp.108 %tmp.109(%tmp.110);
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 179 1 ]
+        %tmp.112 = getv ? :System;
+        %tmp.113 = getv function %tmp.112 :println;
+        %tmp.115 = lgetv %responseCode;
+        invoke %tmp.112 %tmp.113(%tmp.115);
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_177_49_stop:
+        goto @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_177_6_if_end;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_177_6_if_false:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_180_13_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 181 1 ]
+        %tmp.117 = getv ? :System;
+        %tmp.118 = getv function %tmp.117 :print;
+        %tmp.119 = ".";
+        invoke %tmp.117 %tmp.118(%tmp.119);
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_180_13_stop:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_177_6_if_end:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_159_11_stop:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_146_4_if_end:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 184 4 ]
+        %tmp.121 = lgetv %responseCode;
+        putv self :lastOnReceiveResponse %tmp.121;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 185 4 ]
+        %tmp.123 = lgetv %data;
+        putv self :lastOnReceiveData %tmp.123;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_145_41_stop:
+    }
+    [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc"; @line = 190; ]
+    function onMessageReceived(msg) {
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_190_34_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 191 4 ]
+        [ "_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_190_34_start" "_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_190_34_stop" ]
+        %i.1 = local;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 192 4 ]
+        %tmp.2 = getv ? :System;
+        %tmp.3 = getv function %tmp.2 :print;
+        %tmp.4 = "GarminSdApp.onMessageReceived - ";
+        invoke %tmp.2 %tmp.3(%tmp.4);
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 193 4 ]
+        %tmp.6 = getv ? :System;
+        %tmp.7 = getv function %tmp.6 :println;
+        %tmp.8 = lgetv %msg;
+        %tmp.9 = getv %tmp.8 :data;
+        %tmp.10 = getv function %tmp.9 :toString;
+        %tmp.11 = invoke %tmp.9 %tmp.10();
+        invoke %tmp.6 %tmp.7(%tmp.11);
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_190_34_stop:
+    }
+    [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc"; @line = 199; ]
+    class CommListener extends Comm.ConnectionListener{
+        [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc"; @line = 199; ]
+        <init> {
+        }
+        [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc"; @line = 199; ]
+        static
+        <init> {
+        }
+        [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc"; @line = 200; ]
+        function initialize() as Void {
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_200_26_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 201 6 ]
+            %tmp.1 = getm $.Toybox.Communications;
+            %tmp.2 = getv %tmp.1 :ConnectionListener;
+            %tmp.3 = getv function %tmp.2 :initialize;
+            invoke %tmp.2 %tmp.3();
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_200_26_stop:
+        }
+        [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc"; @line = 204; ]
+        function onComplete() {
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_204_26_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 205 6 ]
+            %tmp.2 = getv ? :System;
+            %tmp.3 = getv function %tmp.2 :println;
+            %tmp.4 = "Transmit Complete";
+            invoke %tmp.2 %tmp.3(%tmp.4);
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_204_26_stop:
+        }
+        [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc"; @line = 208; ]
+        function onError() {
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_208_23_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc" 209 6 ]
+            %tmp.2 = getv ? :System;
+            %tmp.3 = getv function %tmp.2 :println;
+            %tmp.4 = "Transmit Failed";
+            invoke %tmp.2 %tmp.3(%tmp.4);
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDComms_mc_208_23_stop:
+        }
+    }
+}
+[ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDComms.mc"; @line = 25; ]
+<init> {
+}

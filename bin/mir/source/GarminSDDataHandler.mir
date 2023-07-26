@@ -1,0 +1,754 @@
+[ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc"; @line = 28; ]
+using Toybox.Sensor;
+[ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc"; @line = 29; ]
+using Toybox.System;
+[ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc"; @line = 30; ]
+using Toybox.WatchUi as :Ui;
+[ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc"; @line = 31; ]
+using Toybox.Timer;
+[ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc"; @line = 32; ]
+using Toybox.Math;
+[ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc"; @line = 34; ]
+class GarminSDDataHandler{
+    [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc"; @line = 34; ]
+    <init> {
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 38 8 ]
+        %tmp.1 = 5;
+        %tmp.2 = 60;
+        %tmp.3 = mul %tmp.1 %tmp.2;
+        %tmp.4 = 1000;
+        %tmp.5 = mul %tmp.3 %tmp.4;
+        putv self :MUTE_TIMER_PERIOD %tmp.5;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 41 6 ]
+        %tmp.8 = getv ? :ANALYSIS_PERIOD;
+        %tmp.10 = getv ? :SAMPLE_FREQUENCY;
+        %tmp.11 = mul %tmp.8 %tmp.10;
+        %tmp.6 = newa %tmp.11;
+        putv self :mSamplesX %tmp.6;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 42 6 ]
+        %tmp.14 = getv ? :ANALYSIS_PERIOD;
+        %tmp.16 = getv ? :SAMPLE_FREQUENCY;
+        %tmp.17 = mul %tmp.14 %tmp.16;
+        %tmp.12 = newa %tmp.17;
+        putv self :mSamplesY %tmp.12;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 43 6 ]
+        %tmp.20 = getv ? :ANALYSIS_PERIOD;
+        %tmp.22 = getv ? :SAMPLE_FREQUENCY;
+        %tmp.23 = mul %tmp.20 %tmp.22;
+        %tmp.18 = newa %tmp.23;
+        putv self :mSamplesZ %tmp.18;
+    }
+    [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc"; @line = 34; ]
+    static
+    <init> {
+    }
+    [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc"; @line = 35; @position = 8; ]
+    const ANALYSIS_PERIOD = 5;
+    [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc"; @line = 36; @position = 8; ]
+    const SAMPLE_PERIOD = 1;
+    [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc"; @line = 37; @position = 8; ]
+    const SAMPLE_FREQUENCY = 25;
+    [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc"; @line = 38; @position = 8; ]
+    const MUTE_TIMER_PERIOD;
+    [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc"; @line = 41; @position = 6; ]
+    var mSamplesX;
+    [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc"; @line = 42; @position = 6; ]
+    var mSamplesY;
+    [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc"; @line = 43; @position = 6; ]
+    var mSamplesZ;
+    [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc"; @line = 45; @position = 6; ]
+    var nSamp = 0;
+    [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc"; @line = 46; @position = 6; ]
+    var mHR = 0;
+    [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc"; @line = 47; @position = 6; ]
+    var mO2sat = 0;
+    [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc"; @line = 48; @position = 6; ]
+    var mMute = 0;
+    [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc"; @line = 49; @position = 6; ]
+    var mMuteTimer;
+    [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc"; @line = 50; @position = 6; ]
+    var mStatusStr = "---";
+    [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc"; @line = 51; @position = 6; ]
+    var mComms = null;
+    [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc"; @line = 52; @position = 6; ]
+    var mVersionStr = "";
+    [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc"; @line = 56; ]
+    function initialize(versionStr) as Void {
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_56_34_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 57 4 ]
+        %tmp.1 = getm $.Toybox.System;
+        %tmp.2 = getv function %tmp.1 :println;
+        %tmp.3 = "DataHandler.initialize()";
+        invoke %tmp.1 %tmp.2(%tmp.3);
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 58 4 ]
+        %tmp.5 = lgetv %versionStr;
+        putv self :mVersionStr %tmp.5;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 60 4 ]
+        %tmp.7 = lgetv %versionStr;
+        putv self :mStatusStr %tmp.7;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 61 4 ]
+        %tmp.11 = getv ? :GarminSDComms;
+        %tmp.13 = lgetv %self;
+        %tmp.8 = newc %tmp.11 (%tmp.13);
+        putv self :mComms %tmp.8;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 62 4 ]
+        %tmp.15 = getv ? :mComms;
+        %tmp.16 = getv function %tmp.15 :onStart;
+        invoke %tmp.15 %tmp.16();
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_56_34_stop:
+    }
+    [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc"; @line = 67; ]
+    function getDataJson() {
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_67_25_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 68 4 ]
+        [ "_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_67_25_start" "_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_67_25_stop" ]
+        %i.1 = local;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 69 4 ]
+        [ "_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_67_25_start" "_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_67_25_stop" ]
+        %jsonStr.2 = local;
+        %tmp.1 = "{ dataType: 'raw', data: [";
+            lputv %jsonStr.2 %tmp.1;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 70 4 ]
+            for @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_70_4_for_test @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_70_4_for_incr @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_70_4_for_end;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_70_4_for_init:
+            %tmp.2 = 0;
+            lputv %i.1 %tmp.2;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_70_4_for_test:
+            %tmp.4 = lgetv %i.1;
+            %tmp.6 = getv ? :ANALYSIS_PERIOD;
+            %tmp.8 = getv ? :SAMPLE_FREQUENCY;
+            %tmp.9 = mul %tmp.6 %tmp.8;
+            %tmp.10 = lt %tmp.4 %tmp.9;
+            bf %tmp.10 @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_70_4_for_end;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_70_4_for_begin:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_70_59_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 71 6 ]
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_71_6_if_stmt:
+            %tmp.12 = lgetv %i.1;
+            %tmp.13 = 0;
+            %tmp.14 = gt %tmp.12 %tmp.13;
+            bf %tmp.14 @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_71_6_if_end;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_71_6_if_true:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_71_15_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 72 1 ]
+            %tmp.16 = lgetv %jsonStr.2;
+            %tmp.17 = ", ";
+            %tmp.18 = add %tmp.16 %tmp.17;
+            lputv %jsonStr.2 %tmp.18;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_71_15_stop:
+            goto @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_71_6_if_end;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_71_6_if_end:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 74 6 ]
+            %tmp.20 = lgetv %jsonStr.2;
+            %tmp.21 = getm $.Toybox.Math;
+            %tmp.22 = getv function %tmp.21 :sqrt;
+            %tmp.24 = getv ? :mSamplesX;
+            %tmp.26 = lgetv %i.1;
+            %tmp.27 = agetv %tmp.24 %tmp.26;
+            %tmp.29 = getv ? :mSamplesX;
+            %tmp.31 = lgetv %i.1;
+            %tmp.32 = agetv %tmp.29 %tmp.31;
+            %tmp.33 = mul %tmp.27 %tmp.32;
+            %tmp.35 = getv ? :mSamplesY;
+            %tmp.37 = lgetv %i.1;
+            %tmp.38 = agetv %tmp.35 %tmp.37;
+            %tmp.40 = getv ? :mSamplesY;
+            %tmp.42 = lgetv %i.1;
+            %tmp.43 = agetv %tmp.40 %tmp.42;
+            %tmp.44 = mul %tmp.38 %tmp.43;
+            %tmp.45 = add %tmp.33 %tmp.44;
+            %tmp.47 = getv ? :mSamplesZ;
+            %tmp.49 = lgetv %i.1;
+            %tmp.50 = agetv %tmp.47 %tmp.49;
+            %tmp.52 = getv ? :mSamplesZ;
+            %tmp.54 = lgetv %i.1;
+            %tmp.55 = agetv %tmp.52 %tmp.54;
+            %tmp.56 = mul %tmp.50 %tmp.55;
+            %tmp.57 = add %tmp.45 %tmp.56;
+            %tmp.58 = invoke %tmp.21 %tmp.22(%tmp.57);
+            %tmp.59 = add %tmp.20 %tmp.58;
+            lputv %jsonStr.2 %tmp.59;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_70_59_stop:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_70_4_for_incr:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 70 ]
+            %tmp.61 = lgetv %i.1;
+            %tmp.62 = 1;
+            %tmp.63 = add %tmp.61 %tmp.62;
+            lputv %i.1 %tmp.63;
+            goto @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_70_4_for_test;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_70_4_for_end:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 78 4 ]
+            %tmp.65 = lgetv %jsonStr.2;
+            %tmp.66 = "], data3D: [";
+            %tmp.67 = add %tmp.65 %tmp.66;
+            lputv %jsonStr.2 %tmp.67;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 79 4 ]
+            for @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_79_4_for_test @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_79_4_for_incr @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_79_4_for_end;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_79_4_for_init:
+            %tmp.68 = 0;
+            lputv %i.1 %tmp.68;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_79_4_for_test:
+            %tmp.70 = lgetv %i.1;
+            %tmp.72 = getv ? :ANALYSIS_PERIOD;
+            %tmp.74 = getv ? :SAMPLE_FREQUENCY;
+            %tmp.75 = mul %tmp.72 %tmp.74;
+            %tmp.76 = lt %tmp.70 %tmp.75;
+            bf %tmp.76 @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_79_4_for_end;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_79_4_for_begin:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_79_59_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 80 6 ]
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_80_6_if_stmt:
+            %tmp.78 = lgetv %i.1;
+            %tmp.79 = 0;
+            %tmp.80 = gt %tmp.78 %tmp.79;
+            bf %tmp.80 @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_80_6_if_end;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_80_6_if_true:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_80_15_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 81 1 ]
+            %tmp.82 = lgetv %jsonStr.2;
+            %tmp.83 = ", ";
+            %tmp.84 = add %tmp.82 %tmp.83;
+            lputv %jsonStr.2 %tmp.84;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_80_15_stop:
+            goto @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_80_6_if_end;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_80_6_if_end:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 83 6 ]
+            %tmp.86 = lgetv %jsonStr.2;
+            %tmp.88 = getv ? :mSamplesX;
+            %tmp.90 = lgetv %i.1;
+            %tmp.91 = agetv %tmp.88 %tmp.90;
+            %tmp.92 = add %tmp.86 %tmp.91;
+            %tmp.93 = ", ";
+            %tmp.94 = add %tmp.92 %tmp.93;
+            lputv %jsonStr.2 %tmp.94;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 84 6 ]
+            %tmp.96 = lgetv %jsonStr.2;
+            %tmp.98 = getv ? :mSamplesY;
+            %tmp.100 = lgetv %i.1;
+            %tmp.101 = agetv %tmp.98 %tmp.100;
+            %tmp.102 = add %tmp.96 %tmp.101;
+            %tmp.103 = ", ";
+            %tmp.104 = add %tmp.102 %tmp.103;
+            lputv %jsonStr.2 %tmp.104;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 85 6 ]
+            %tmp.106 = lgetv %jsonStr.2;
+            %tmp.108 = getv ? :mSamplesZ;
+            %tmp.110 = lgetv %i.1;
+            %tmp.111 = agetv %tmp.108 %tmp.110;
+            %tmp.112 = add %tmp.106 %tmp.111;
+            lputv %jsonStr.2 %tmp.112;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_79_59_stop:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_79_4_for_incr:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 79 ]
+            %tmp.114 = lgetv %i.1;
+            %tmp.115 = 1;
+            %tmp.116 = add %tmp.114 %tmp.115;
+            lputv %i.1 %tmp.116;
+            goto @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_79_4_for_test;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_79_4_for_end:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 88 4 ]
+            %tmp.118 = lgetv %jsonStr.2;
+            %tmp.119 = "], HR:";
+            %tmp.120 = add %tmp.118 %tmp.119;
+            %tmp.122 = getv ? :mHR;
+            %tmp.123 = add %tmp.120 %tmp.122;
+            lputv %jsonStr.2 %tmp.123;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 89 4 ]
+            %tmp.125 = lgetv %jsonStr.2;
+            %tmp.126 = ", O2sat:";
+            %tmp.127 = add %tmp.125 %tmp.126;
+            %tmp.129 = getv ? :mO2sat;
+            %tmp.130 = add %tmp.127 %tmp.129;
+            lputv %jsonStr.2 %tmp.130;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 90 4 ]
+            %tmp.132 = lgetv %jsonStr.2;
+            %tmp.133 = ", Mute:";
+            %tmp.134 = add %tmp.132 %tmp.133;
+            %tmp.136 = getv ? :mMute;
+            %tmp.137 = add %tmp.134 %tmp.136;
+            lputv %jsonStr.2 %tmp.137;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 91 4 ]
+            %tmp.139 = lgetv %jsonStr.2;
+        %tmp.140 = " }";
+        %tmp.141 = add %tmp.139 %tmp.140;
+        lputv %jsonStr.2 %tmp.141;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 92 4 ]
+        %tmp.143 = lgetv %jsonStr.2;
+        ret %tmp.143;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_67_25_stop:
+    }
+    [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc"; @line = 97; ]
+    function getSettingsJson() {
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_97_29_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 98 4 ]
+        [ "_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_97_29_start" "_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_97_29_stop" ]
+        %sysStats.1 = local;
+        %tmp.1 = getm $.Toybox.System;
+        %tmp.2 = getv function %tmp.1 :getSystemStats;
+        %tmp.3 = invoke %tmp.1 %tmp.2();
+        lputv %sysStats.1 %tmp.3;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 99 4 ]
+        [ "_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_97_29_start" "_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_97_29_stop" ]
+        %deviceSettings.2 = local;
+        %tmp.4 = getm $.Toybox.System;
+        %tmp.5 = getv function %tmp.4 :getDeviceSettings;
+        %tmp.6 = invoke %tmp.4 %tmp.5();
+        lputv %deviceSettings.2 %tmp.6;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 100 4 ]
+        [ "_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_97_29_start" "_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_97_29_stop" ]
+        %ciqVer.3 = local;
+        %tmp.7 = lgetv %deviceSettings.2;
+        %tmp.8 = getv %tmp.7 :monkeyVersion;
+        lputv %ciqVer.3 %tmp.8;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 101 4 ]
+        [ "_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_97_29_start" "_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_97_29_stop" ]
+        %ciqVerStr.4 = local;
+        %tmp.10 = getv ? :Lang;
+        %tmp.11 = getv function %tmp.10 :format;
+        %tmp.12 = "$1$.$2$.$3$";
+        %tmp.14 = lgetv %ciqVer.3;
+        %tmp.15 = invoke %tmp.10 %tmp.11(%tmp.12, %tmp.14);
+        lputv %ciqVerStr.4 %tmp.15;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 102 4 ]
+        [ "_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_97_29_start" "_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_97_29_stop" ]
+        %jsonStr.5 = local;
+        %tmp.16 = "{ dataType: 'settings'";
+            lputv %jsonStr.5 %tmp.16;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 103 4 ]
+            %tmp.18 = lgetv %jsonStr.5;
+            %tmp.19 = ", analysisPeriod: ";
+            %tmp.20 = add %tmp.18 %tmp.19;
+            %tmp.22 = getv ? :ANALYSIS_PERIOD;
+            %tmp.23 = add %tmp.20 %tmp.22;
+            lputv %jsonStr.5 %tmp.23;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 104 4 ]
+            %tmp.25 = lgetv %jsonStr.5;
+            %tmp.26 = ", sampleFreq: ";
+            %tmp.27 = add %tmp.25 %tmp.26;
+            %tmp.29 = getv ? :SAMPLE_FREQUENCY;
+            %tmp.30 = add %tmp.27 %tmp.29;
+            lputv %jsonStr.5 %tmp.30;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 105 4 ]
+            %tmp.32 = lgetv %jsonStr.5;
+            %tmp.33 = ", battery: ";
+            %tmp.34 = add %tmp.32 %tmp.33;
+            %tmp.35 = lgetv %sysStats.1;
+            %tmp.36 = getv %tmp.35 :battery;
+            %tmp.37 = add %tmp.34 %tmp.36;
+            lputv %jsonStr.5 %tmp.37;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 106 4 ]
+            %tmp.39 = lgetv %jsonStr.5;
+            %tmp.40 = ", watchPartNo: ";
+            %tmp.41 = add %tmp.39 %tmp.40;
+            %tmp.42 = lgetv %deviceSettings.2;
+            %tmp.43 = getv %tmp.42 :partNumber;
+            %tmp.44 = add %tmp.41 %tmp.43;
+            lputv %jsonStr.5 %tmp.44;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 107 4 ]
+            %tmp.46 = lgetv %jsonStr.5;
+            %tmp.47 = ", watchFwVersion: ";
+            %tmp.48 = add %tmp.46 %tmp.47;
+            %tmp.50 = lgetv %ciqVerStr.4;
+            %tmp.51 = add %tmp.48 %tmp.50;
+            lputv %jsonStr.5 %tmp.51;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 108 4 ]
+            %tmp.53 = lgetv %jsonStr.5;
+            %tmp.54 = ", sdVersion: ";
+            %tmp.55 = add %tmp.53 %tmp.54;
+            %tmp.57 = getv ? :mVersionStr;
+            %tmp.58 = add %tmp.55 %tmp.57;
+            lputv %jsonStr.5 %tmp.58;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 109 4 ]
+            %tmp.60 = lgetv %jsonStr.5;
+            %tmp.61 = ", sdName: GarminSD";
+            %tmp.62 = add %tmp.60 %tmp.61;
+            lputv %jsonStr.5 %tmp.62;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 110 4 ]
+            %tmp.64 = lgetv %jsonStr.5;
+        %tmp.65 = "}";
+        %tmp.66 = add %tmp.64 %tmp.65;
+        lputv %jsonStr.5 %tmp.66;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 111 4 ]
+        %tmp.68 = lgetv %jsonStr.5;
+        ret %tmp.68;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_97_29_stop:
+    }
+    [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc"; @line = 115; ]
+    function muteTimerCallback() {
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_115_31_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 116 4 ]
+        %tmp.1 = getm $.Toybox.System;
+        %tmp.2 = getv function %tmp.1 :println;
+        %tmp.3 = "muteTimerCallback()";
+        invoke %tmp.1 %tmp.2(%tmp.3);
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 117 4 ]
+        %tmp.4 = 0;
+        putv self :mMute %tmp.4;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_115_31_stop:
+    }
+    [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc"; @line = 120; ]
+    function muteAlarms() {
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_120_24_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 121 4 ]
+        %tmp.1 = getm $.Toybox.System;
+        %tmp.2 = getv function %tmp.1 :println;
+        %tmp.3 = "muteAlarms()";
+        invoke %tmp.1 %tmp.2(%tmp.3);
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 123 4 ]
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_123_4_if_stmt:
+        %tmp.5 = getv ? :mMute;
+        %tmp.6 = 1;
+        %tmp.7 = eq %tmp.5 %tmp.6;
+        bf %tmp.7 @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_123_4_if_end;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_123_4_if_true:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_123_20_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 124 6 ]
+        %tmp.9 = getv ? :mMuteTimer;
+        %tmp.10 = getv function %tmp.9 :stop;
+        invoke %tmp.9 %tmp.10();
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_123_20_stop:
+        goto @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_123_4_if_end;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_123_4_if_end:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 126 4 ]
+        %tmp.13 = getm $.Toybox.Timer;
+        %tmp.14 = getv function ? %tmp.13 :Timer;
+        %tmp.11 = newc %tmp.14 ();
+        putv self :mMuteTimer %tmp.11;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 127 4 ]
+        %tmp.16 = getv ? :mMuteTimer;
+        %tmp.17 = getv function %tmp.16 :start;
+        %tmp.18 = self;
+        %tmp.19 = getv function %tmp.18 :method;
+        %tmp.21 = const :muteTimerCallback;
+        %tmp.22 = invoke %tmp.18 %tmp.19(%tmp.21);
+        %tmp.24 = getv ? :MUTE_TIMER_PERIOD;
+        %tmp.25 = false;
+        invoke %tmp.16 %tmp.17(%tmp.22, %tmp.24, %tmp.25);
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 128 4 ]
+        %tmp.26 = 1;
+        putv self :mMute %tmp.26;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_120_24_stop:
+    }
+    [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc"; @line = 133; ]
+    function accel_callback(sensorData) {
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_133_38_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 136 4 ]
+        [ "_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_133_38_start" "_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_133_38_stop" ]
+        %iStart.1 = local;
+        %tmp.2 = getv ? :nSamp;
+        %tmp.4 = getv ? :SAMPLE_PERIOD;
+        %tmp.5 = mul %tmp.2 %tmp.4;
+        %tmp.7 = getv ? :SAMPLE_FREQUENCY;
+        %tmp.8 = mul %tmp.5 %tmp.7;
+        lputv %iStart.1 %tmp.8;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 138 4 ]
+        for @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_138_4_for_test @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_138_4_for_incr @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_138_4_for_end;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_138_4_for_init:
+        [ "_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_138_4_for_begin" "_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_138_4_for_end" ]
+        %i.2 = local;
+        %tmp.9 = 0;
+        lputv %i.2 %tmp.9;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_138_4_for_test:
+        %tmp.11 = lgetv %i.2;
+        %tmp.13 = getv ? :SAMPLE_PERIOD;
+        %tmp.15 = getv ? :SAMPLE_FREQUENCY;
+        %tmp.16 = mul %tmp.13 %tmp.15;
+        %tmp.17 = lt %tmp.11 %tmp.16;
+        bf %tmp.17 @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_138_4_for_end;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_138_4_for_begin:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_138_61_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 139 6 ]
+        %tmp.18 = getv self :mSamplesX;
+        %tmp.19 = lgetv %sensorData;
+        %tmp.20 = getv %tmp.19 :accelerometerData;
+        %tmp.21 = getv %tmp.20 :x;
+        %tmp.23 = lgetv %i.2;
+        %tmp.24 = agetv %tmp.21 %tmp.23;
+        %tmp.26 = lgetv %iStart.1;
+        %tmp.28 = lgetv %i.2;
+        %tmp.29 = add %tmp.26 %tmp.28;
+        aputv %tmp.18 %tmp.29 %tmp.24;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 140 6 ]
+        %tmp.30 = getv self :mSamplesY;
+        %tmp.31 = lgetv %sensorData;
+        %tmp.32 = getv %tmp.31 :accelerometerData;
+        %tmp.33 = getv %tmp.32 :y;
+        %tmp.35 = lgetv %i.2;
+        %tmp.36 = agetv %tmp.33 %tmp.35;
+        %tmp.38 = lgetv %iStart.1;
+        %tmp.40 = lgetv %i.2;
+        %tmp.41 = add %tmp.38 %tmp.40;
+        aputv %tmp.30 %tmp.41 %tmp.36;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 141 6 ]
+        %tmp.42 = getv self :mSamplesZ;
+        %tmp.43 = lgetv %sensorData;
+        %tmp.44 = getv %tmp.43 :accelerometerData;
+        %tmp.45 = getv %tmp.44 :z;
+        %tmp.47 = lgetv %i.2;
+        %tmp.48 = agetv %tmp.45 %tmp.47;
+        %tmp.50 = lgetv %iStart.1;
+        %tmp.52 = lgetv %i.2;
+        %tmp.53 = add %tmp.50 %tmp.52;
+        aputv %tmp.42 %tmp.53 %tmp.48;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_138_61_stop:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_138_4_for_incr:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 138 ]
+        %tmp.55 = lgetv %i.2;
+        %tmp.56 = 1;
+        %tmp.57 = add %tmp.55 %tmp.56;
+        lputv %i.2 %tmp.57;
+        goto @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_138_4_for_test;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_138_4_for_end:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 143 4 ]
+        %tmp.59 = getv ? :nSamp;
+        %tmp.60 = 1;
+        %tmp.61 = add %tmp.59 %tmp.60;
+        putv self :nSamp %tmp.61;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 148 4 ]
+        %tmp.62 = getm $.Toybox.WatchUi;
+        %tmp.63 = getv function %tmp.62 :requestUpdate;
+        invoke %tmp.62 %tmp.63();
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 150 4 ]
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_150_4_if_stmt:
+        %tmp.65 = getv ? :nSamp;
+        %tmp.67 = getv ? :SAMPLE_PERIOD;
+        %tmp.68 = mul %tmp.65 %tmp.67;
+        %tmp.70 = getv ? :ANALYSIS_PERIOD;
+        %tmp.71 = eq %tmp.68 %tmp.70;
+        bf %tmp.71 @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_150_4_if_end;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_150_4_if_true:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_150_48_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 154 6 ]
+        %tmp.72 = getm $.Toybox.Sensor;
+        %tmp.73 = getv function %tmp.72 :getInfo;
+        %tmp.74 = invoke %tmp.72 %tmp.73();
+        %tmp.75 = getv %tmp.74 :heartRate;
+        putv self :mHR %tmp.75;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 155 6 ]
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_155_6_if_stmt:
+        %tmp.76 = getm $.Toybox.Sensor;
+        %tmp.77 = getv function %tmp.76 :getInfo;
+        %tmp.78 = invoke %tmp.76 %tmp.77();
+        %tmp.80 = const :oxygenSaturation;
+        %tmp.81 = canhazplz %tmp.78 %tmp.80;
+        bf %tmp.81 @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_155_6_if_false;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_155_6_if_true:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_155_50_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 156 8 ]
+        %tmp.82 = getm $.Toybox.Sensor;
+        %tmp.83 = getv function %tmp.82 :getInfo;
+        %tmp.84 = invoke %tmp.82 %tmp.83();
+        %tmp.85 = getv %tmp.84 :oxygenSaturation;
+        putv self :mO2sat %tmp.85;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_155_50_stop:
+        goto @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_155_6_if_end;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_155_6_if_false:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_157_13_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 158 8 ]
+        %tmp.86 = 0;
+        putv self :mO2sat %tmp.86;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_157_13_stop:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_155_6_if_end:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 160 6 ]
+        %tmp.87 = 0;
+        putv self :nSamp %tmp.87;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 161 6 ]
+        %tmp.89 = getv ? :mComms;
+        %tmp.90 = getv function %tmp.89 :sendAccelData;
+        invoke %tmp.89 %tmp.90();
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_150_48_stop:
+        goto @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_150_4_if_end;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_150_4_if_end:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_133_38_stop:
+    }
+    [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc"; @line = 165; ]
+    function heartrate_callback(sensorInfo) {
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_165_42_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 168 4 ]
+        %tmp.1 = lgetv %sensorInfo;
+        %tmp.2 = getv %tmp.1 :heartRate;
+        putv self :mHR %tmp.2;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 169 4 ]
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_169_4_if_stmt:
+        %tmp.4 = lgetv %sensorInfo;
+        %tmp.6 = const :oxygenSaturation;
+        %tmp.7 = canhazplz %tmp.4 %tmp.6;
+        bf %tmp.7 @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_169_4_if_false;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_169_4_if_true:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_169_42_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 170 6 ]
+        %tmp.8 = lgetv %sensorInfo;
+        %tmp.9 = as %tmp.8 { (interface { var oxygenSaturation; }) };
+        %tmp.10 = getv %tmp.9 :oxygenSaturation;
+        putv self :mO2sat %tmp.10;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_169_42_stop:
+        goto @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_169_4_if_end;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_169_4_if_false:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_171_11_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 172 6 ]
+        %tmp.11 = 0;
+        putv self :mO2sat %tmp.11;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_171_11_stop:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_169_4_if_end:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_165_42_stop:
+    }
+    [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc"; @line = 178; ]
+    function onStart() {
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_178_21_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 179 4 ]
+        %tmp.1 = getm $.Toybox.System;
+        %tmp.2 = getv function %tmp.1 :println;
+        %tmp.3 = "DataHandler.onStart()";
+        invoke %tmp.1 %tmp.2(%tmp.3);
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 180 4 ]
+        [ "_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_178_21_start" "_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_178_21_stop" ]
+        %maxSampleRate.1 = local;
+        %tmp.4 = getm $.Toybox.Sensor;
+        %tmp.5 = getv function %tmp.4 :getMaxSampleRate;
+        %tmp.6 = invoke %tmp.4 %tmp.5();
+        lputv %maxSampleRate.1 %tmp.6;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 181 4 ]
+        %tmp.7 = getm $.Toybox.System;
+        %tmp.8 = getv function %tmp.7 :print;
+        %tmp.9 = "maxSampleRate = ";
+        invoke %tmp.7 %tmp.8(%tmp.9);
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 182 4 ]
+        %tmp.10 = getm $.Toybox.System;
+        %tmp.11 = getv function %tmp.10 :println;
+        %tmp.13 = lgetv %maxSampleRate.1;
+        invoke %tmp.10 %tmp.11(%tmp.13);
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 186 4 ]
+        [ "_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_178_21_start" "_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_178_21_stop" ]
+        %options.2 = local;
+        %tmp.14 = newd 3;
+        %tmp.16 = const :period;
+        %tmp.18 = getv ? :SAMPLE_PERIOD;
+        %tmp.19 = dup %tmp.14;
+        %tmp.20 = aputv %tmp.19 %tmp.16 %tmp.18;
+        %tmp.22 = const :sampleRate;
+        %tmp.24 = getv ? :SAMPLE_FREQUENCY;
+        %tmp.25 = dup %tmp.20;
+        %tmp.26 = aputv %tmp.25 %tmp.22 %tmp.24;
+        %tmp.28 = const :enableAccelerometer;
+        %tmp.29 = true;
+        %tmp.30 = dup %tmp.26;
+        %tmp.31 = aputv %tmp.30 %tmp.28 %tmp.29;
+        lputv %options.2 %tmp.31;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 191 4 ]
+        try @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_191_4_beginTry @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_191_4_endTry @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_191_4_catch @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_191_4_finally;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_191_4_beginTry:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_191_8_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 192 6 ]
+        %tmp.32 = getm $.Toybox.Sensor;
+        %tmp.33 = getv function %tmp.32 :registerSensorDataListener;
+        %tmp.34 = self;
+        %tmp.35 = getv function %tmp.34 :method;
+        %tmp.37 = const :accel_callback;
+        %tmp.38 = invoke %tmp.34 %tmp.35(%tmp.37);
+        %tmp.40 = lgetv %options.2;
+        invoke %tmp.32 %tmp.33(%tmp.38, %tmp.40);
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 194 6 ]
+        %tmp.41 = getm $.Toybox.System;
+        %tmp.42 = getv function %tmp.41 :println;
+        %tmp.43 = "Registered for Sensor Data";
+        invoke %tmp.41 %tmp.42(%tmp.43);
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_191_8_stop:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_191_4_endTry:
+        jsr @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_191_4_finally;
+        goto @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_191_4_end;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_191_4_catch:
+        %tmp.44 = exception;
+        push %tmp.44;
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 195 6 ]
+        [ "_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_191_4_catch" "_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_195_6_end" ]
+        %e.3 = local;
+        %tmp.45 = dup %tmp.44;
+        lputv %e.3 %tmp.45;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_195_15_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 196 6 ]
+        %tmp.46 = getm $.Toybox.System;
+        %tmp.47 = getv function %tmp.46 :println;
+        %tmp.48 = lgetv %e.3;
+        %tmp.49 = getv function %tmp.48 :getErrorMessage;
+        %tmp.50 = invoke %tmp.48 %tmp.49();
+        invoke %tmp.46 %tmp.47(%tmp.50);
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_195_15_stop:
+        jsr @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_191_4_finally;
+        pop;
+        goto @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_191_4_end;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_195_6_end:
+        try @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_191_4_catch @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_195_6_end @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_195_6_end @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_191_4_finally;
+        jsr @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_191_4_finally;
+        throw %tmp.44;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_191_4_finally:
+        jsrret;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_191_4_end:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 201 4 ]
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_201_4_if_stmt:
+        %tmp.52 = getm $.Toybox.Sensor;
+        %tmp.54 = const :SENSOR_PULSE_OXYMETRY;
+        %tmp.55 = canhazplz %tmp.52 %tmp.54;
+        bf %tmp.55 @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_201_4_if_false;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_201_4_if_true:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_201_43_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 202 6 ]
+        %tmp.56 = getm $.Toybox.Sensor;
+        %tmp.57 = getv function %tmp.56 :setEnabledSensors;
+        %tmp.58 = newa 2;
+        %tmp.59 = getm $.Toybox.Sensor;
+        %tmp.60 = getv %tmp.59 :SENSOR_HEARTRATE;
+        %tmp.61 = dup %tmp.58;
+        %tmp.62 = aputv %tmp.61 0 %tmp.60;
+        %tmp.63 = getm $.Toybox.Sensor;
+        %tmp.64 = getv %tmp.63 :SENSOR_PULSE_OXIMETRY;
+        %tmp.65 = dup %tmp.62;
+        %tmp.66 = aputv %tmp.65 1 %tmp.64;
+        invoke %tmp.56 %tmp.57(%tmp.66);
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_201_43_stop:
+        goto @_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_201_4_if_end;
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_201_4_if_false:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_204_11_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 205 6 ]
+        %tmp.67 = getm $.Toybox.Sensor;
+        %tmp.68 = getv function %tmp.67 :setEnabledSensors;
+        %tmp.69 = newa 1;
+        %tmp.70 = getm $.Toybox.Sensor;
+        %tmp.71 = getv %tmp.70 :SENSOR_HEARTRATE;
+        %tmp.72 = dup %tmp.69;
+        %tmp.73 = aputv %tmp.72 0 %tmp.71;
+        invoke %tmp.67 %tmp.68(%tmp.73);
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_204_11_stop:
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_201_4_if_end:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 208 4 ]
+        %tmp.74 = getm $.Toybox.Sensor;
+        %tmp.75 = getv function %tmp.74 :enableSensorEvents;
+        %tmp.76 = self;
+        %tmp.77 = getv function %tmp.76 :method;
+        %tmp.79 = const :heartrate_callback;
+        %tmp.80 = invoke %tmp.76 %tmp.77(%tmp.79);
+        invoke %tmp.74 %tmp.75(%tmp.80);
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_178_21_stop:
+    }
+    [ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc"; @line = 212; ]
+    function onStop() {
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_212_20_start:
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 213 4 ]
+        %tmp.1 = getm $.Toybox.System;
+        %tmp.2 = getv function %tmp.1 :println;
+        %tmp.3 = "DataHandler.onStop()";
+        invoke %tmp.1 %tmp.2(%tmp.3);
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 214 4 ]
+        %tmp.4 = getm $.Toybox.Sensor;
+        %tmp.5 = getv function %tmp.4 :unregisterSensorDataListener;
+        invoke %tmp.4 %tmp.5();
+[ "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc" 215 4 ]
+        %tmp.6 = getm $.Toybox.Sensor;
+        %tmp.7 = getv function %tmp.6 :setEnabledSensors;
+        %tmp.8 = newa 0;
+        invoke %tmp.6 %tmp.7(%tmp.8);
+_home_graham_osd_Garmin_SD_WatchApp_source_GarminSDDataHandler_mc_212_20_stop:
+    }
+}
+[ @file = "/home/graham/osd/Garmin_SD/WatchApp/source/GarminSDDataHandler.mc"; @line = 28; ]
+<init> {
+}
