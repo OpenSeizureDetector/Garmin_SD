@@ -2,4 +2,5 @@
 *#
 *.prg.debug.xml
 temp
-WatchApp/bin
+bin
+developer_key
