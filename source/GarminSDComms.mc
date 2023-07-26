@@ -98,43 +98,43 @@ class GarminSDComms {
     //System.println("onSdStatusReceive - ResponseCode="+responseCode);
     if (responseCode == 200) {
       if (responseCode != lastOnSdStatusReceiveResponse) {
-	System.println("onSdStatusReceive() success - data ="+data);
-	System.println("onSdStatusReceive() Status ="+data.get("alarmPhrase"));
+	      System.println("onSdStatusReceive() success - data ="+data);
+	      System.println("onSdStatusReceive() Status ="+data.get("alarmPhrase"));
       }
       mAccelHandler.mStatusStr = data.get("alarmPhrase");
       if (data.get("alarmState") != 0) {
-	try {
-	  if (Attention has :backlight) {
-	    Attention.backlight(true);
-	  }
-	} catch( ex ) {
-	  // We might get a Toybox.Attention.BacklightOnTooLongException
-	}
-	if (Attention has :playTone) {
-	  Attention.playTone(Attention.TONE_ALERT_HI);
-	}
-      }
-      if (data.get("alarmState") == 2) { // ALARM
-	if (Attention has :vibrate) {
-	  var vibeData =
-	    [
-	     new Attention.VibeProfile(50, 500),
-	     new Attention.VibeProfile(0, 500),  
-	     new Attention.VibeProfile(50, 500), 
-	     new Attention.VibeProfile(0, 500),  
-	     new Attention.VibeProfile(50, 500)  
-	     ];
-	  Attention.vibrate(vibeData);
-	}
+        try {
+          if (Attention has :backlight) {
+            Attention.backlight(true);
+          }
+        } catch( ex ) {
+          // We might get a Toybox.Attention.BacklightOnTooLongException
+        }
+        if (Attention has :playTone) {
+          Attention.playTone(Attention.TONE_ALERT_HI);
+        }
+            }
+            if (data.get("alarmState") == 2) { // ALARM
+        if (Attention has :vibrate) {
+          var vibeData =
+            [
+            new Attention.VibeProfile(50, 500),
+            new Attention.VibeProfile(0, 500),  
+            new Attention.VibeProfile(50, 500), 
+            new Attention.VibeProfile(0, 500),  
+            new Attention.VibeProfile(50, 500)  
+            ];
+          Attention.vibrate(vibeData);
+        }
       }
     } else {
       mAccelHandler.mStatusStr = Rez.Strings.Error_abbrev + ": " + responseCode.toString();
       if (responseCode != lastOnSdStatusReceiveResponse) {
-	System.println("onSdStatusReceive() Failue - code =");
-	System.println(responseCode);
-	System.println("onSdStatusReceive() Failure - data ="+data);
+	      System.println("onSdStatusReceive() Failue - code =");
+	      System.println(responseCode);
+	      System.println("onSdStatusReceive() Failure - data ="+data);
       } else {
-	System.print(".");
+	      System.print(".");
       }
     }
     lastOnSdStatusReceiveResponse = responseCode;
@@ -145,40 +145,40 @@ class GarminSDComms {
   function onReceive(responseCode, data) {
     if (responseCode == 200) {
       if ((responseCode != lastOnReceiveResponse) || (data != lastOnReceiveData) ) {	
-	System.println("onReceive() success - data ="+data);
+	      System.println("onReceive() success - data ="+data);
       } else {
-	System.print(".");
+	      System.print(".");
       }
       if (data.equals("sendSettings")) {
-	//System.println("Sending Settings");
-	sendSettings();
+	      //System.println("Sending Settings");
+	      sendSettings();
       } else {
-	//System.println("getting sd status");
-	getSdStatus();
+	      //System.println("getting sd status");
+	      getSdStatus();
       }
     } else {
       mAccelHandler.mStatusStr = "ERR: " + responseCode.toString();
       if (Attention has :playTone) {
-	Attention.playTone(Attention.TONE_LOUD_BEEP);
+	      Attention.playTone(Attention.TONE_LOUD_BEEP);
       }
       if (Attention has :vibrate) {
-	 var vibeData =
-	  [
-	   new Attention.VibeProfile(50, 200),
-	   new Attention.VibeProfile(0, 200),  
-	   new Attention.VibeProfile(50, 200), 
-	   new Attention.VibeProfile(0, 200),  
-	   new Attention.VibeProfile(50, 200)  
-	   ];
-	 Attention.vibrate(vibeData);
+	      var vibeData =
+	         [
+	          new Attention.VibeProfile(50, 200),
+	          //new Attention.VibeProfile(0, 200),  
+	          //new Attention.VibeProfile(50, 200), 
+	          //new Attention.VibeProfile(0, 200),  
+	          //new Attention.VibeProfile(50, 200)  
+	        ];
+	      Attention.vibrate(vibeData);
       }
 
 
       if (responseCode != lastOnReceiveResponse) {
-	System.println("onReceive() Failue - code =");
-	System.println(responseCode);
+	      System.println("onReceive() Failue - code =");
+	      System.println(responseCode);
       } else {
-	System.print(".");
+	      System.print(".");
       }
     }
     lastOnReceiveResponse = responseCode;
