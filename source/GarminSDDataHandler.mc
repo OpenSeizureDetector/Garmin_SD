@@ -145,7 +145,7 @@ class GarminSDDataHandler {
     //Toybox.System.println("Raw samples, X axis: " + mSamplesX);
     //Toybox.System.println("Raw samples, Y axis: " + mSamplesY);
     //Toybox.System.println("Raw samples, Z axis: " + mSamplesZ);
-    Ui.requestUpdate();
+    //Ui.requestUpdate();
     
     if (nSamp*SAMPLE_PERIOD == ANALYSIS_PERIOD) {
       //System.println("Doing Analysis....");
@@ -159,6 +159,7 @@ class GarminSDDataHandler {
       }
       nSamp = 0;
       mComms.sendAccelData();
+      Ui.requestUpdate();
     }
   }
 

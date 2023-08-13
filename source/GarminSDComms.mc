@@ -24,6 +24,7 @@
 */
 using Toybox.Communications as Comm;
 using Toybox.Attention as Attention;
+import Toybox.Application.Storage;
 
 class GarminSDComms {
   var listener;
@@ -104,18 +105,21 @@ class GarminSDComms {
       mAccelHandler.mStatusStr = data.get("alarmPhrase");
       if (data.get("alarmState") != 0) {
         try {
-          if (Attention has :backlight) {
+          var lightEnabled =  Storage.getValue(MENUITEM_LIGHT) ? true : false;
+          if (Attention has :backlight && lightEnabled) {
             Attention.backlight(true);
           }
         } catch( ex ) {
           // We might get a Toybox.Attention.BacklightOnTooLongException
         }
-        if (Attention has :playTone) {
+        var soundEnabled =  Storage.getValue(MENUITEM_SOUND) ? true : false;
+        if (Attention has :playTone && soundEnabled) {
           Attention.playTone(Attention.TONE_ALERT_HI);
         }
             }
             if (data.get("alarmState") == 2) { // ALARM
-        if (Attention has :vibrate) {
+        var vibrationEnabled =  Storage.getValue(MENUITEM_VIBRATION) ? true : false;
+        if (Attention has :vibrate && vibrationEnabled) {
           var vibeData =
             [
             new Attention.VibeProfile(50, 500),
@@ -188,7 +192,6 @@ class GarminSDComms {
 
 
   function onMessageReceived(msg) {
-    var i;
     System.print("GarminSdApp.onMessageReceived - ");
     System.println(msg.data.toString());
   }

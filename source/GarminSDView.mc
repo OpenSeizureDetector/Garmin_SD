@@ -29,6 +29,17 @@ using Toybox.Time;
 using Toybox.Time.Gregorian;
 using Toybox.Timer;
 using Toybox.Lang;
+using Toybox.Application as App;
+import Toybox.Application.Storage;
+
+// FIXME:  Move this to a common include file.
+enum {
+  MENUITEM_MUTE,
+  MENUITEM_BENMODE,
+  MENUITEM_VIBRATION,
+  MENUITEM_SOUND,
+  MENUITEM_LIGHT
+}
 
 class GarminSDView extends Ui.View {
   var accelHandler;
@@ -142,13 +153,36 @@ class SdDelegate extends Ui.BehaviorDelegate {
   }
 
   function onMenu() {
-    System.println("SdDelegate.onMenu() - Showing confirm dialog");
-    var msgStr = Ui.loadResource(Rez.Strings.Mute_alarms_confirmation);			
-    var cd = new Ui.Confirmation( msgStr );
-    Ui.pushView( cd,
-    		 new MuteDelegate(mSdView.accelHandler),
-    		 Ui.SLIDE_IMMEDIATE );
+    var menu = new GarminSDSettingsMenu();
+    //var boolean = Storage.getValue(1) ? true : false;
+    var boolean = mSdView.accelHandler.mMute ? true : false;
+    menu.addItem(new Ui.ToggleMenuItem("Mute Alarms", null, MENUITEM_MUTE, boolean, null));
+
+    boolean = Storage.getValue(MENUITEM_BENMODE) ? true : false;
+    menu.addItem(new Ui.ToggleMenuItem("Ben Mode", null, MENUITEM_BENMODE, boolean, null));
+
+    boolean = Storage.getValue(MENUITEM_VIBRATION) ? true : false;
+    menu.addItem(new Ui.ToggleMenuItem("Vibration", null, MENUITEM_VIBRATION, boolean, null));
+
+    boolean = Storage.getValue(MENUITEM_SOUND) ? true : false;
+    menu.addItem(new Ui.ToggleMenuItem("Sound", null, MENUITEM_SOUND, boolean, null));
+
+    boolean = Storage.getValue(MENUITEM_LIGHT) ? true : false;
+    menu.addItem(new Ui.ToggleMenuItem("Light", null, MENUITEM_LIGHT, boolean, null));
+
+    Ui.pushView(menu, new GarminSDSettingsMenuDelegate(mSdView.accelHandler), Ui.SLIDE_IMMEDIATE);
     return true;
+
+
+
+
+    //System.println("SdDelegate.onMenu() - Showing confirm dialog");
+    //var msgStr = Ui.loadResource(Rez.Strings.Mute_alarms_confirmation);			
+    //var cd = new Ui.Confirmation( msgStr );
+    //Ui.pushView( cd,
+    //		 new MuteDelegate(mSdView.accelHandler),
+    //		 Ui.SLIDE_IMMEDIATE );
+    //return true;
   }
 
 
@@ -183,6 +217,7 @@ class SdDelegate extends Ui.BehaviorDelegate {
 class QuitDelegate extends Ui.ConfirmationDelegate
 {
   const QUIT_TIMEOUT = 10 * 1000;  // Milliseconds
+  const QUIT_TIMEOUT_BENMODE = 500; // Milliseconds
   var mTimer;
   var mResponseReceived;
 
@@ -193,7 +228,9 @@ class QuitDelegate extends Ui.ConfirmationDelegate
       
       // Start a timer to timeout this dialog - calls timerCallback
       mTimer = new Timer.Timer();
-      mTimer.start(method(:timerCallback),QUIT_TIMEOUT,false);
+      var timeoutMs = Storage.getValue(MENUITEM_BENMODE) ? QUIT_TIMEOUT_BENMODE : QUIT_TIMEOUT;
+      System.println("Quit Timeout Ms = "+timeoutMs);
+      mTimer.start(method(:timerCallback),timeoutMs,false);
       mResponseReceived = false;
     }
 
@@ -265,6 +302,49 @@ class MuteDelegate extends Ui.ConfirmationDelegate
 	  mAccelHandler.muteAlarms();
         }
       return true;
+    }
+}
+
+//! The app settings menu
+class GarminSDSettingsMenu extends Ui.Menu2 {
+
+    //! Constructor
+    public function initialize() {
+        Menu2.initialize({:title=>"Settings"});
+    }
+}
+
+//! Input handler for the app settings menu
+class GarminSDSettingsMenuDelegate extends Ui.Menu2InputDelegate {
+  var mAccelHandler;
+    //! Constructor
+    public function initialize(accelHandler) {
+        Menu2InputDelegate.initialize();
+        mAccelHandler = accelHandler;
+    }
+
+    //! Handle a menu item being selected
+    //! @param menuItem The menu item selected
+    public function onSelect(menuItem as Ui.MenuItem) as Void {
+        if (menuItem instanceof ToggleMenuItem) {
+          System.println("onSelect - id="+menuItem.getId());
+          if (menuItem.getId() == MENUITEM_MUTE) {
+            System.println("Mute Selected");
+            System.println("SdDelegate.onMenu() - Showing confirm dialog");
+            var msgStr = Ui.loadResource(Rez.Strings.Mute_alarms_confirmation);			
+            var cd = new Ui.Confirmation( msgStr );
+            Ui.pushView( cd,
+      		      new MuteDelegate(mAccelHandler),
+    		        Ui.SLIDE_IMMEDIATE );
+
+
+
+          } else {
+            System.println("Storing selected value");
+            Storage.setValue(menuItem.getId() as Ui.Number, menuItem.isEnabled());
+          }
+            //Storage.setValue(menuItem.getId() as Ui.Number, menuItem.isEnabled());
+        }
     }
 }
 

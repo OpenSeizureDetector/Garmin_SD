@@ -27,6 +27,9 @@ class GarminSDApp extends App.AppBase {
     } else {
       System.println("GarminSDApp.onStart(): State= null");
     }
+    //System.println("benMode="+App.getApp().getProperty("benMode"));
+    //System.println("benmode="+App.getApp().getProperty("benmode"));
+    //System.println("prop2="+App.getApp().getProperty("prop2"));
   }
 
   // onStop() is called when your application is exiting
@@ -49,7 +52,7 @@ class GarminSDApp extends App.AppBase {
 
   function onPosition(info) {
     System.println("GarminSDApp.onPosition()");
-    var myLocation = info.position.toDegrees();
+    //var myLocation = info.position.toDegrees();
   }
   
 }
