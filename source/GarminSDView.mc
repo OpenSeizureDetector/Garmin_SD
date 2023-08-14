@@ -218,7 +218,7 @@ class QuitDelegate extends Ui.ConfirmationDelegate
 {
   const QUIT_TIMEOUT = 10 * 1000;  // Milliseconds
   const QUIT_TIMEOUT_BENMODE = 500; // Milliseconds
-  var mTimer;
+  var mTimer = new Timer.Timer();
   var mResponseReceived;
 
   function initialize()
@@ -227,7 +227,7 @@ class QuitDelegate extends Ui.ConfirmationDelegate
       Ui.ConfirmationDelegate.initialize();
       
       // Start a timer to timeout this dialog - calls timerCallback
-      mTimer = new Timer.Timer();
+      mTimer.stop();
       var timeoutMs = Storage.getValue(MENUITEM_BENMODE) ? QUIT_TIMEOUT_BENMODE : QUIT_TIMEOUT;
       System.println("Quit Timeout Ms = "+timeoutMs);
       mTimer.start(method(:timerCallback),timeoutMs,false);
@@ -263,7 +263,7 @@ class QuitDelegate extends Ui.ConfirmationDelegate
 class MuteDelegate extends Ui.ConfirmationDelegate
 {
   const DIALOG_TIMEOUT = 10 * 1000;  // Milliseconds
-  var mTimer;
+  var mTimer = new Timer.Timer();
   var mAccelHandler;
   var mResponseReceived;
     function initialize(accelHandler)
@@ -273,7 +273,7 @@ class MuteDelegate extends Ui.ConfirmationDelegate
       mAccelHandler = accelHandler;
       
       // Start a timer to timeout this dialog - calls timerCallback
-      mTimer = new Timer.Timer();
+      mTimer.stop();
       mTimer.start(method(:muteTimerCallback),DIALOG_TIMEOUT,false);
       mResponseReceived = false;
     }
