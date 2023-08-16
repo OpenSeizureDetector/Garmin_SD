@@ -44,158 +44,159 @@ class GarminSDComms {
     // We use http communications not phone app messages.
     //Comm.registerForPhoneAppMessages(method(:onMessageReceived));
     //Comm.transmit("Hello World.", null, listener);
-
   }
 
   function sendAccelData() {
     var dataObj = mAccelHandler.getDataJson();
-    
+
     Comm.makeWebRequest(
-			serverUrl+"/data",
-			{"dataObj"=>dataObj},
-			{
-			  :method => Communications.HTTP_REQUEST_METHOD_POST,
-			    :headers => {
-			    "Content-Type" => Comm.REQUEST_CONTENT_TYPE_URL_ENCODED
-			  }
-			},
-			method(:onReceive));
+      serverUrl + "/data",
+      { "dataObj" => dataObj },
+      {
+        :method => Communications.HTTP_REQUEST_METHOD_POST,
+        :headers => {
+          "Content-Type" => Comm.REQUEST_CONTENT_TYPE_URL_ENCODED,
+        },
+      },
+      method(:onReceive)
+    );
   }
 
   function sendSettings() {
     var dataObj = mAccelHandler.getSettingsJson();
     //System.println("sendSettings() - dataObj="+dataObj);
     Comm.makeWebRequest(
-			serverUrl+"/settings",
-			{"dataObj"=>dataObj},
-			{
-			  :method => Communications.HTTP_REQUEST_METHOD_POST,
-			    :headers => {
-			    "Content-Type" => Comm.REQUEST_CONTENT_TYPE_URL_ENCODED
-			  }
-			},
-			method(:onReceive));    
+      serverUrl + "/settings",
+      { "dataObj" => dataObj },
+      {
+        :method => Communications.HTTP_REQUEST_METHOD_POST,
+        :headers => {
+          "Content-Type" => Comm.REQUEST_CONTENT_TYPE_URL_ENCODED,
+        },
+      },
+      method(:onReceive)
+    );
   }
 
   function getSdStatus() {
     // System.println("getSdStatus()");
     Comm.makeWebRequest(
-			serverUrl+"/data",
-			{ },
-			{
-			  :method => Communications.HTTP_REQUEST_METHOD_GET,
-			    :headers => {                                    
-			    "Content-Type" => Communications.REQUEST_CONTENT_TYPE_URL_ENCODED },
-			    :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON	
-			       },
-			method(:onSdStatusReceive)
-      );
+      serverUrl + "/data",
+      {},
+      {
+        :method => Communications.HTTP_REQUEST_METHOD_GET,
+        :headers => {
+          "Content-Type" => Communications.REQUEST_CONTENT_TYPE_URL_ENCODED,
+        },
+        :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON,
+      },
+      method(:onSdStatusReceive)
+    );
     //System.println("getSdStatus Exiting");
   }
-
 
   // Receive the data from the web request - should be a json string
   function onSdStatusReceive(responseCode, data) {
     //System.println("onSdStatusReceive - ResponseCode="+responseCode);
     if (responseCode == 200) {
       if (responseCode != lastOnSdStatusReceiveResponse) {
-	      System.println("onSdStatusReceive() success - data ="+data);
-	      System.println("onSdStatusReceive() Status ="+data.get("alarmPhrase"));
+        System.println("onSdStatusReceive() success - data =" + data);
+        System.println(
+          "onSdStatusReceive() Status =" + data.get("alarmPhrase")
+        );
       }
       mAccelHandler.mStatusStr = data.get("alarmPhrase");
       if (data.get("alarmState") != 0) {
         try {
-          var lightEnabled =  Storage.getValue(MENUITEM_LIGHT) ? true : false;
+          var lightEnabled = Storage.getValue(MENUITEM_LIGHT) ? true : false;
           if (Attention has :backlight && lightEnabled) {
             Attention.backlight(true);
           }
-        } catch( ex ) {
+        } catch (ex) {
           // We might get a Toybox.Attention.BacklightOnTooLongException
         }
-        var soundEnabled =  Storage.getValue(MENUITEM_SOUND) ? true : false;
+        var soundEnabled = Storage.getValue(MENUITEM_SOUND) ? true : false;
         if (Attention has :playTone && soundEnabled) {
           Attention.playTone(Attention.TONE_ALERT_HI);
         }
-            }
-            if (data.get("alarmState") == 2) { // ALARM
-        var vibrationEnabled =  Storage.getValue(MENUITEM_VIBRATION) ? true : false;
+      }
+      if (data.get("alarmState") == 2) {
+        // ALARM
+        var vibrationEnabled = Storage.getValue(MENUITEM_VIBRATION)
+          ? true
+          : false;
         if (Attention has :vibrate && vibrationEnabled) {
-          var vibeData =
-            [
+          var vibeData = [
             new Attention.VibeProfile(50, 500),
-            new Attention.VibeProfile(0, 500),  
-            new Attention.VibeProfile(50, 500), 
-            new Attention.VibeProfile(0, 500),  
-            new Attention.VibeProfile(50, 500)  
-            ];
+            new Attention.VibeProfile(0, 500),
+            new Attention.VibeProfile(50, 500),
+            new Attention.VibeProfile(0, 500),
+            new Attention.VibeProfile(50, 500),
+          ];
           Attention.vibrate(vibeData);
         }
       }
     } else {
-      mAccelHandler.mStatusStr = Rez.Strings.Error_abbrev + ": " + responseCode.toString();
+      mAccelHandler.mStatusStr =
+        Rez.Strings.Error_abbrev + ": " + responseCode.toString();
       if (responseCode != lastOnSdStatusReceiveResponse) {
-	      System.println("onSdStatusReceive() Failue - code =");
-	      System.println(responseCode);
-	      System.println("onSdStatusReceive() Failure - data ="+data);
+        System.println("onSdStatusReceive() Failue - code =");
+        System.println(responseCode);
+        System.println("onSdStatusReceive() Failure - data =" + data);
       } else {
-	      System.print(".");
+        System.print(".");
       }
     }
     lastOnSdStatusReceiveResponse = responseCode;
   }
 
-  
   // Receive the response from the sendAccelData or sendSettings web request.
   function onReceive(responseCode, data) {
     if (responseCode == 200) {
-      if ((responseCode != lastOnReceiveResponse) || (data != lastOnReceiveData) ) {	
-	      System.println("onReceive() success - data ="+data);
+      if (responseCode != lastOnReceiveResponse || data != lastOnReceiveData) {
+        System.println("onReceive() success - data =" + data);
       } else {
-	      System.print(".");
+        System.print(".");
       }
       if (data.equals("sendSettings")) {
-	      //System.println("Sending Settings");
-	      sendSettings();
+        //System.println("Sending Settings");
+        sendSettings();
       } else {
-	      //System.println("getting sd status");
-	      getSdStatus();
+        //System.println("getting sd status");
+        getSdStatus();
       }
     } else {
       mAccelHandler.mStatusStr = "ERR: " + responseCode.toString();
       if (Attention has :playTone) {
-	      Attention.playTone(Attention.TONE_LOUD_BEEP);
+        Attention.playTone(Attention.TONE_LOUD_BEEP);
       }
       if (Attention has :vibrate) {
-	      var vibeData =
-	         [
-	          new Attention.VibeProfile(50, 200),
-	          //new Attention.VibeProfile(0, 200),  
-	          //new Attention.VibeProfile(50, 200), 
-	          //new Attention.VibeProfile(0, 200),  
-	          //new Attention.VibeProfile(50, 200)  
-	        ];
-	      Attention.vibrate(vibeData);
+        var vibeData = [
+          new Attention.VibeProfile(50, 200),
+          //new Attention.VibeProfile(0, 200),
+          //new Attention.VibeProfile(50, 200),
+          //new Attention.VibeProfile(0, 200),
+          //new Attention.VibeProfile(50, 200)
+        ];
+        Attention.vibrate(vibeData);
       }
 
-
       if (responseCode != lastOnReceiveResponse) {
-	      System.println("onReceive() Failue - code =");
-	      System.println(responseCode);
+        System.println("onReceive() Failue - code =");
+        System.println(responseCode);
       } else {
-	      System.print(".");
+        System.print(".");
       }
     }
     lastOnReceiveResponse = responseCode;
     lastOnReceiveData = data;
   }
-  
-
 
   function onMessageReceived(msg) {
     System.print("GarminSdApp.onMessageReceived - ");
     System.println(msg.data.toString());
   }
-  
+
   /////////////////////////////////////////////////////////////////////
   // Connection listener class that is used to log success and failure
   // of message transmissions.
@@ -203,14 +204,13 @@ class GarminSDComms {
     function initialize() {
       Comm.ConnectionListener.initialize();
     }
-    
+
     function onComplete() {
       System.println("Transmit Complete");
     }
-    
+
     function onError() {
       System.println("Transmit Failed");
     }
   }
-
 }

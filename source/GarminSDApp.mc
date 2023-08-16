@@ -9,17 +9,17 @@ using Toybox.System;
 using Toybox.Position;
 
 class GarminSDApp extends App.AppBase {
-  
   function initialize() {
     System.println("GarminSdApp.initialize");
     AppBase.initialize();
     // Disable location tracking, in case that is causing battery drain
     // on Vivoactive 4.
     Position.enableLocationEvents(
-				  Position.LOCATION_DISABLE,
-				  method(:onPosition));
+      Position.LOCATION_DISABLE,
+      method(:onPosition)
+    );
   }
-    
+
   // onStart() is called on application start up
   function onStart(state) {
     if (state != null) {
@@ -54,7 +54,4 @@ class GarminSDApp extends App.AppBase {
     System.println("GarminSDApp.onPosition()");
     //var myLocation = info.position.toDegrees();
   }
-  
 }
-
-
