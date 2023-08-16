@@ -7,4 +7,14 @@
   <string id="Mute_label">MUTE</string>
   <string id="Mute_alarms_confirmation">Mute Alarms (for 5 min)?</string>
   <string id="Exit_app_confirmation">Exit OSD App?</string>
+  <string id="BenMode_title">Ben Mode</string>
+  <string id="BenMode_desc">Difficult to shut down accidentally</string>
+  <string id="Mute_title">Mute Alarms</string>
+  <string id="Mute_desc">Mute for 5 minutes</string>
+  <string id="Vibration_title">Vibration</string>
+  <string id="Vibration_desc">Vibrate on Alarm or Fault</string>
+  <string id="Sound_title">Sound</string>
+  <string id="Sound_desc">Sound on Alarm or Fault</string>
+  <string id="Light_title">Light</string>
+  <string id="Light_desc">Light on Alarm or Fault</string>
 </resources>
