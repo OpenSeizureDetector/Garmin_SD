@@ -41,21 +41,16 @@ enum {
   MENUITEM_LIGHT,
 }
 
-enum {
-    MODE_RUNNING,
-    MODE_MUTEDLG,
-    MODE_QUITDLG,
-  }
-
-
 class GarminSDView extends Ui.View {
   var accelHandler;
   var width;
   var height;
+  var mSdState;
 
-  function initialize() {
+  function initialize(sdState) {
     System.println("GarminSDView.initialize()");
     View.initialize();
+    mSdState = sdState;
     accelHandler = new GarminSDDataHandler(
       Ui.loadResource(Rez.Strings.VersionId)
     );
@@ -205,6 +200,7 @@ class GarminSDView extends Ui.View {
 
 class SdDelegate extends Ui.BehaviorDelegate {
   var mSdView;
+  var mSdState;
   var mTimer;
   var mMode;
   var mMuteDlgOpenTime;
@@ -214,10 +210,11 @@ class SdDelegate extends Ui.BehaviorDelegate {
   const MUTE_TIMEOUT = 10; // Seconds
 
 
-  function initialize(sdView) {
+  function initialize(sdView, sdState) {
     System.println("SdDelegate.initialize()");
     mSdView = sdView;
-    mMode = MODE_RUNNING;
+    mSdState = sdState;
+    mSdState.setMode(MODE_RUNNING);
 
     // Set default values for settings if necessary
     if (Storage.getValue(MENUITEM_BENMODE) == null) {
@@ -243,7 +240,7 @@ class SdDelegate extends Ui.BehaviorDelegate {
   function timerCallback() {
     //System.println("SdDelegate.timerCallback()");
     // Handle Timeout of Quit Dialog
-    if (mMode == MODE_QUITDLG) {
+    if (mSdState.getMode() == MODE_QUITDLG) {
       //System.println("SdDelegate.timerCalback - Quit Dialog Displayed");
       var timeoutSecs = Storage.getValue(MENUITEM_BENMODE)
         ? QUIT_TIMEOUT_BENMODE
@@ -252,7 +249,7 @@ class SdDelegate extends Ui.BehaviorDelegate {
       //System.println("dlgOpenMs="+dlgOpenSecs);
       if (dlgOpenSecs > timeoutSecs) {
         System.println("Quit Dialog Timedout - closing");
-        mMode = MODE_RUNNING;
+        mSdState.setMode(MODE_RUNNING);
         Ui.popView(Ui.SLIDE_IMMEDIATE);
       }
     }
@@ -335,9 +332,9 @@ class SdDelegate extends Ui.BehaviorDelegate {
     System.println("SdDelegate.onBack()");
     var quitString = Ui.loadResource(Rez.Strings.Exit_app_confirmation);
     var cd = new Ui.Confirmation(quitString);
-    mMode = MODE_QUITDLG;
+    mSdState.setMode(MODE_QUITDLG);
     mQuitDlgOpenTime = Time.now().value();
-    Ui.pushView(cd, new QuitDelegate(mSdView), Ui.SLIDE_IMMEDIATE);
+    Ui.pushView(cd, new QuitDelegate(mSdView, mSdState), Ui.SLIDE_IMMEDIATE);
     return true;
   }
 
@@ -345,12 +342,14 @@ class SdDelegate extends Ui.BehaviorDelegate {
   function onKey(keyEvent) {
     System.println("onKey() - "+keyEvent.getKey()); // e.g. KEY_MENU = 7
     if (keyEvent.getKey() == KEY_ENTER) {
-        System.println("Mute Selected");
         if (mSdView.accelHandler.mMute) {
           mSdView.accelHandler.mMute = false;
+        System.println("Mute="+mSdView.accelHandler.mMute);
         } else {
           mSdView.accelHandler.mMute = true;
+        System.println("Mute="+mSdView.accelHandler.mMute);
         }
+        Ui.requestUpdate();
       return true;
     } 
     return true;
@@ -362,10 +361,12 @@ class QuitDelegate extends Ui.ConfirmationDelegate {
   // Handles user response to the quit confirmation dialog.
   var mResponseReceived;
   var mSdView;
+  var mSdState;
 
-  function initialize(sdView) {
+  function initialize(sdView, sdState) {
     System.println("QuitDelegate.initialize()");
     mSdView = sdView;
+    mSdState = sdState;
     Ui.ConfirmationDelegate.initialize();
 
     mResponseReceived = false;
@@ -374,11 +375,14 @@ class QuitDelegate extends Ui.ConfirmationDelegate {
   function onResponse(value) {
     System.println("QuitDelegate.onResponse() - " + value);
     mResponseReceived = true;
-    mSdView.mMode = MODE_RUNNING;
     if (value == CONFIRM_YES) {
       // pop the confirmation dialog associated with this delegate
+      System.println("quitDelegate.onResponse - exiting app");
       Ui.popView(Ui.SLIDE_IMMEDIATE);
-      // the system will automatically pop the top level dialog
+    } else {
+      // the system will automatically pop the top level dialog so we do not have to close it ourselves
+      System.println("quitDelegate.onResponse - closing quit dalog and returning to running state");
+      mSdState.setMode(MODE_RUNNING);
     }
 
     return true;

@@ -8,10 +8,14 @@ using Toybox.Application as App;
 using Toybox.System;
 using Toybox.Position;
 
+
 class GarminSDApp extends App.AppBase {
+  var mSdState;
   function initialize() {
     System.println("GarminSdApp.initialize");
     AppBase.initialize();
+
+    mSdState = new GarminSDState();
     // Disable location tracking, in case that is causing battery drain
     // on Vivoactive 4.
     Position.enableLocationEvents(
@@ -44,8 +48,8 @@ class GarminSDApp extends App.AppBase {
   // Return the initial view of your application here
   function getInitialView() {
     System.println("GarminSDApp.getInitialView");
-    var mainView = new GarminSDView();
-    var viewDelegate = new SdDelegate(mainView);
+    var mainView = new GarminSDView(mSdState);
+    var viewDelegate = new SdDelegate(mainView, mSdState);
     return [mainView, viewDelegate];
     //return [mainView];
   }

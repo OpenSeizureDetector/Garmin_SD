@@ -1,5 +1,10 @@
 GarminSD CHANGELOG
 ==================
+
+v1.4 - 18aug2023:
+	- Added configuration menu to allow user to select whether to play a sound, light up the watch or vibrate when 
+	  an alarm or error occurs.
+	- Adjusted use of timers to reduce chance of crashes.
 v1.0 - 06jan2020:
 	- Added system info to settings http response for improved logging.
 	- Changed acceleration output to be true vector magnitude, not the

@@ -167,16 +167,14 @@ class GarminSDComms {
       }
     } else {
       mAccelHandler.mStatusStr = "ERR: " + responseCode.toString();
-      if (Attention has :playTone) {
+      var soundEnabled = Storage.getValue(MENUITEM_SOUND) ? true : false;
+      if (Attention has :playTone && soundEnabled) {
         Attention.playTone(Attention.TONE_LOUD_BEEP);
       }
-      if (Attention has :vibrate) {
+      var vibrationEnabled = Storage.getValue(MENUITEM_VIBRATION) ? true : false;
+      if (Attention has :vibrate && vibrationEnabled) {
         var vibeData = [
           new Attention.VibeProfile(50, 200),
-          //new Attention.VibeProfile(0, 200),
-          //new Attention.VibeProfile(50, 200),
-          //new Attention.VibeProfile(0, 200),
-          //new Attention.VibeProfile(50, 200)
         ];
         Attention.vibrate(vibeData);
       }
