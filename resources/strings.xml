@@ -1,6 +1,6 @@
 <resources>
   <string id="AppName">GarminSD</string>
-  <string id="VersionId">V1.4.1c</string>
+  <string id="VersionId">V1.4.1f</string>
   <string id="Beats_per_minute_abbrev">bpm</string>
   <string id="Battery_abbrev">bat</string>
   <string id="Error_abbrev">ERR</string>
@@ -17,5 +17,7 @@
   <string id="Sound_desc">Sound on Alarm or Fault</string>
   <string id="Light_title">Light</string>
   <string id="Light_desc">Light on Alarm or Fault</string>
+  <string id="Retry_title">Retry Warning</string>
+  <string id="Retry_desc">Vibrate when data send re-try is necessary</string>
   <string id="Error_request_in_progress">Waiting</string>
 </resources>

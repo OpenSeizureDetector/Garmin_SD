@@ -145,7 +145,7 @@ class GarminSDDataHandler {
     //Toybox.System.println("Raw samples, X axis: " + mSamplesX);
     //Toybox.System.println("Raw samples, Y axis: " + mSamplesY);
     //Toybox.System.println("Raw samples, Z axis: " + mSamplesZ);
-    //Ui.requestUpdate();
+    Ui.requestUpdate();
 
     if (nSamp * SAMPLE_PERIOD == ANALYSIS_PERIOD) {
       //System.println("Doing Analysis....");
@@ -158,8 +158,9 @@ class GarminSDDataHandler {
         mO2sat = 0;
       }
       nSamp = 0;
+      System.println("DataHandler - sending Accel Data");
       mComms.sendAccelData();
-      Ui.requestUpdate();
+      //Ui.requestUpdate();
     }
   }
 
@@ -207,6 +208,15 @@ class GarminSDDataHandler {
     }
 
     Sensor.enableSensorEvents(method(:heartrate_callback));
+  }
+
+  function onTick() {
+    /**
+    Called by GarminSDView every second in case we need to do anything timed.
+    */
+    //System.println("GarminSDDataHandler.onTick()");
+
+    mComms.onTick();
   }
 
   function onStop() {

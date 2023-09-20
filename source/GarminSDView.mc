@@ -39,6 +39,7 @@ enum {
   MENUITEM_VIBRATION,
   MENUITEM_SOUND,
   MENUITEM_LIGHT,
+  MENUITEM_RETRY_WARNING
 }
 
 class GarminSDView extends Ui.View {
@@ -221,13 +222,16 @@ class SdDelegate extends Ui.BehaviorDelegate {
       Storage.setValue(MENUITEM_BENMODE, 0);
     }
     if (Storage.getValue(MENUITEM_SOUND) == null) {
-      Storage.setValue(MENUITEM_SOUND, 1);
+      Storage.setValue(MENUITEM_SOUND, 0);
     }
     if (Storage.getValue(MENUITEM_VIBRATION) == null) {
-      Storage.setValue(MENUITEM_VIBRATION, 1);
+      Storage.setValue(MENUITEM_VIBRATION, 0);
     }
     if (Storage.getValue(MENUITEM_LIGHT) == null) {
-      Storage.setValue(MENUITEM_LIGHT, 1);
+      Storage.setValue(MENUITEM_LIGHT, 0);
+    }
+    if (Storage.getValue(MENUITEM_RETRY_WARNING) == null) {
+      Storage.setValue(MENUITEM_RETRY_WARNING, 0);
     }
 
     // Start a timer that calls timerCallback every second
@@ -253,6 +257,7 @@ class SdDelegate extends Ui.BehaviorDelegate {
         Ui.popView(Ui.SLIDE_IMMEDIATE);
       }
     }
+    mSdView.accelHandler.onTick();
   }
 
   function onMenu() {
@@ -305,6 +310,18 @@ class SdDelegate extends Ui.BehaviorDelegate {
         null
       )
     );
+
+    boolean = Storage.getValue(MENUITEM_RETRY_WARNING) ? true : false;
+    menu.addItem(
+      new Ui.ToggleMenuItem(
+        Ui.loadResource(Rez.Strings.Retry_title),
+        Ui.loadResource(Rez.Strings.Retry_desc),
+        MENUITEM_RETRY_WARNING,
+        boolean,
+        null
+      )
+    );
+
 
     boolean = Storage.getValue(MENUITEM_BENMODE) ? true : false;
     menu.addItem(
