@@ -32,12 +32,14 @@ class GarminSDComms {
   var lastOnReceiveResponse = -1;
   var lastOnReceiveData = "";
   var lastOnSdStatusReceiveResponse = -1;
+  var mRequestInProgress = 0;
   //var serverUrl = "http:192.168.43.1:8080";
   var serverUrl = "http://127.0.0.1:8080";
 
   function initialize(accelHandler) {
     listener = new CommListener();
     mAccelHandler = accelHandler;
+    mRequestInProgress = 0;
   }
 
   function onStart() {
@@ -48,23 +50,38 @@ class GarminSDComms {
 
   function sendAccelData() {
     var dataObj = mAccelHandler.getDataJson();
-
-    Comm.makeWebRequest(
-      serverUrl + "/data",
-      { "dataObj" => dataObj },
-      {
-        :method => Communications.HTTP_REQUEST_METHOD_POST,
-        :headers => {
-          "Content-Type" => Comm.REQUEST_CONTENT_TYPE_URL_ENCODED,
+    if (mRequestInProgress) {
+      // Don't start another one.
+      System.println("sendAccelData() - request already in progress so not sending another one");
+      mAccelHandler.mStatusStr =
+        Rez.Strings.Error_abbrev + ": " + Rez.Strings.Error_request_in_progress;
+      var vibrationEnabled = Storage.getValue(MENUITEM_VIBRATION) ? true : false;
+      if (Attention has :vibrate && vibrationEnabled) {
+        var vibeData = [
+          new Attention.VibeProfile(50, 200),
+        ];
+        Attention.vibrate(vibeData);
+      }
+    } else {
+      mRequestInProgress = 1;
+      Comm.makeWebRequest(
+        serverUrl + "/data",
+        { "dataObj" => dataObj },
+        {
+          :method => Communications.HTTP_REQUEST_METHOD_POST,
+          :headers => {
+            "Content-Type" => Comm.REQUEST_CONTENT_TYPE_URL_ENCODED,
+          },
         },
-      },
-      method(:onReceive)
-    );
+        method(:onReceive)
+      );
+    }
   }
 
   function sendSettings() {
     var dataObj = mAccelHandler.getSettingsJson();
     //System.println("sendSettings() - dataObj="+dataObj);
+    mRequestInProgress = 1;
     Comm.makeWebRequest(
       serverUrl + "/settings",
       { "dataObj" => dataObj },
@@ -80,6 +97,7 @@ class GarminSDComms {
 
   function getSdStatus() {
     // System.println("getSdStatus()");
+    mRequestInProgress = 1;
     Comm.makeWebRequest(
       serverUrl + "/data",
       {},
@@ -97,6 +115,7 @@ class GarminSDComms {
 
   // Receive the data from the web request - should be a json string
   function onSdStatusReceive(responseCode, data) {
+    mRequestInProgress = 0;
     //System.println("onSdStatusReceive - ResponseCode="+responseCode);
     if (responseCode == 200) {
       if (responseCode != lastOnSdStatusReceiveResponse) {
@@ -152,6 +171,7 @@ class GarminSDComms {
 
   // Receive the response from the sendAccelData or sendSettings web request.
   function onReceive(responseCode, data) {
+    mRequestInProgress = 0;
     if (responseCode == 200) {
       if (responseCode != lastOnReceiveResponse || data != lastOnReceiveData) {
         System.println("onReceive() success - data =" + data);
