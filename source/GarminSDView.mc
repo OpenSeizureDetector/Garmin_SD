@@ -257,7 +257,7 @@ class SdDelegate extends Ui.BehaviorDelegate {
         Ui.popView(Ui.SLIDE_IMMEDIATE);
       }
     }
-    mSdView.accelHandler.onTick();
+    //mSdView.accelHandler.onTick();
   }
 
   function onMenu() {

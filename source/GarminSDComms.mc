@@ -29,6 +29,7 @@ import Toybox.Application.Storage;
 
 class GarminSDComms {
   var listener;
+  var mTimer;
   var mAccelHandler = null;
   var lastOnReceiveResponse = -1;
   var lastOnReceiveData = "";
@@ -46,6 +47,11 @@ class GarminSDComms {
     mDataRequestInProgress = 0;
     mSettingsRequestInProgress = 0;
     mStatusRequestInProgress = 0;
+
+    // Start a timer that calls timerCallback every second
+    mTimer = new Timer.Timer();
+    mTimer.start(method(:onTick), 1000, true);
+
   }
 
   function onStart() {
@@ -79,7 +85,7 @@ class GarminSDComms {
 
   function sendSettings() {
     var dataObj = mAccelHandler.getSettingsJson();
-    //System.println("sendSettings() - dataObj="+dataObj);
+    System.println("sendSettings()");
     mSettingsRequestInProgress = 1;
     Comm.makeWebRequest(
       serverUrl + "/settings",
@@ -95,7 +101,7 @@ class GarminSDComms {
   }
 
   function getSdStatus() {
-    // System.println("getSdStatus()");
+    System.println("getSdStatus()");
     mStatusRequestInProgress = 1;
     Comm.makeWebRequest(
       serverUrl + "/data",
@@ -115,7 +121,7 @@ class GarminSDComms {
   // Receive the data from the web request - should be a json string
   function onSdStatusReceive(responseCode, data) {
     mStatusRequestInProgress = 0;
-    //System.println("onSdStatusReceive - ResponseCode="+responseCode);
+    System.println("onSdStatusReceive - ResponseCode="+responseCode);
     if (responseCode == 200) {
       if (responseCode != lastOnSdStatusReceiveResponse) {
         System.println("onSdStatusReceive() success - data =" + data);
@@ -173,7 +179,7 @@ class GarminSDComms {
     mDataRequestInProgress = 0;
     if (responseCode == 200) {
       if (responseCode != lastOnReceiveResponse || data != lastOnReceiveData) {
-        System.println("onAccelDataReceive() success - data =" + data);
+        System.println("onDataReceive() success - data =" + data);
       } else {
         System.print(".");
       }
@@ -211,6 +217,7 @@ class GarminSDComms {
 
   // Receive the response from the sendSettings web request.
   function onSettingsReceive(responseCode, data) {
+    System.println("onSettingsReceive()");
     mSettingsRequestInProgress = 0;
   }
 
