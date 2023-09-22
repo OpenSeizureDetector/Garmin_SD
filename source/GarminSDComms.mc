@@ -69,7 +69,7 @@ class GarminSDComms {
       writeLog(tagStr,"mDataRequestInProgress="+mDataRequestInProgress+", "+ mSettingsRequestInProgress+ ", " + mStatusRequestInProgress);
       mDataReadyToSend = 1;   // Set a flag so that onTick knows to re-try this send.
     } else {
-      writeLog(tagStr, "sendAccelData Start");
+      //writeLog(tagStr, "sendAccelData Start");
       mDataRequestInProgress = 1;
       mDataSendStartTime = Time.now();
       mDataReadyToSend = 0;

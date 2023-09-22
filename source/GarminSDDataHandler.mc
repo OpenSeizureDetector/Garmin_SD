@@ -30,6 +30,8 @@ using Toybox.System;
 using Toybox.WatchUi as Ui;
 using Toybox.Timer;
 using Toybox.Math;
+import Toybox.Application.Storage;
+
 
 class GarminSDDataHandler {
   const ANALYSIS_PERIOD = 5;
@@ -66,6 +68,8 @@ class GarminSDDataHandler {
   // Return the current set of data as a JSON String
   function getDataJson() {
     var i;
+    var lowDataMode = Storage.getValue(MENUITEM_LOWDATAMODE) ? true : false;
+
     var jsonStr = "{ dataType: 'raw', data: [";
     for (i = 0; i < ANALYSIS_PERIOD * SAMPLE_FREQUENCY; i = i + 1) {
       if (i > 0) {
@@ -79,17 +83,24 @@ class GarminSDDataHandler {
             mSamplesZ[i] * mSamplesZ[i]
         );
     }
-    jsonStr = jsonStr + "], data3D: [";
-    for (i = 0; i < ANALYSIS_PERIOD * SAMPLE_FREQUENCY; i = i + 1) {
-      if (i > 0) {
-        jsonStr = jsonStr + ", ";
+    jsonStr = jsonStr + "],";
+
+    if (!lowDataMode) {
+      jsonStr = jsonStr + " data3D: [";
+      for (i = 0; i < ANALYSIS_PERIOD * SAMPLE_FREQUENCY; i = i + 1) {
+        if (i > 0) {
+          jsonStr = jsonStr + ", ";
+        }
+        jsonStr = jsonStr + mSamplesX[i] + ", ";
+        jsonStr = jsonStr + mSamplesY[i] + ", ";
+        jsonStr = jsonStr + mSamplesZ[i];
       }
-      jsonStr = jsonStr + mSamplesX[i] + ", ";
-      jsonStr = jsonStr + mSamplesY[i] + ", ";
-      jsonStr = jsonStr + mSamplesZ[i];
+      jsonStr = jsonStr + "],";
+    } else {
+      writeLog("accelHandler.getDataJson()","Low Data Mode - Skipping data3D");
     }
 
-    jsonStr = jsonStr + "], HR:" + mHR;
+    jsonStr = jsonStr + " HR:" + mHR;
     jsonStr = jsonStr + ", O2sat:" + mO2sat;
     jsonStr = jsonStr + ", Mute:" + mMute;
     jsonStr = jsonStr + " }";
@@ -160,7 +171,7 @@ class GarminSDDataHandler {
       }
       nSamp = 0;
       //System.println("DataHandler - sending Accel Data");
-      writeLog("DataHandler.accelCallback()","Sending accel Data");
+      //writeLog("DataHandler.accelCallback()","Sending accel Data");
       mComms.sendAccelData();
       //Ui.requestUpdate();
     }

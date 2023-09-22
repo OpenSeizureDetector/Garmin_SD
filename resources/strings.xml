@@ -1,6 +1,6 @@
 <resources>
   <string id="AppName">GarminSD</string>
-  <string id="VersionId">V1.4.1m</string>
+  <string id="VersionId">V1.4.1n</string>
   <string id="Beats_per_minute_abbrev">bpm</string>
   <string id="Battery_abbrev">bat</string>
   <string id="Error_abbrev">ERR</string>
@@ -19,5 +19,7 @@
   <string id="Light_desc">Light on Alarm or Fault</string>
   <string id="Retry_title">Retry Warning</string>
   <string id="Retry_desc">Vibrate when data send re-try is necessary</string>
-  <string id="Error_request_in_progress">Waiting</string>
+  <string id="Error_request_in_progress">Retry</string>
+  <string id="Low_data_title">Low Data Mode</string>
+  <string id="Low_data_desc">Minimise data transmission to phone</string>
 </resources>
