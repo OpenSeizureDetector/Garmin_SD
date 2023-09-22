@@ -54,7 +54,8 @@ class GarminSDDataHandler {
   ///////////////
   // Constructor
   function initialize(versionStr) {
-    System.println("DataHandler.initialize()");
+    var tagStr = "DataHandler.initialize()";
+    writeLog(tagStr, "");
     mVersionStr = versionStr;
     // On Start-up we show the app version number in place of satus.
     mStatusStr = versionStr;
@@ -114,12 +115,12 @@ class GarminSDDataHandler {
   }
 
   function muteTimerCallback() {
-    System.println("muteTimerCallback()");
+    writeLog("muteTimerCallback()", "");
     mMute = 0;
   }
 
   function muteAlarms() {
-    System.println("muteAlarms()");
+    writeLog("muteAlarms()","");
     // If the timer is already running, stop it then re-start it.
     if (mMute == 1) {
       mMuteTimer.stop();
@@ -158,7 +159,8 @@ class GarminSDDataHandler {
         mO2sat = 0;
       }
       nSamp = 0;
-      System.println("DataHandler - sending Accel Data");
+      //System.println("DataHandler - sending Accel Data");
+      writeLog("DataHandler.accelCallback()","Sending accel Data");
       mComms.sendAccelData();
       //Ui.requestUpdate();
     }
@@ -177,10 +179,10 @@ class GarminSDDataHandler {
 
   // Initializes the view and registers for accelerometer data
   function onStart() {
-    System.println("DataHandler.onStart()");
+    var tagStr = "DataHandler.onStart()";
+    writeLog(tagStr,"");
     var maxSampleRate = Sensor.getMaxSampleRate();
-    System.print("maxSampleRate = ");
-    System.println(maxSampleRate);
+    writeLog(tagStr, "maxSampleRate = "+maxSampleRate);
 
     // initialize accelerometer to request the maximum amount of
     // data possible
@@ -191,9 +193,9 @@ class GarminSDDataHandler {
     };
     try {
       Sensor.registerSensorDataListener(method(:accel_callback), options);
-      System.println("Registered for Sensor Data");
+      writeLog(tagStr, "Registered for Sensor Data");
     } catch (e) {
-      System.println(e.getErrorMessage());
+      writeLog("*** ERROR - "+ tagStr, e.getErrorMessage());
     }
 
     // Intialise heart rate monitoring.
@@ -220,7 +222,7 @@ class GarminSDDataHandler {
   }
 
   function onStop() {
-    System.println("DataHandler.onStop()");
+    writeLog("DataHandler.onStop()", "");
     Sensor.unregisterSensorDataListener();
     Sensor.setEnabledSensors([]);
   }

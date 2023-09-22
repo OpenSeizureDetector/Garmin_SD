@@ -32,15 +32,6 @@ using Toybox.Lang;
 using Toybox.Application as App;
 import Toybox.Application.Storage;
 
-// FIXME:  Move this to a common include file.
-enum {
-  MENUITEM_MUTE,
-  MENUITEM_BENMODE,
-  MENUITEM_VIBRATION,
-  MENUITEM_SOUND,
-  MENUITEM_LIGHT,
-  MENUITEM_RETRY_WARNING
-}
 
 class GarminSDView extends Ui.View {
   var accelHandler;
@@ -49,28 +40,26 @@ class GarminSDView extends Ui.View {
   var mSdState;
 
   function initialize(sdState) {
-    System.println("GarminSDView.initialize()");
+    writeLog("GarminSDView.initialize()", "");
     View.initialize();
     mSdState = sdState;
     accelHandler = new GarminSDDataHandler(
       Ui.loadResource(Rez.Strings.VersionId)
     );
-    System.println("GarminSDView.initialize() - complete");
+    writeLog("GarminSDView.initialize()", "Complete");
   }
 
   // Load your resources here
   function onLayout(dc) {
-    System.println("GarminSDView.onLayout()");
+    writeLog("GarminSDView.onLayout()", "");
     width = dc.getWidth();
     height = dc.getHeight();
-    System.println("GarminSDView.onLayout() - complete");
   }
 
   // Restore the state of the app and prepare the view to be shown
   function onShow() {
-    System.println("GarminSDView.onShow()");
+    writeLog("GarminSDView.onShow()", "Starting accelHandler");
     accelHandler.onStart();
-    System.println("GarminSDView.onShow() - finishing");
   }
 
   // Update the view
@@ -194,7 +183,7 @@ class GarminSDView extends Ui.View {
   // Called when this View is removed from the screen. Save the
   // state of your app here.
   function onHide() {
-    System.println("GarminSDView.onHide");
+    writeLog("GarminSDView.onHide", "Stopping accelHandler");
     accelHandler.onStop();
   }
 }
@@ -212,7 +201,7 @@ class SdDelegate extends Ui.BehaviorDelegate {
 
 
   function initialize(sdView, sdState) {
-    System.println("SdDelegate.initialize()");
+    writeLog("SdDelegate.initialize()", "");
     mSdView = sdView;
     mSdState = sdState;
     mSdState.setMode(MODE_RUNNING);
@@ -252,7 +241,7 @@ class SdDelegate extends Ui.BehaviorDelegate {
       var dlgOpenSecs = Time.now().value() - mQuitDlgOpenTime;
       //System.println("dlgOpenMs="+dlgOpenSecs);
       if (dlgOpenSecs > timeoutSecs) {
-        System.println("Quit Dialog Timedout - closing");
+        writeLog("timerCallback()" , "Quit Dialog Timedout - closing");
         mSdState.setMode(MODE_RUNNING);
         Ui.popView(Ui.SLIDE_IMMEDIATE);
       }
@@ -346,7 +335,7 @@ class SdDelegate extends Ui.BehaviorDelegate {
     // Display a quit confirmation dialog, which times out after a given period
     // Handled by setting mMode to MODE_QUITDLG and initialising the time that we open the dialog.
     // timeout is handled in the timerCallback function.
-    System.println("SdDelegate.onBack()");
+    writeLog("SdDelegate.onBack()", "");
     var quitString = Ui.loadResource(Rez.Strings.Exit_app_confirmation);
     var cd = new Ui.Confirmation(quitString);
     mSdState.setMode(MODE_QUITDLG);
@@ -357,14 +346,14 @@ class SdDelegate extends Ui.BehaviorDelegate {
 
   // Detect Menu button input
   function onKey(keyEvent) {
-    System.println("onKey() - "+keyEvent.getKey()); // e.g. KEY_MENU = 7
+    writeLog("onKey()", " key="+keyEvent.getKey()); // e.g. KEY_MENU = 7
     if (keyEvent.getKey() == KEY_ENTER) {
         if (mSdView.accelHandler.mMute) {
           mSdView.accelHandler.mMute = false;
-        System.println("Mute="+mSdView.accelHandler.mMute);
+          writeLog( "onKey()", "Mute="+mSdView.accelHandler.mMute);
         } else {
           mSdView.accelHandler.mMute = true;
-        System.println("Mute="+mSdView.accelHandler.mMute);
+          writeLog("onKey()", "Mute="+mSdView.accelHandler.mMute);
         }
         Ui.requestUpdate();
       return true;
@@ -381,7 +370,7 @@ class QuitDelegate extends Ui.ConfirmationDelegate {
   var mSdState;
 
   function initialize(sdView, sdState) {
-    System.println("QuitDelegate.initialize()");
+    writeLog("QuitDelegate.initialize()", "");
     mSdView = sdView;
     mSdState = sdState;
     Ui.ConfirmationDelegate.initialize();
@@ -390,15 +379,15 @@ class QuitDelegate extends Ui.ConfirmationDelegate {
   }
 
   function onResponse(value) {
-    System.println("QuitDelegate.onResponse() - " + value);
+    writeLog("QuitDelegate.onResponse()", "Resonse = " + value);
     mResponseReceived = true;
     if (value == CONFIRM_YES) {
       // pop the confirmation dialog associated with this delegate
-      System.println("quitDelegate.onResponse - exiting app");
+      writeLog("quitDelegate.onResponse()", "Exiting app");
       Ui.popView(Ui.SLIDE_IMMEDIATE);
     } else {
       // the system will automatically pop the top level dialog so we do not have to close it ourselves
-      System.println("quitDelegate.onResponse - closing quit dalog and returning to running state");
+      writeLog("quitDelegate.onResponse()", "Closing quit dalog and returning to running state");
       mSdState.setMode(MODE_RUNNING);
     }
 
@@ -428,8 +417,7 @@ class GarminSDSettingsMenuDelegate extends Ui.Menu2InputDelegate {
   //! @param menuItem The menu item selected
   public function onSelect(menuItem as Ui.MenuItem) as Void {
     if (menuItem instanceof ToggleMenuItem) {
-        System.println("onSelect - id=" + menuItem.getId());
-        System.println("Storing selected value");
+        writeLog("menuDelegate.onSelect()", "id=" + menuItem.getId());
         Storage.setValue(menuItem.getId() as Ui.Number, menuItem.isEnabled());
     }
   }

@@ -12,7 +12,7 @@ using Toybox.Position;
 class GarminSDApp extends App.AppBase {
   var mSdState;
   function initialize() {
-    System.println("GarminSdApp.initialize");
+    writeLog("GarminSdApp.initialize", "");
     AppBase.initialize();
 
     mSdState = new GarminSDState();
@@ -27,9 +27,9 @@ class GarminSDApp extends App.AppBase {
   // onStart() is called on application start up
   function onStart(state) {
     if (state != null) {
-      System.println("GarminSDApp.onStart(): State=" + state.toString());
+      writeLog("GarminSDApp.onStart()", "State=" + state.toString());
     } else {
-      System.println("GarminSDApp.onStart(): State= null");
+      writeLog("GarminSDApp.onStart()", "State= null");
     }
     //System.println("benMode="+App.getApp().getProperty("benMode"));
     //System.println("benmode="+App.getApp().getProperty("benmode"));
@@ -39,15 +39,15 @@ class GarminSDApp extends App.AppBase {
   // onStop() is called when your application is exiting
   function onStop(state) {
     if (state != null) {
-      System.println("GarminSDApp.onStop(): State=" + state.toString());
+      writeLog("GarminSDApp.onStop()", "State=" + state.toString());
     } else {
-      System.println("GarminSDApp.onStop(): State= null");
+      writeLog("GarminSDApp.onStop()", "State= null");
     }
   }
 
   // Return the initial view of your application here
   function getInitialView() {
-    System.println("GarminSDApp.getInitialView");
+    writeLog("GarminSDApp.getInitialView", "");
     var mainView = new GarminSDView(mSdState);
     var viewDelegate = new SdDelegate(mainView, mSdState);
     return [mainView, viewDelegate];
@@ -55,7 +55,7 @@ class GarminSDApp extends App.AppBase {
   }
 
   function onPosition(info) {
-    System.println("GarminSDApp.onPosition()");
+    writeLog("GarminSDApp.onPosition()", "");
     //var myLocation = info.position.toDegrees();
   }
 }
