@@ -28,8 +28,10 @@ Note, this used to be easy until Garmin introduced the SDK manager - now you nee
   * Clone this repository.
   * Change to the watch app directory.
   * Set the MB_HOME environment variable to point to the SDK (see (https://developer.garmin.com/connect-iq/connect-iq-faq/how-do-i-integrate-connect-iq-and-travis-ci/)) for more information.
+  * You might want to edit mb_runner.cfg to set the TARGET_DEVICE and TARGET_SDK_VERSION to match your device (like maybe venusq and current SDK version)
+  * You might want to use Garmin SDK Manager to install device definitions (or remove products from manifest.xml)
   * execute ./mb_runner.sh build   (requires the Garmin SDK to be installed).
-  * It should generate a GarminSD.pkg file.
+  * It should generate a GarminSD.prg file.
 
 # Build Instructions (Visual Studio Code)
   * Clone this repository
@@ -47,7 +49,7 @@ Note, this used to be easy until Garmin introduced the SDK manager - now you nee
 
 
 # Installation Instructions
-  * Copy GarminSD.pkg into the folder GARMIN/APS on the watch.   
+  * Copy GarminSD.prg into the folder GARMIN/APS on the watch.   
   * GarminSD should appear as an app on the watch (like Running, Bike etc.).
   * To be able to see the debug output, create an empty file GARMIN/APPS/LOGS/GarminSD.Log - this file will be populated when the app runs.
 
