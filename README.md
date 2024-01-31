@@ -28,6 +28,8 @@ Note, this used to be easy until Garmin introduced the SDK manager - now you nee
   * Clone this repository.
   * Change to the watch app directory.
   * Set the MB_HOME environment variable to point to the SDK (see (https://developer.garmin.com/connect-iq/connect-iq-faq/how-do-i-integrate-connect-iq-and-travis-ci/)) for more information.
+  * Set the MB_PRIVATE_KEY environment variable to point to your developer key.
+  * Copy the template file to the same location, but remove the extension. They will be your own configuration.
   * You might want to edit mb_runner.cfg to set the TARGET_DEVICE and TARGET_SDK_VERSION to match your device (like maybe venusq and current SDK version)
   * You might want to use Garmin SDK Manager to install device definitions (or remove products from manifest.xml)
   * execute ./mb_runner.sh build   (requires the Garmin SDK to be installed).
