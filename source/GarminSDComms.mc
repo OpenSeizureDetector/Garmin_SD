@@ -125,7 +125,6 @@ class GarminSDComms {
   // Receive the data from the web request - should be a json string
   function onSdStatusReceive(responseCode, data) {
     var tagStr = "SDComms.onSdStatusReceive";
-    mStatusRequestInProgress = 0;
     writeLog(tagStr, "ResponseCode="+responseCode);
     if (responseCode == 200) {
       if (responseCode != lastOnSdStatusReceiveResponse) {
@@ -174,6 +173,7 @@ class GarminSDComms {
       }
     }
     lastOnSdStatusReceiveResponse = responseCode;
+    mStatusRequestInProgress = 0;
   }
 
   // Receive the response from the sendAccelData web request.
@@ -181,7 +181,6 @@ class GarminSDComms {
     var tagStr = "SDComms.onDataReceive()";
     var sendDuration = Time.now().subtract(mDataSendStartTime);
     writeLog(tagStr, "sendAccelData End - Send Duration = " + sendDuration.value());
-    mDataRequestInProgress = 0;
     if (responseCode == 200) {
       if (responseCode != lastOnReceiveResponse || data != lastOnReceiveData) {
         writeLog(tagStr, "Success - data =" + data);
@@ -217,6 +216,7 @@ class GarminSDComms {
     }
     lastOnReceiveResponse = responseCode;
     lastOnReceiveData = data;
+    mDataRequestInProgress = 0;
   }
 
   // Receive the response from the sendSettings web request.
