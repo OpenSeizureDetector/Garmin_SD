@@ -227,7 +227,7 @@ class SdDelegate extends Ui.BehaviorDelegate {
       Storage.setValue(MENUITEM_LOWDATAMODE, 0);
     }
     if (Storage.getValue(MENUITEM_O2SENSOR) == null) {
-      Storage.setValue(MENUITEM_O2SENSOR, 0);
+      Storage.setValue(MENUITEM_O2SENSOR, 1);
     }
 
     // Start a timer that calls timerCallback every second
@@ -335,7 +335,7 @@ class SdDelegate extends Ui.BehaviorDelegate {
         Ui.loadResource(Rez.Strings.O2_sensor_title),
         Ui.loadResource(Rez.Strings.O2_sensor_desc),
         MENUITEM_O2SENSOR,
-        true,
+        boolean,
         null
       )
     );
