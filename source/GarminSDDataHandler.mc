@@ -52,6 +52,7 @@ class GarminSDDataHandler {
   var mStatusStr = "---";
   var mComms = null;
   var mVersionStr = "";
+  var mO2SensorIsEnabled = true;
 
   ///////////////
   // Constructor
@@ -143,6 +144,7 @@ class GarminSDDataHandler {
 
   // Prints acclerometer data that is recevied from the system
   function accel_callback(sensorData) {
+    //var tagStr = "DataHandler.accel_callback()";
     //System.println("accel_callback()");
 
     var iStart = nSamp * SAMPLE_PERIOD * SAMPLE_FREQUENCY;
@@ -164,9 +166,11 @@ class GarminSDDataHandler {
       // Force reading of current heart rate and o2sat values in case the heart rate
       // freezing issue
       mHR = Sensor.getInfo().heartRate;
-      if (Sensor.getInfo() has :oxygenSaturation) {
+      if ((Sensor.getInfo() has :oxygenSaturation) && (mO2SensorIsEnabled == true)) {
+        //writeLog(tagStr,"reading o2sat value ");
         mO2sat = Sensor.getInfo().oxygenSaturation;
       } else {
+        //writeLog(tagStr,"setting mO2sat to zero");
         mO2sat = 0;
       }
       nSamp = 0;
@@ -181,7 +185,7 @@ class GarminSDDataHandler {
     //System.println("HeartRate: " + sensorInfo.heartRate);
     //System.println("O2Sat: " + sensorInfo.oxygenSaturation);
     mHR = sensorInfo.heartRate;
-    if (sensorInfo has :oxygenSaturation) {
+    if ((Sensor.getInfo() has :oxygenSaturation) && (mO2SensorIsEnabled == true)) {
       mO2sat = sensorInfo.oxygenSaturation;
     } else {
       mO2sat = 0;
@@ -190,9 +194,8 @@ class GarminSDDataHandler {
 
   // Initializes the view and registers for accelerometer data
   function onStart() {
-    var o2SensorIsEnabled = Storage.getValue(MENUITEM_O2SENSOR) ? true : false;
+    mO2SensorIsEnabled = Storage.getValue(MENUITEM_O2SENSOR) ? true : false;
     var tagStr = "DataHandler.onStart()";
-    writeLog(tagStr,"");
     var maxSampleRate = Sensor.getMaxSampleRate();
     writeLog(tagStr, "maxSampleRate = "+maxSampleRate);
 
@@ -205,19 +208,22 @@ class GarminSDDataHandler {
     };
     try {
       Sensor.registerSensorDataListener(method(:accel_callback), options);
-      writeLog(tagStr, "Registered for Sensor Data");
+      writeLog(tagStr, "Registered for Accelerometer Data");
     } catch (e) {
       writeLog("*** ERROR - "+ tagStr, e.getErrorMessage());
     }
 
     // Intialise heart rate monitoring.
-    // FIXME - does this drain the battery a lot?
-    if (Sensor has :SENSOR_PULSE_OXYMETRY && o2SensorIsEnabled) {
+    // But only initialise O2sat sensor if enabled in settings (default is true)
+    writeLog(tagStr,"mO2SensorIsEnabled = " + mO2SensorIsEnabled);
+    if ((Sensor has :SENSOR_PULSE_OXYMETRY) && (mO2SensorIsEnabled == true)) {
+      writeLog(tagStr,"Enabling HR and O2SAT Sensors");
       Sensor.setEnabledSensors([
         Sensor.SENSOR_HEARTRATE,
         Sensor.SENSOR_PULSE_OXIMETRY,
       ]);
     } else {
+      writeLog(tagStr,"Enabling HR Sensor only");
       Sensor.setEnabledSensors([Sensor.SENSOR_HEARTRATE]);
     }
 
