@@ -22,4 +22,6 @@
   <string id="Error_request_in_progress">Retry</string>
   <string id="Low_data_title">Low Data Mode</string>
   <string id="Low_data_desc">Minimise data transmission to phone</string>
+  <string id="O2_sensor_title">O2 Sensor Enabled</string>
+  <string id="O2_sensor_desc">Enable / disable O2 sensor</string>
 </resources>

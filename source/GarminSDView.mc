@@ -226,6 +226,9 @@ class SdDelegate extends Ui.BehaviorDelegate {
     if (Storage.getValue(MENUITEM_LOWDATAMODE) == null) {
       Storage.setValue(MENUITEM_LOWDATAMODE, 0);
     }
+    if (Storage.getValue(MENUITEM_O2SENSOR) == null) {
+      Storage.setValue(MENUITEM_O2SENSOR, 1);
+    }
 
     // Start a timer that calls timerCallback every second
     mTimer = new Timer.Timer();
@@ -326,6 +329,16 @@ class SdDelegate extends Ui.BehaviorDelegate {
       )
     );
 
+    boolean = Storage.getValue(MENUITEM_O2SENSOR) ? true : false;
+    menu.addItem(
+      new Ui.ToggleMenuItem(
+        Ui.loadResource(Rez.Strings.O2_sensor_title),
+        Ui.loadResource(Rez.Strings.O2_sensor_desc),
+        MENUITEM_O2SENSOR,
+        boolean,
+        null
+      )
+    );
 
     boolean = Storage.getValue(MENUITEM_BENMODE) ? true : false;
     menu.addItem(

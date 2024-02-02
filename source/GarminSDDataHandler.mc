@@ -190,6 +190,7 @@ class GarminSDDataHandler {
 
   // Initializes the view and registers for accelerometer data
   function onStart() {
+    var o2SensorIsEnabled = Storage.getValue(MENUITEM_O2SENSOR) ? true : false;
     var tagStr = "DataHandler.onStart()";
     writeLog(tagStr,"");
     var maxSampleRate = Sensor.getMaxSampleRate();
@@ -211,7 +212,7 @@ class GarminSDDataHandler {
 
     // Intialise heart rate monitoring.
     // FIXME - does this drain the battery a lot?
-    if (Sensor has :SENSOR_PULSE_OXYMETRY) {
+    if (Sensor has :SENSOR_PULSE_OXYMETRY && o2SensorIsEnabled) {
       Sensor.setEnabledSensors([
         Sensor.SENSOR_HEARTRATE,
         Sensor.SENSOR_PULSE_OXIMETRY,
