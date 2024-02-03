@@ -53,6 +53,7 @@ class GarminSDDataHandler {
   var mComms = null;
   var mVersionStr = "";
   var mO2SensorIsEnabled = true;
+  var firstCallBack = true;
 
   ///////////////
   // Constructor
@@ -175,7 +176,10 @@ class GarminSDDataHandler {
       nSamp = 0;
       //System.println("DataHandler - sending Accel Data");
       //writeLog("DataHandler.accelCallback()","Sending accel Data");
-      //mComms.sendAccelData();
+      if (firstCallBack == true){
+        firstCallBack = false;
+        mComms.sendAccelData();
+      }
       //Ui.requestUpdate();
     }
     Ui.requestUpdate();
