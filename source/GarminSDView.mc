@@ -77,11 +77,20 @@ class GarminSDView extends Ui.View {
       dateTime.sec.format("%02d"),
     ]);
     var sysStats = System.getSystemStats();
-    var hrO2Str = Lang.format("$1$ $2$ / $3$% Ox", [
-      accelHandler.mHR,
-      Ui.loadResource(Rez.Strings.Beats_per_minute_abbrev),
-      accelHandler.mO2sat,
-    ]);
+    var hrO2Str = "";
+    if (accelHandler.mO2SensorIsEnabled == true){
+        hrO2Str = Lang.format("$1$ $2$ / $3$% Ox", [
+          accelHandler.mHR,
+          Ui.loadResource(Rez.Strings.Beats_per_minute_abbrev),
+          accelHandler.mO2sat,
+        ]);
+    }
+    else {
+        hrO2Str = Lang.format("$1$ $2$", [
+          accelHandler.mHR,
+          Ui.loadResource(Rez.Strings.Beats_per_minute_abbrev),
+        ]);
+    }
 
     var hrBatStr = Lang.format("$1$: $2$%", [
       Ui.loadResource(Rez.Strings.Battery_abbrev),
