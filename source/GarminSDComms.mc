@@ -63,13 +63,13 @@ class GarminSDComms {
 
   function sendAccelData() {
     var tagStr = "SDComms.sendAccelData()";
-    var dataObj = mAccelHandler.getDataJson();
     if (mDataRequestInProgress) {
       // Don't start another one.
       writeLog(tagStr,"mDataRequestInProgress="+mDataRequestInProgress+", "+ mSettingsRequestInProgress+ ", " + mStatusRequestInProgress);
       mDataReadyToSend = 1;   // Set a flag so that onTick knows to re-try this send.
     } else {
       //writeLog(tagStr, "sendAccelData Start");
+      var dataObj = mAccelHandler.getDataJson();
       mDataRequestInProgress = 1;
       mDataSendStartTime = Time.now();
       mDataReadyToSend = 0;
