@@ -181,16 +181,6 @@ class GarminSDDataHandler {
     }
   }
 
-  function heartrate_callback(sensorInfo) {
-    //System.println("HeartRate: " + sensorInfo.heartRate);
-    //System.println("O2Sat: " + sensorInfo.oxygenSaturation);
-    mHR = sensorInfo.heartRate;
-    if ((Sensor.getInfo() has :oxygenSaturation) && (mO2SensorIsEnabled == true)) {
-      mO2sat = sensorInfo.oxygenSaturation;
-    } else {
-      mO2sat = 0;
-    }
-  }
 
   // Initializes the view and registers for accelerometer data
   function onStart() {
@@ -226,8 +216,6 @@ class GarminSDDataHandler {
       writeLog(tagStr,"Enabling HR Sensor only");
       Sensor.setEnabledSensors([Sensor.SENSOR_HEARTRATE]);
     }
-
-    Sensor.enableSensorEvents(method(:heartrate_callback));
   }
 
   function onTick() {
