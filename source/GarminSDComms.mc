@@ -35,10 +35,10 @@ class GarminSDComms {
   var lastOnReceiveData = "";
   var lastOnSdStatusReceiveResponse = -1;
   var mDataRequestInProgress = 0;
-  var mDataSendStartTime = 0;
+  var mDataSendStartTime = Time.now();
   var mSettingsRequestInProgress = 0;
   var mStatusRequestInProgress = 0;
-  var mDataReadyToSend = 0;
+  var TIMEOUT = new Time.Duration(5);
   //var serverUrl = "http:192.168.43.1:8080";
   var serverUrl = "http://127.0.0.1:8080";
 
@@ -63,16 +63,15 @@ class GarminSDComms {
 
   function sendAccelData() {
     var tagStr = "SDComms.sendAccelData()";
-    if (mDataRequestInProgress) {
+    var waitingTime = Time.now().subtract(mDataSendStartTime);
+    if ((mDataRequestInProgress) && (waitingTime.lessThan(TIMEOUT))){
       // Don't start another one.
       writeLog(tagStr,"mDataRequestInProgress="+mDataRequestInProgress+", "+ mSettingsRequestInProgress+ ", " + mStatusRequestInProgress);
-      mDataReadyToSend = 1;   // Set a flag so that onTick knows to re-try this send.
     } else {
       //writeLog(tagStr, "sendAccelData Start");
       var dataObj = mAccelHandler.getDataJson();
       mDataRequestInProgress = 1;
       mDataSendStartTime = Time.now();
-      mDataReadyToSend = 0;
       Comm.makeWebRequest(
         serverUrl + "/data",
         { "dataObj" => dataObj },
@@ -253,10 +252,12 @@ class GarminSDComms {
     */
     var tagStr = "SDComms.onTick()";
     //System.println("GarminSDComms.onTick()");
-    if (mDataReadyToSend) {
+
+    var waitingTime = Time.now().subtract(mDataSendStartTime);
+    if (waitingTime.greaterThan(TIMEOUT)){
+      mDataRequestInProgress = 0;
       writeLog(tagStr, "Re-sending accelData");
-            mAccelHandler.mStatusStr =
-        Ui.loadResource(Rez.Strings.Error_abbrev) + ": " + Ui.loadResource(Rez.Strings.Error_request_in_progress);
+      mAccelHandler.mStatusStr = Ui.loadResource(Rez.Strings.Error_abbrev) + ": " + Ui.loadResource(Rez.Strings.Error_request_in_progress);
       var retryWarningEnabled = Storage.getValue(MENUITEM_RETRY_WARNING) ? true : false;
       if (Attention has :vibrate && retryWarningEnabled) {
         var vibeData = [
@@ -264,7 +265,6 @@ class GarminSDComms {
         ];
         Attention.vibrate(vibeData);
       }
-      sendAccelData();
     }
   }
 }
