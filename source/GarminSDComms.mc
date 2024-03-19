@@ -71,6 +71,7 @@ class GarminSDComms {
       //writeLog(tagStr, "sendAccelData Start");
       var dataObj = mAccelHandler.getDataJson();
       mDataRequestInProgress = 1;
+      mDataSendStartTime = Time.now();
       Comm.makeWebRequest(
         serverUrl + "/data",
         { "dataObj" => dataObj },
@@ -82,7 +83,6 @@ class GarminSDComms {
         },
         method(:onDataReceive)
       );
-      mDataSendStartTime = Time.now();
     }
   }
 
