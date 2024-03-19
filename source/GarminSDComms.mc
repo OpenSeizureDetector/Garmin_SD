@@ -208,7 +208,7 @@ class GarminSDComms {
       }
 
       if (responseCode != lastOnReceiveResponse) {
-        writeLog(tagStr, "Failue - code =" + responseCode);
+        writeLog(tagStr, "Failure - code =" + responseCode);
       } else {
         //
       }
@@ -254,7 +254,7 @@ class GarminSDComms {
     //System.println("GarminSDComms.onTick()");
 
     var waitingTime = Time.now().subtract(mDataSendStartTime);
-    if (waitingTime.greaterThan(TIMEOUT)){
+    if ((waitingTime.greaterThan(TIMEOUT))&&(mDataRequestInProgress==1)){
       mDataRequestInProgress = 0;
       writeLog(tagStr, "Re-sending accelData");
       mAccelHandler.mStatusStr = Ui.loadResource(Rez.Strings.Error_abbrev) + ": " + Ui.loadResource(Rez.Strings.Error_request_in_progress);
