@@ -71,23 +71,23 @@ class GarminSDDataHandler {
     var i;
     var lowDataMode = Storage.getValue(MENUITEM_LOWDATAMODE) ? true : false;
 
-    var jsonStr = "{ dataType: 'raw', ";
+    var jsonStr = "{dataType:'raw',";
 
-    jsonStr = jsonStr + " data3D: [";
+    jsonStr = jsonStr + "data3D:[";
     for (i = 0; i < ANALYSIS_PERIOD * SAMPLE_FREQUENCY; i = i + 1) {
         if (i > 0) {
-          jsonStr = jsonStr + ", ";
+          jsonStr = jsonStr +",";
         }
-        jsonStr = jsonStr + mSamplesX[i] + ", ";
-        jsonStr = jsonStr + mSamplesY[i] + ", ";
+        jsonStr = jsonStr + mSamplesX[i] + ",";
+        jsonStr = jsonStr + mSamplesY[i] + ",";
         jsonStr = jsonStr + mSamplesZ[i];
     }
-    jsonStr = jsonStr + "],";
+    jsonStr = jsonStr +"],";
 
-    jsonStr = jsonStr + " HR:" + mHR;
-    jsonStr = jsonStr + ", O2sat:" + mO2sat;
-    jsonStr = jsonStr + ", Mute:" + mMute;
-    jsonStr = jsonStr + " }";
+    jsonStr = jsonStr + "HR:" + mHR;
+    jsonStr = jsonStr + ",O2sat:" + mO2sat;
+    jsonStr = jsonStr + ",Mute:" + mMute;
+    jsonStr = jsonStr + "}";
     return jsonStr;
   }
 
