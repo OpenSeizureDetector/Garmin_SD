@@ -36,11 +36,19 @@ import Toybox.Application.Storage;
 class GarminSDView extends Ui.View {
   var accelHandler;
   var width;
+  var halfWidth;
   var height;
   var mSdState;
   var beatsPerMinuteAbbrev;
   var batteryAbbrev;
   var muteLabel;
+  var fontSizeClock;
+  var fontHrO2Str;
+  var heightScaleLine1;
+  var heightScaleLine2;
+  var heightScaleLine3;
+  var heightScaleLine4;
+  var heightScaleLine5;
 
   function initialize(sdState) {
     writeLog("GarminSDView.initialize()", "");
@@ -60,7 +68,44 @@ class GarminSDView extends Ui.View {
   function onLayout(dc) {
     writeLog("GarminSDView.onLayout()", "");
     width = dc.getWidth();
+    halfWidth = width/2;
     height = dc.getHeight();
+    // Nominal height of display for positioning text - values are for a 240px high display.
+    var heightScale = height / 240.0;
+    heightScaleLine1=heightScale*20;
+    heightScaleLine2=heightScale*45;
+    heightScaleLine3=heightScale*120;
+    heightScaleLine4=heightScale*150;
+    heightScaleLine5=heightScale*180;
+    //precalculate font size
+    // There is an issue with some devices having different font sizes, so
+    // we check the width of the text for our preferred font size, and if it is too long
+    // we use a smaller font.
+    var timeTextDims = dc.getTextDimensions(
+      "23:59:52",
+      Gfx.FONT_SYSTEM_NUMBER_HOT
+    );
+    if (timeTextDims[0] < width) {
+      fontSizeClock = Gfx.FONT_SYSTEM_NUMBER_HOT;
+    }
+    else{
+      fontSizeClock = Gfx.FONT_SYSTEM_NUMBER_MEDIUM;
+    }
+    //precalculate HRO2 string size from dummy values
+    var hrO2Str = "";
+    if (accelHandler.mO2SensorIsEnabled == true){
+        hrO2Str = Lang.format("150 $1$ / 100% Ox", [beatsPerMinuteAbbrev]);
+    }
+    else {
+        hrO2Str = Lang.format("150 $1$", [beatsPerMinuteAbbrev]);
+    }
+    var hrTextDims = dc.getTextDimensions(hrO2Str, Gfx.FONT_LARGE);
+    if (hrTextDims[0] < width) {
+      fontHrO2Str = Gfx.FONT_LARGE;
+    }
+    else{
+      fontHrO2Str = Gfx.FONT_SMALL;
+    }
     writeLog("GarminSDView.initialize()", "Start accelHandler");
     accelHandler.onStart();
   }
@@ -71,12 +116,6 @@ class GarminSDView extends Ui.View {
 
   // Update the view
   function onUpdate(dc) {
-    // see https://developer.garmin.com/downloads/connect-iq/monkey-c/doc/Toybox/Time.html
-    var heightScale = height / 240.0; // Nominal height of display for positioning text - values are for a 240px high display.
-    //System.print("height = ");
-    //System.println(height);
-    //System.print("heightScale = ");
-    //System.println(heightScale);
     var myTime = System.getClockTime();
     var timeString = Lang.format("$1$:$2$:$3$", [
         myTime.hour.format("%02d"),
@@ -108,87 +147,52 @@ class GarminSDView extends Ui.View {
     dc.clear();
     dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
     dc.drawText(
-      width / 2,
+      halfWidth,
       0,
       Gfx.FONT_MEDIUM,
       "OpenSeizure",
       Gfx.TEXT_JUSTIFY_CENTER
     );
     dc.drawText(
-      width / 2,
-      20 * heightScale,
+      halfWidth,
+      heightScaleLine1,
       Gfx.FONT_MEDIUM,
       "Detector",
       Gfx.TEXT_JUSTIFY_CENTER
     );
-    // There is an issue with some devices having different font sizes, so
-    // we check the width of the text for our preferred font size, and if it is too long
-    // we use a smaller font.
-    var timeTextDims = dc.getTextDimensions(
+    dc.drawText(
+      halfWidth,
+      heightScaleLine2,
+      fontSizeClock,
       timeString,
-      Gfx.FONT_SYSTEM_NUMBER_HOT
+      Gfx.TEXT_JUSTIFY_CENTER
     );
-    if (timeTextDims[0] < width) {
-      dc.drawText(
-        width / 2,
-        45 * heightScale,
-        Gfx.FONT_SYSTEM_NUMBER_HOT,
-        timeString,
-        Gfx.TEXT_JUSTIFY_CENTER
-      );
-    } else {
-      dc.drawText(
-        width / 2,
-        45 * heightScale,
-        Gfx.FONT_SYSTEM_NUMBER_MEDIUM,
-        timeString,
-        Gfx.TEXT_JUSTIFY_CENTER
-      );
-    }
-    var hrTextDims = dc.getTextDimensions(hrO2Str, Gfx.FONT_LARGE);
-    if (hrTextDims[0] < width) {
-      dc.drawText(
-        width / 2,
-        120 * heightScale,
-        Gfx.FONT_LARGE,
-        hrO2Str,
-        Gfx.TEXT_JUSTIFY_CENTER
-      );
-      dc.drawText(
-        width / 2,
-        150 * heightScale,
-        Gfx.FONT_LARGE,
-        hrBatStr,
-        Gfx.TEXT_JUSTIFY_CENTER
-      );
-    } else {
-      dc.drawText(
-        width / 2,
-        120 * heightScale,
-        Gfx.FONT_SMALL,
-        hrO2Str,
-        Gfx.TEXT_JUSTIFY_CENTER
-      );
-      dc.drawText(
-        width / 2,
-        150 * heightScale,
-        Gfx.FONT_SMALL,
-        hrBatStr,
-        Gfx.TEXT_JUSTIFY_CENTER
-      );
-    }
+    dc.drawText(
+      halfWidth,
+      heightScaleLine3,
+      fontHrO2Str,
+      hrO2Str,
+      Gfx.TEXT_JUSTIFY_CENTER
+    );
+    dc.drawText(
+      halfWidth,
+      heightScaleLine4,
+      fontHrO2Str,
+      hrBatStr,
+      Gfx.TEXT_JUSTIFY_CENTER
+    );
     if (accelHandler.mMute) {
       dc.drawText(
-        width / 2,
-        180 * heightScale,
+        halfWidth,
+        heightScaleLine5,
         Gfx.FONT_LARGE,
         muteLabel,
         Gfx.TEXT_JUSTIFY_CENTER
       );
     } else {
       dc.drawText(
-        width / 2,
-        180 * heightScale,
+        halfWidth,
+        heightScaleLine5,
         Gfx.FONT_LARGE,
         accelHandler.mStatusStr,
         Gfx.TEXT_JUSTIFY_CENTER

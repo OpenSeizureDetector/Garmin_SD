@@ -59,6 +59,7 @@ class GarminSDDataHandler {
   function initialize(versionStr) {
     var tagStr = "DataHandler.initialize()";
     writeLog(tagStr, "");
+    mO2SensorIsEnabled = Storage.getValue(MENUITEM_O2SENSOR) ? true : false;
     mVersionStr = versionStr;
     // On Start-up we show the app version number in place of satus.
     mStatusStr = versionStr;
@@ -165,7 +166,6 @@ class GarminSDDataHandler {
 
   // Initializes the view and registers for accelerometer data
   function onStart() {
-    mO2SensorIsEnabled = Storage.getValue(MENUITEM_O2SENSOR) ? true : false;
     var tagStr = "DataHandler.onStart()";
     var maxSampleRate = Sensor.getMaxSampleRate();
     writeLog(tagStr, "maxSampleRate = "+maxSampleRate);
