@@ -228,9 +228,6 @@ class SdDelegate extends Ui.BehaviorDelegate {
     if (Storage.getValue(MENUITEM_LIGHT) == null) {
       Storage.setValue(MENUITEM_LIGHT, 0);
     }
-    if (Storage.getValue(MENUITEM_RETRY_WARNING) == null) {
-      Storage.setValue(MENUITEM_RETRY_WARNING, 0);
-    }
     if (Storage.getValue(MENUITEM_O2SENSOR) == null) {
       Storage.setValue(MENUITEM_O2SENSOR, 1);
     }
@@ -307,17 +304,6 @@ class SdDelegate extends Ui.BehaviorDelegate {
         Ui.loadResource(Rez.Strings.Light_title),
         Ui.loadResource(Rez.Strings.Light_desc),
         MENUITEM_LIGHT,
-        boolean,
-        null
-      )
-    );
-
-    boolean = Storage.getValue(MENUITEM_RETRY_WARNING) ? true : false;
-    menu.addItem(
-      new Ui.ToggleMenuItem(
-        Ui.loadResource(Rez.Strings.Retry_title),
-        Ui.loadResource(Rez.Strings.Retry_desc),
-        MENUITEM_RETRY_WARNING,
         boolean,
         null
       )

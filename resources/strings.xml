@@ -19,7 +19,7 @@
   <string id="Light_desc">Light on Alarm or Fault</string>
   <string id="Retry_title">Retry Warning</string>
   <string id="Retry_desc">Vibrate when data send re-try is necessary</string>
-  <string id="Error_request_in_progress">Retry</string>
+  <string id="Error_request_in_progress">COMMS</string>
   <string id="Low_data_title">Low Data Mode</string>
   <string id="Low_data_desc">Minimise data transmission to phone</string>
   <string id="O2_sensor_title">O2 Sensor Enabled</string>

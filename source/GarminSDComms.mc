@@ -38,7 +38,7 @@ class GarminSDComms {
   var mDataSendStartTime = Time.now();
   var mSettingsRequestInProgress = 0;
   var mStatusRequestInProgress = 0;
-  var TIMEOUT = new Time.Duration(5);
+  var TIMEOUT = new Time.Duration(2);
   //var serverUrl = "http:192.168.43.1:8080";
   var serverUrl = "http://127.0.0.1:8080";
 
@@ -49,9 +49,9 @@ class GarminSDComms {
     mSettingsRequestInProgress = 0;
     mStatusRequestInProgress = 0;
 
-    // Start a timer that calls timerCallback every half second
+    // Start a timer that calls timerCallback every second
     mTimer = new Timer.Timer();
-    mTimer.start(method(:onTick), 500, true);
+    mTimer.start(method(:onTick), 1000, true);
 
   }
 
@@ -62,17 +62,12 @@ class GarminSDComms {
   }
 
   function sendAccelData() {
-    var tagStr = "SDComms.sendAccelData()";
-    var waitingTime = Time.now().subtract(mDataSendStartTime);
-    if ((mDataRequestInProgress) && (waitingTime.lessThan(TIMEOUT))){
-      // Don't start another one.
-      writeLog(tagStr,"mDataRequestInProgress="+mDataRequestInProgress+", "+ mSettingsRequestInProgress+ ", " + mStatusRequestInProgress);
-    } else {
-      //writeLog(tagStr, "sendAccelData Start");
-      var dataObj = mAccelHandler.getDataJson();
-      mDataRequestInProgress = 1;
-      mDataSendStartTime = Time.now();
-      Comm.makeWebRequest(
+    //var tagStr = "SDComms.sendAccelData()";
+    //writeLog(tagStr, "sendAccelData Start");
+    var dataObj = mAccelHandler.getDataJson();
+    mDataRequestInProgress = 1;
+    mDataSendStartTime = Time.now();
+    Comm.makeWebRequest(
         serverUrl + "/data",
         { "dataObj" => dataObj },
         {
@@ -82,8 +77,7 @@ class GarminSDComms {
           },
         },
         method(:onDataReceive)
-      );
-    }
+    );
   }
 
   function sendSettings() {
@@ -250,21 +244,21 @@ class GarminSDComms {
     /** Called every second (by GarminSDDataHandler)
     in case we need to do anything timed.
     */
-    var tagStr = "SDComms.onTick()";
     //System.println("GarminSDComms.onTick()");
-
-    var waitingTime = Time.now().subtract(mDataSendStartTime);
-    if ((waitingTime.greaterThan(TIMEOUT))&&(mDataRequestInProgress==1)){
-      mDataRequestInProgress = 0;
-      writeLog(tagStr, "Re-sending accelData");
-      mAccelHandler.mStatusStr = Ui.loadResource(Rez.Strings.Error_abbrev) + ": " + Ui.loadResource(Rez.Strings.Error_request_in_progress);
-      var retryWarningEnabled = Storage.getValue(MENUITEM_RETRY_WARNING) ? true : false;
-      if (Attention has :vibrate && retryWarningEnabled) {
-        var vibeData = [
-          new Attention.VibeProfile(50, 200),
-        ];
-        Attention.vibrate(vibeData);
-      }
+    if (mDataRequestInProgress==1){
+        var waitingTime = Time.now().subtract(mDataSendStartTime);
+        if (waitingTime.greaterThan(TIMEOUT)){
+          mDataRequestInProgress = 0;
+          var tagStr = "SDComms.onTick()";
+          writeLog(tagStr, "Sending accelData failed");
+          mAccelHandler.mStatusStr = Ui.loadResource(Rez.Strings.Error_abbrev) + ": " + Ui.loadResource(Rez.Strings.Error_request_in_progress);
+          if (Attention has :vibrate) {
+            var vibeData = [
+              new Attention.VibeProfile(50, 200),
+            ];
+            Attention.vibrate(vibeData);
+          }
+        }
     }
   }
 }

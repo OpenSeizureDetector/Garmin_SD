@@ -141,7 +141,8 @@ class GarminSDDataHandler {
     //Toybox.System.println("Raw samples, Y axis: " + mSamplesY);
     //Toybox.System.println("Raw samples, Z axis: " + mSamplesZ);
 
-    if (nSamp * SAMPLE_PERIOD == ANALYSIS_PERIOD) {
+    // It should never be above analysis period, but in case it happens, greater would prevent infinite loop.
+    if (nSamp * SAMPLE_PERIOD >= ANALYSIS_PERIOD) {
       //System.println("Doing Analysis....");
       // Force reading of current heart rate and o2sat values in case the heart rate
       // freezing issue
