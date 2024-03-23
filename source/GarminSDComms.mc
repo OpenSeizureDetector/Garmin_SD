@@ -106,7 +106,6 @@ class GarminSDComms {
     var sendDuration = Time.now().subtract(mDataSendStartTime);
     writeLog(tagStr, "sendAccelData End - Send Duration = " + sendDuration.value());
     if (responseCode == 200) {
-      writeLog(tagStr, "Success - data =" + data);
       if (responseCode != lastOnReceiveResponse || data != lastOnReceiveData) {
         writeLog(tagStr, "Success - data =" + data);
       } else {
@@ -116,35 +115,37 @@ class GarminSDComms {
         //System.println("Sending Settings");
         sendSettings();
       }
-      mAccelHandler.mStatusStr = data.get("alarmPhrase");
-      if (data.get("alarmState") != 0) {
-        try {
-          var lightEnabled = Storage.getValue(MENUITEM_LIGHT) ? true : false;
-          if (Attention has :backlight && lightEnabled) {
-            Attention.backlight(true);
+      else{
+        mAccelHandler.mStatusStr = data.get("alarmPhrase");
+        if (data.get("alarmState") != 0) {
+          try {
+            var lightEnabled = Storage.getValue(MENUITEM_LIGHT) ? true : false;
+            if (Attention has :backlight && lightEnabled) {
+              Attention.backlight(true);
+            }
+          } catch (ex) {
+            // We might get a Toybox.Attention.BacklightOnTooLongException
           }
-        } catch (ex) {
-          // We might get a Toybox.Attention.BacklightOnTooLongException
+          var soundEnabled = Storage.getValue(MENUITEM_SOUND) ? true : false;
+          if (Attention has :playTone && soundEnabled) {
+            Attention.playTone(Attention.TONE_ALERT_HI);
+          }
         }
-        var soundEnabled = Storage.getValue(MENUITEM_SOUND) ? true : false;
-        if (Attention has :playTone && soundEnabled) {
-          Attention.playTone(Attention.TONE_ALERT_HI);
-        }
-      }
-      if (data.get("alarmState") == 2) {
-        // ALARM
-        var vibrationEnabled = Storage.getValue(MENUITEM_VIBRATION)
-          ? true
-          : false;
-        if (Attention has :vibrate && vibrationEnabled) {
-          var vibeData = [
-            new Attention.VibeProfile(50, 500),
-            new Attention.VibeProfile(0, 500),
-            new Attention.VibeProfile(50, 500),
-            new Attention.VibeProfile(0, 500),
-            new Attention.VibeProfile(50, 500),
-          ];
-          Attention.vibrate(vibeData);
+        if (data.get("alarmState") == 2) {
+          // ALARM
+          var vibrationEnabled = Storage.getValue(MENUITEM_VIBRATION)
+            ? true
+            : false;
+          if (Attention has :vibrate && vibrationEnabled) {
+            var vibeData = [
+              new Attention.VibeProfile(50, 500),
+              new Attention.VibeProfile(0, 500),
+              new Attention.VibeProfile(50, 500),
+              new Attention.VibeProfile(0, 500),
+              new Attention.VibeProfile(50, 500),
+            ];
+            Attention.vibrate(vibeData);
+          }
         }
       }
     } else {
