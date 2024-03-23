@@ -46,8 +46,6 @@ class GarminSDView extends Ui.View {
     accelHandler = new GarminSDDataHandler(
       Ui.loadResource(Rez.Strings.VersionId)
     );
-    writeLog("GarminSDView.initialize()", "Start accelHandler");
-    accelHandler.onStart();
     writeLog("GarminSDView.initialize()", "Complete");
   }
 
@@ -56,6 +54,8 @@ class GarminSDView extends Ui.View {
     writeLog("GarminSDView.onLayout()", "");
     width = dc.getWidth();
     height = dc.getHeight();
+    writeLog("GarminSDView.initialize()", "Start accelHandler");
+    accelHandler.onStart();
   }
 
   // Restore the state of the app and prepare the view to be shown
