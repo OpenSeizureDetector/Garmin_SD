@@ -69,42 +69,23 @@ class GarminSDDataHandler {
   // Return the current set of data as a JSON String
   function getDataJson() {
     var i;
-    var lowDataMode = Storage.getValue(MENUITEM_LOWDATAMODE) ? true : false;
+    var jsonStr = "{dataType:'raw',";
 
-    var jsonStr = "{ dataType: 'raw', data: [";
+    jsonStr = jsonStr + "data3D:[";
     for (i = 0; i < ANALYSIS_PERIOD * SAMPLE_FREQUENCY; i = i + 1) {
-      if (i > 0) {
-        jsonStr = jsonStr + ", ";
-      }
-      jsonStr =
-        jsonStr +
-        Math.sqrt(
-          mSamplesX[i] * mSamplesX[i] +
-            mSamplesY[i] * mSamplesY[i] +
-            mSamplesZ[i] * mSamplesZ[i]
-        );
-    }
-    jsonStr = jsonStr + "],";
-
-    if (!lowDataMode) {
-      jsonStr = jsonStr + " data3D: [";
-      for (i = 0; i < ANALYSIS_PERIOD * SAMPLE_FREQUENCY; i = i + 1) {
         if (i > 0) {
-          jsonStr = jsonStr + ", ";
+          jsonStr = jsonStr +",";
         }
-        jsonStr = jsonStr + mSamplesX[i] + ", ";
-        jsonStr = jsonStr + mSamplesY[i] + ", ";
+        jsonStr = jsonStr + mSamplesX[i] + ",";
+        jsonStr = jsonStr + mSamplesY[i] + ",";
         jsonStr = jsonStr + mSamplesZ[i];
-      }
-      jsonStr = jsonStr + "],";
-    } else {
-      writeLog("accelHandler.getDataJson()","Low Data Mode - Skipping data3D");
     }
+    jsonStr = jsonStr +"],";
 
-    jsonStr = jsonStr + " HR:" + mHR;
-    jsonStr = jsonStr + ", O2sat:" + mO2sat;
-    jsonStr = jsonStr + ", Mute:" + mMute;
-    jsonStr = jsonStr + " }";
+    jsonStr = jsonStr + "HR:" + mHR;
+    jsonStr = jsonStr + ",O2sat:" + mO2sat;
+    jsonStr = jsonStr + ",Mute:" + mMute;
+    jsonStr = jsonStr + "}";
     return jsonStr;
   }
 
@@ -143,7 +124,7 @@ class GarminSDDataHandler {
   }
 
   // Prints acclerometer data that is recevied from the system
-  function accel_callback(sensorData) {
+  function accel_callback(sensorData as Toybox.Sensor.AccelerometerData) {
     //var tagStr = "DataHandler.accel_callback()";
     //System.println("accel_callback()");
 
@@ -191,9 +172,11 @@ class GarminSDDataHandler {
     // initialize accelerometer to request the maximum amount of
     // data possible
     var options = {
-      :period => SAMPLE_PERIOD,
-      :sampleRate => SAMPLE_FREQUENCY,
-      :enableAccelerometer => true,
+        :period => SAMPLE_PERIOD,
+        :accelerometer => {
+            :enabled => true,
+            :sampleRate => SAMPLE_FREQUENCY
+        }
     };
     try {
       Sensor.registerSensorDataListener(method(:accel_callback), options);
