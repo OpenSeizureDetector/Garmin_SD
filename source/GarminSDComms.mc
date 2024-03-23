@@ -106,6 +106,7 @@ class GarminSDComms {
     var sendDuration = Time.now().subtract(mDataSendStartTime);
     writeLog(tagStr, "sendAccelData End - Send Duration = " + sendDuration.value());
     if (responseCode == 200) {
+      writeLog(tagStr, "Success - data =" + data);
       if (responseCode != lastOnReceiveResponse || data != lastOnReceiveData) {
         writeLog(tagStr, "Success - data =" + data);
       } else {
@@ -115,7 +116,7 @@ class GarminSDComms {
         //System.println("Sending Settings");
         sendSettings();
       }
-      else{
+      if (data has :alarmPhrase) {
         mAccelHandler.mStatusStr = data.get("alarmPhrase");
         if (data.get("alarmState") != 0) {
           try {
