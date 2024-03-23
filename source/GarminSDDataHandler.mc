@@ -69,8 +69,6 @@ class GarminSDDataHandler {
   // Return the current set of data as a JSON String
   function getDataJson() {
     var i;
-    var lowDataMode = Storage.getValue(MENUITEM_LOWDATAMODE) ? true : false;
-
     var jsonStr = "{dataType:'raw',";
 
     jsonStr = jsonStr + "data3D:[";

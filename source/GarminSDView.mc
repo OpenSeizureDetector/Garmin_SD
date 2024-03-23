@@ -231,10 +231,6 @@ class SdDelegate extends Ui.BehaviorDelegate {
     if (Storage.getValue(MENUITEM_RETRY_WARNING) == null) {
       Storage.setValue(MENUITEM_RETRY_WARNING, 0);
     }
-    writeLog("sdDelegate.initialize()", "LOWDATAMODE="+Storage.getValue(MENUITEM_LOWDATAMODE));
-    if (Storage.getValue(MENUITEM_LOWDATAMODE) == null) {
-      Storage.setValue(MENUITEM_LOWDATAMODE, 0);
-    }
     if (Storage.getValue(MENUITEM_O2SENSOR) == null) {
       Storage.setValue(MENUITEM_O2SENSOR, 1);
     }
@@ -322,17 +318,6 @@ class SdDelegate extends Ui.BehaviorDelegate {
         Ui.loadResource(Rez.Strings.Retry_title),
         Ui.loadResource(Rez.Strings.Retry_desc),
         MENUITEM_RETRY_WARNING,
-        boolean,
-        null
-      )
-    );
-
-    boolean = Storage.getValue(MENUITEM_LOWDATAMODE) ? true : false;
-    menu.addItem(
-      new Ui.ToggleMenuItem(
-        Ui.loadResource(Rez.Strings.Low_data_title),
-        Ui.loadResource(Rez.Strings.Low_data_desc),
-        MENUITEM_LOWDATAMODE,
         boolean,
         null
       )
