@@ -25,8 +25,8 @@
 
 using Toybox.WatchUi as Ui;
 using Toybox.Graphics as Gfx;
+using Toybox.System;
 using Toybox.Time;
-using Toybox.Time.Gregorian;
 using Toybox.Timer;
 using Toybox.Lang;
 using Toybox.Application as App;
@@ -46,6 +46,8 @@ class GarminSDView extends Ui.View {
     accelHandler = new GarminSDDataHandler(
       Ui.loadResource(Rez.Strings.VersionId)
     );
+    writeLog("GarminSDView.initialize()", "Start accelHandler");
+    accelHandler.onStart();
     writeLog("GarminSDView.initialize()", "Complete");
   }
 
@@ -58,8 +60,6 @@ class GarminSDView extends Ui.View {
 
   // Restore the state of the app and prepare the view to be shown
   function onShow() {
-    writeLog("GarminSDView.onShow()", "Starting accelHandler");
-    accelHandler.onStart();
   }
 
   // Update the view
@@ -70,11 +70,11 @@ class GarminSDView extends Ui.View {
     //System.println(height);
     //System.print("heightScale = ");
     //System.println(heightScale);
-    var dateTime = Gregorian.info(Time.now(), Time.FORMAT_MEDIUM);
+    var myTime = System.getClockTime();
     var timeString = Lang.format("$1$:$2$:$3$", [
-      dateTime.hour.format("%02d"),
-      dateTime.min.format("%02d"),
-      dateTime.sec.format("%02d"),
+        myTime.hour.format("%02d"),
+        myTime.min.format("%02d"),
+        myTime.sec.format("%02d")
     ]);
     var sysStats = System.getSystemStats();
     var hrO2Str = "";
@@ -192,8 +192,6 @@ class GarminSDView extends Ui.View {
   // Called when this View is removed from the screen. Save the
   // state of your app here.
   function onHide() {
-    writeLog("GarminSDView.onHide", "Stopping accelHandler");
-    accelHandler.onStop();
   }
 }
 
