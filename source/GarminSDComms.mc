@@ -121,7 +121,6 @@ class GarminSDComms {
     writeLog(tagStr, "ResponseCode="+responseCode);
     if (responseCode == 200) {
       if (responseCode != lastOnSdStatusReceiveResponse) {
-        #writeLog(tagStr, "success - data =" + data);
         writeLog(tagStr, "Status =" + data.get("alarmPhrase"));
       }
       mAccelHandler.mStatusStr = data.get("alarmPhrase");
@@ -175,7 +174,7 @@ class GarminSDComms {
     var sendDuration = Time.now().subtract(mDataSendStartTime);
     writeLog(tagStr, "sendAccelData End - Send Duration = " + sendDuration.value());
     if (responseCode == 200) {
-      if (responseCode != lastOnReceiveResponse || data != lastOnReceiveData) {
+      if (responseCode != lastOnReceiveResponse || !data.equals(lastOnReceiveData)) {
         writeLog(tagStr, "Success - data =" + data);
       } else {
         // Don't write repeated log entries.
