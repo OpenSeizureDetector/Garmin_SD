@@ -38,6 +38,9 @@ class GarminSDView extends Ui.View {
   var width;
   var height;
   var mSdState;
+  var beatsPerMinuteAbbrev;
+  var batteryAbbrev;
+  var muteLabel;
 
   function initialize(sdState) {
     writeLog("GarminSDView.initialize()", "");
@@ -46,6 +49,10 @@ class GarminSDView extends Ui.View {
     accelHandler = new GarminSDDataHandler(
       Ui.loadResource(Rez.Strings.VersionId)
     );
+    //loading resources locally
+    beatsPerMinuteAbbrev = Ui.loadResource(Rez.Strings.Beats_per_minute_abbrev);
+    batteryAbbrev = Ui.loadResource(Rez.Strings.Battery_abbrev);
+    muteLabel = Ui.loadResource(Rez.Strings.Mute_label);
     writeLog("GarminSDView.initialize()", "Complete");
   }
 
@@ -81,19 +88,19 @@ class GarminSDView extends Ui.View {
     if (accelHandler.mO2SensorIsEnabled == true){
         hrO2Str = Lang.format("$1$ $2$ / $3$% Ox", [
           accelHandler.mHR,
-          Ui.loadResource(Rez.Strings.Beats_per_minute_abbrev),
+          beatsPerMinuteAbbrev,
           accelHandler.mO2sat,
         ]);
     }
     else {
         hrO2Str = Lang.format("$1$ $2$", [
           accelHandler.mHR,
-          Ui.loadResource(Rez.Strings.Beats_per_minute_abbrev),
+          beatsPerMinuteAbbrev,
         ]);
     }
 
     var hrBatStr = Lang.format("$1$: $2$%", [
-      Ui.loadResource(Rez.Strings.Battery_abbrev),
+      batteryAbbrev,
       sysStats.battery.format("%02.0f"),
     ]);
 
@@ -175,7 +182,7 @@ class GarminSDView extends Ui.View {
         width / 2,
         180 * heightScale,
         Gfx.FONT_LARGE,
-        Ui.loadResource(Rez.Strings.Mute_label),
+        muteLabel,
         Gfx.TEXT_JUSTIFY_CENTER
       );
     } else {
