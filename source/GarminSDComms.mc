@@ -33,11 +33,9 @@ class GarminSDComms {
   var mAccelHandler = null;
   var lastOnReceiveResponse = -1;
   var lastOnReceiveData = "";
-  var lastOnSdStatusReceiveResponse = -1;
   var mDataRequestInProgress = 0;
   var mDataSendStartTime = Time.now();
   var mSettingsRequestInProgress = 0;
-  var mStatusRequestInProgress = 0;
   var TIMEOUT = new Time.Duration(5);
   //var serverUrl = "http:192.168.43.1:8080";
   var serverUrl = "http://127.0.0.1:8080";
@@ -47,7 +45,6 @@ class GarminSDComms {
     mAccelHandler = accelHandler;
     mDataRequestInProgress = 0;
     mSettingsRequestInProgress = 0;
-    mStatusRequestInProgress = 0;
 
     // Start a timer that calls timerCallback every half second
     mTimer = new Timer.Timer();
@@ -66,7 +63,7 @@ class GarminSDComms {
     var waitingTime = Time.now().subtract(mDataSendStartTime);
     if ((mDataRequestInProgress) && (waitingTime.lessThan(TIMEOUT))){
       // Don't start another one.
-      writeLog(tagStr,"mDataRequestInProgress="+mDataRequestInProgress+", "+ mSettingsRequestInProgress+ ", " + mStatusRequestInProgress);
+      writeLog(tagStr,"mDataRequestInProgress="+mDataRequestInProgress+", "+ mSettingsRequestInProgress);
     } else {
       //writeLog(tagStr, "sendAccelData Start");
       var dataObj = mAccelHandler.getDataJson();
@@ -103,32 +100,21 @@ class GarminSDComms {
     );
   }
 
-  function getSdStatus() {
-    writeLog("SDComms.getSdStatus()", "");
-    mStatusRequestInProgress = 1;
-    Comm.makeWebRequest(
-      serverUrl + "/data",
-      {},
-      {
-        :method => Communications.HTTP_REQUEST_METHOD_GET,
-        :headers => {
-          "Content-Type" => Communications.REQUEST_CONTENT_TYPE_URL_ENCODED,
-        },
-        :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON,
-      },
-      method(:onSdStatusReceive)
-    );
-    //System.println("getSdStatus Exiting");
-  }
-
-  // Receive the data from the web request - should be a json string
-  function onSdStatusReceive(responseCode, data) {
-    var tagStr = "SDComms.onSdStatusReceive";
-    writeLog(tagStr, "ResponseCode="+responseCode);
+  // Receive the response from the sendAccelData web request.
+  function onDataReceive(responseCode, data) {
+    var tagStr = "SDComms.onDataReceive()";
+    var sendDuration = Time.now().subtract(mDataSendStartTime);
+    writeLog(tagStr, "sendAccelData End - Send Duration = " + sendDuration.value());
     if (responseCode == 200) {
-      if (responseCode != lastOnSdStatusReceiveResponse) {
-        #writeLog(tagStr, "success - data =" + data);
-        writeLog(tagStr, "Status =" + data.get("alarmPhrase"));
+      writeLog(tagStr, "Success - data =" + data);
+      if (responseCode != lastOnReceiveResponse || data != lastOnReceiveData) {
+        writeLog(tagStr, "Success - data =" + data);
+      } else {
+        // Don't write repeated log entries.
+      }
+      if (data.equals("sendSettings")) {
+        //System.println("Sending Settings");
+        sendSettings();
       }
       mAccelHandler.mStatusStr = data.get("alarmPhrase");
       if (data.get("alarmState") != 0) {
@@ -164,37 +150,6 @@ class GarminSDComms {
     } else {
       mAccelHandler.mStatusStr =
         Ui.loadResource(Rez.Strings.Error_abbrev) + ": " + responseCode.toString();
-      if (responseCode != lastOnSdStatusReceiveResponse) {
-        writeLog(tagStr, "Failue - code =" + responseCode);
-        writeLog(tagStr, "Failure - data =" + data);
-      } else {
-        // Don't write repeated log entries to save filling up the log file.
-      }
-    }
-    lastOnSdStatusReceiveResponse = responseCode;
-    mStatusRequestInProgress = 0;
-  }
-
-  // Receive the response from the sendAccelData web request.
-  function onDataReceive(responseCode, data) {
-    var tagStr = "SDComms.onDataReceive()";
-    var sendDuration = Time.now().subtract(mDataSendStartTime);
-    writeLog(tagStr, "sendAccelData End - Send Duration = " + sendDuration.value());
-    if (responseCode == 200) {
-      if (responseCode != lastOnReceiveResponse || data != lastOnReceiveData) {
-        writeLog(tagStr, "Success - data =" + data);
-      } else {
-        // Don't write repeated log entries.
-      }
-      if (data.equals("sendSettings")) {
-        //System.println("Sending Settings");
-        sendSettings();
-      } else {
-        //System.println("getting sd status");
-        getSdStatus();
-      }
-    } else {
-      mAccelHandler.mStatusStr = "ERR: " + responseCode.toString();
       var soundEnabled = Storage.getValue(MENUITEM_SOUND) ? true : false;
       if (Attention has :playTone && soundEnabled) {
         Attention.playTone(Attention.TONE_LOUD_BEEP);
@@ -205,12 +160,6 @@ class GarminSDComms {
           new Attention.VibeProfile(50, 200),
         ];
         Attention.vibrate(vibeData);
-      }
-
-      if (responseCode != lastOnReceiveResponse) {
-        writeLog(tagStr, "Failure - code =" + responseCode);
-      } else {
-        //
       }
     }
     lastOnReceiveResponse = responseCode;
