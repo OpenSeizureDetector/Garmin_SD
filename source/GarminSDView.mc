@@ -49,6 +49,8 @@ class GarminSDView extends Ui.View {
   var heightScaleLine3;
   var heightScaleLine4;
   var heightScaleLine5;
+  var lastUpdatedMinute = -1;
+  var mTimer as Toybox.Timer;
 
   function initialize(sdState) {
     writeLog("GarminSDView.initialize()", "");
@@ -62,6 +64,25 @@ class GarminSDView extends Ui.View {
     batteryAbbrev = Ui.loadResource(Rez.Strings.Battery_abbrev);
     muteLabel = Ui.loadResource(Rez.Strings.Mute_label);
     writeLog("GarminSDView.initialize()", "Complete");
+    // Start a timer that calls timerCallback every second
+    mTimer = new Timer.Timer();
+    mTimer.start(method(:onTick), 1000, true);
+
+  }
+
+  function onTick() {
+    /**
+    Called by GarminSDView every second in case we need to do anything timed.
+    */
+    //writeLog("GarminSDView.onTick()", "Start");
+
+    var currentMinute = System.getClockTime().min;
+    if ((accelHandler.mComms.needs_update == 1)||(currentMinute != lastUpdatedMinute)){
+      writeLog("GarminSDView.onTick()", "update view");
+      Ui.requestUpdate();
+      lastUpdatedMinute = currentMinute;
+      accelHandler.mComms.needs_update = 0;
+    }
   }
 
   // Load your resources here
@@ -117,10 +138,9 @@ class GarminSDView extends Ui.View {
   // Update the view
   function onUpdate(dc) {
     var myTime = System.getClockTime();
-    var timeString = Lang.format("$1$:$2$:$3$", [
+    var timeString = Lang.format("$1$:$2$", [
         myTime.hour.format("%02d"),
-        myTime.min.format("%02d"),
-        myTime.sec.format("%02d")
+        myTime.min.format("%02d")
     ]);
     var sysStats = System.getSystemStats();
     var hrO2Str = "";

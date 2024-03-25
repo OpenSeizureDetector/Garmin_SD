@@ -41,6 +41,7 @@ class GarminSDComms {
   var TIMEOUT = new Time.Duration(2);
   //var serverUrl = "http:192.168.43.1:8080";
   var serverUrl = "http://127.0.0.1:8080";
+  var needs_update = 1;
 
   function initialize(accelHandler) {
     //listener = new CommListener();
@@ -121,10 +122,14 @@ class GarminSDComms {
     writeLog(tagStr, "ResponseCode="+responseCode);
     if (responseCode == 200) {
       if (responseCode != lastOnSdStatusReceiveResponse) {
+        needs_update = 1;
+        // writeLog(tagStr, "needs update 1");
         writeLog(tagStr, "Status =" + data.get("alarmPhrase"));
       }
       mAccelHandler.mStatusStr = data.get("alarmPhrase");
       if (data.get("alarmState") != 0) {
+        // writeLog(tagStr, "needs update 2");
+        needs_update = 1;
         try {
           var lightEnabled = Storage.getValue(MENUITEM_LIGHT) ? true : false;
           if (Attention has :backlight && lightEnabled) {
@@ -155,10 +160,12 @@ class GarminSDComms {
         }
       }
     } else {
+      // writeLog(tagStr, "needs update 3");
+      needs_update = 1;
       mAccelHandler.mStatusStr =
         Ui.loadResource(Rez.Strings.Error_abbrev) + ": " + responseCode.toString();
       if (responseCode != lastOnSdStatusReceiveResponse) {
-        writeLog(tagStr, "Failue - code =" + responseCode);
+        writeLog(tagStr, "Failure - code =" + responseCode);
         writeLog(tagStr, "Failure - data =" + data);
       } else {
         // Don't write repeated log entries to save filling up the log file.
@@ -175,6 +182,9 @@ class GarminSDComms {
     writeLog(tagStr, "sendAccelData End - Send Duration = " + sendDuration.value());
     if (responseCode == 200) {
       if (responseCode != lastOnReceiveResponse || !data.equals(lastOnReceiveData)) {
+
+        // writeLog(tagStr, "needs update 4");
+        needs_update = 1;
         writeLog(tagStr, "Success - data =" + data);
       } else {
         // Don't write repeated log entries.
@@ -187,6 +197,8 @@ class GarminSDComms {
         getSdStatus();
       }
     } else {
+      // writeLog(tagStr, "needs update 5");
+      needs_update = 1;
       mAccelHandler.mStatusStr = "ERR: " + responseCode.toString();
       var soundEnabled = Storage.getValue(MENUITEM_SOUND) ? true : false;
       if (Attention has :playTone && soundEnabled) {

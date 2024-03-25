@@ -138,15 +138,9 @@ class GarminSDDataHandler {
     }
     nSamp = nSamp + 1;
 
-    //Toybox.System.println("Raw samples, X axis: " + mSamplesX);
-    //Toybox.System.println("Raw samples, Y axis: " + mSamplesY);
-    //Toybox.System.println("Raw samples, Z axis: " + mSamplesZ);
-
     // It should never be above analysis period, but in case it happens, greater would prevent infinite loop.
     if (nSamp * SAMPLE_PERIOD >= ANALYSIS_PERIOD) {
       //System.println("Doing Analysis....");
-      // Force reading of current heart rate and o2sat values in case the heart rate
-      // freezing issue
       mHR = Sensor.getInfo().heartRate;
       if ((Sensor.getInfo() has :oxygenSaturation) && (mO2SensorIsEnabled == true)) {
         //writeLog(tagStr,"reading o2sat value ");
@@ -156,11 +150,9 @@ class GarminSDDataHandler {
         mO2sat = 0;
       }
       nSamp = 0;
-      //System.println("DataHandler - sending Accel Data");
       //writeLog("DataHandler.accelCallback()","Sending accel Data");
       mComms.sendAccelData();
     }
-    Ui.requestUpdate();
   }
 
 
@@ -201,18 +193,12 @@ class GarminSDDataHandler {
     }
   }
 
-  function onTick() {
-    /**
-    Called by GarminSDView every second in case we need to do anything timed.
-    */
-    //System.println("GarminSDDataHandler.onTick()");
-
-    mComms.onTick();
-  }
-
   function onStop() {
     writeLog("DataHandler.onStop()", "");
     Sensor.unregisterSensorDataListener();
     Sensor.setEnabledSensors([]);
+    // this is NOT in the CIQ api and is a Garmin bug.
+    // https://forums.garmin.com/developer/connect-iq/f/discussion/872/battery-drain-when-connectiq-app-is-not-running/1661071#1661071
+    Sensor.enableSensorEvents(null);
   }
 }
