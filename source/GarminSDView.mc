@@ -106,7 +106,7 @@ class GarminSDView extends Ui.View {
     else{
       fontHrO2Str = Gfx.FONT_SMALL;
     }
-    writeLog("GarminSDView.initialize()", "Start accelHandler");
+    writeLog("GarminSDView.on_layout()", "Start accelHandler");
     accelHandler.onStart();
   }
 
