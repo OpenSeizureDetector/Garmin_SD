@@ -29,7 +29,7 @@ import Toybox.Application.Storage;
 
 class GarminSDComms {
   var listener;
-  var mTimer;
+  // var mTimer;
   var mAccelHandler = null;
   var lastOnReceiveResponse = -1;
   var lastOnReceiveData = "";
@@ -51,8 +51,8 @@ class GarminSDComms {
     mStatusRequestInProgress = 0;
 
     // Start a timer that calls timerCallback every second
-    mTimer = new Timer.Timer();
-    mTimer.start(method(:onTick), 1000, true);
+    // mTimer = new Timer.Timer();
+    // mTimer.start(method(:onTick), 1000, true);
 
   }
 
@@ -256,6 +256,7 @@ class GarminSDComms {
     in case we need to do anything timed.
     */
     //System.println("GarminSDComms.onTick()");
+    writeLog("GarminSDComms.onTick()", "");
     if (mDataRequestInProgress==1){
         var waitingTime = Time.now().subtract(mDataSendStartTime);
         if (waitingTime.greaterThan(TIMEOUT)){

@@ -6,15 +6,21 @@
 
 using Toybox.Application as App;
 using Toybox.System;
+using Toybox.Timer;
 
 
 class GarminSDApp extends App.AppBase {
   var mSdState;
+  var mTimer as Toybox.Timer;
+  var mainView as GarminSDView;
+  var viewDelegate as SdDelegate;
+
   function initialize() {
     writeLog("GarminSdApp.initialize", "");
     AppBase.initialize();
 
     mSdState = new GarminSDState();
+    // Start a timer that calls timerCallback every second
   }
 
   // onStart() is called on application start up
@@ -27,6 +33,9 @@ class GarminSDApp extends App.AppBase {
     //System.println("benMode="+App.getApp().getProperty("benMode"));
     //System.println("benmode="+App.getApp().getProperty("benmode"));
     //System.println("prop2="+App.getApp().getProperty("prop2"));
+
+    mTimer = new Timer.Timer();
+    mTimer.start(method(:onTick), 1000, true);
   }
 
   // onStop() is called when your application is exiting
@@ -36,14 +45,23 @@ class GarminSDApp extends App.AppBase {
     } else {
       writeLog("GarminSDApp.onStop()", "State= null");
     }
+    mTimer.stop();
   }
 
   // Return the initial view of your application here
   function getInitialView() {
     writeLog("GarminSDApp.getInitialView", "");
-    var mainView = new GarminSDView(mSdState);
-    var viewDelegate = new SdDelegate(mainView, mSdState);
+    mainView = new GarminSDView(mSdState);
+    viewDelegate = new SdDelegate(mainView, mSdState);
     return [mainView, viewDelegate];
     //return [mainView];
+  }
+  function onTick() {
+    /**
+    Called by GarminSDView every second in case we need to do anything timed.
+    */
+    //writeLog("GarminSDView.onTick()", "Start");
+    mainView.onTick();
+    viewDelegate.onTick();
   }
 }
