@@ -69,7 +69,7 @@ class GarminSDView extends Ui.View {
     Called by GarminSDView every second in case we need to do anything timed.
     */
     //writeLog("GarminSDView.onTick()", "Start");
-    accelHandler.mComms.onTick();
+    accelHandler.onTick();
     var currentMinute = System.getClockTime().min;
     if ((accelHandler.mComms.needs_update == 1)||(currentMinute != lastUpdatedMinute)){
       writeLog("GarminSDView.onTick()", "update view");

@@ -190,7 +190,13 @@ class GarminSDDataHandler {
       Sensor.setEnabledSensors([Sensor.SENSOR_HEARTRATE]);
     }
   }
-
+  function onTick() {
+    /**
+    Called by GarminSDView every second in case we need to do anything timed.
+    */
+    //writeLog("GarminSDView.onTick()", "Start");
+    mComms.onTick();
+  }
   function onStop() {
     writeLog("DataHandler.onStop()", "");
     Sensor.unregisterSensorDataListener();
