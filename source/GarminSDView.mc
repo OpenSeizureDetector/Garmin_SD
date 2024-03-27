@@ -405,7 +405,7 @@ class QuitDelegate extends Ui.ConfirmationDelegate {
   }
 
   function onResponse(value) {
-    writeLog("QuitDelegate.onResponse()", "Resonse = " + value);
+    writeLog("QuitDelegate.onResponse()", "Response = " + value);
     mResponseReceived = true;
     if (value == CONFIRM_YES) {
       // pop the confirmation dialog associated with this delegate
