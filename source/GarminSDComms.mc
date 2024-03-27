@@ -23,8 +23,6 @@
 
 */
 using Toybox.Communications as Comm;
-using Toybox.Attention as Attention;
-using Toybox.WatchUi as Ui;
 import Toybox.Application.Storage;
 
 class GarminSDComms {
@@ -33,40 +31,24 @@ class GarminSDComms {
   var mAccelHandler = null;
   var lastOnReceiveResponse = -1;
   var lastOnReceiveData = "";
-  var lastOnSdStatusReceiveResponse = -1;
-  var mDataRequestInProgress = 0;
   var mDataSendStartTime = Time.now();
   var mSettingsRequestInProgress = 0;
-  var mStatusRequestInProgress = 0;
-  var TIMEOUT = new Time.Duration(2);
   //var serverUrl = "http:192.168.43.1:8080";
   var serverUrl = "http://127.0.0.1:8080";
-  var needs_update = 1;
 
   function initialize(accelHandler) {
     //listener = new CommListener();
     mAccelHandler = accelHandler;
-    mDataRequestInProgress = 0;
     mSettingsRequestInProgress = 0;
-    mStatusRequestInProgress = 0;
-
-    // Start a timer that calls timerCallback every second
-    // mTimer = new Timer.Timer();
-    // mTimer.start(method(:onTick), 1000, true);
-
   }
 
   function onStart() {
-    // We use http communications not phone app messages.
-    //Comm.registerForPhoneAppMessages(method(:onMessageReceived));
-    //Comm.transmit("Hello World.", null, listener);
   }
 
   function sendAccelData() {
     //var tagStr = "SDComms.sendAccelData()";
     //writeLog(tagStr, "sendAccelData Start");
     var dataObj = mAccelHandler.getDataJson();
-    mDataRequestInProgress = 1;
     mDataSendStartTime = Time.now();
     Comm.makeWebRequest(
         serverUrl + "/data",
@@ -98,93 +80,14 @@ class GarminSDComms {
     );
   }
 
-  function getSdStatus() {
-    writeLog("SDComms.getSdStatus()", "");
-    mStatusRequestInProgress = 1;
-    Comm.makeWebRequest(
-      serverUrl + "/data",
-      {},
-      {
-        :method => Communications.HTTP_REQUEST_METHOD_GET,
-        :headers => {
-          "Content-Type" => Communications.REQUEST_CONTENT_TYPE_URL_ENCODED,
-        },
-        :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON,
-      },
-      method(:onSdStatusReceive)
-    );
-    //System.println("getSdStatus Exiting");
-  }
-
-  // Receive the data from the web request - should be a json string
-  function onSdStatusReceive(responseCode, data) {
-    var tagStr = "SDComms.onSdStatusReceive";
-    writeLog(tagStr, "ResponseCode="+responseCode);
-    if (responseCode == 200) {
-      if (responseCode != lastOnSdStatusReceiveResponse) {
-        needs_update = 1;
-        // writeLog(tagStr, "needs update 1");
-        writeLog(tagStr, "Status =" + data.get("alarmPhrase"));
-      }
-      mAccelHandler.mStatusStr = data.get("alarmPhrase");
-      if (data.get("alarmState") != 0) {
-        // writeLog(tagStr, "needs update 2");
-        needs_update = 1;
-        try {
-          var lightEnabled = Storage.getValue(MENUITEM_LIGHT) ? true : false;
-          if (Attention has :backlight && lightEnabled) {
-            Attention.backlight(true);
-          }
-        } catch (ex) {
-          // We might get a Toybox.Attention.BacklightOnTooLongException
-        }
-        var soundEnabled = Storage.getValue(MENUITEM_SOUND) ? true : false;
-        if (Attention has :playTone && soundEnabled) {
-          Attention.playTone(Attention.TONE_ALERT_HI);
-        }
-      }
-      if (data.get("alarmState") == 2) {
-        // ALARM
-        var vibrationEnabled = Storage.getValue(MENUITEM_VIBRATION)
-          ? true
-          : false;
-        if (Attention has :vibrate && vibrationEnabled) {
-          var vibeData = [
-            new Attention.VibeProfile(50, 500),
-            new Attention.VibeProfile(0, 500),
-            new Attention.VibeProfile(50, 500),
-            new Attention.VibeProfile(0, 500),
-            new Attention.VibeProfile(50, 500),
-          ];
-          Attention.vibrate(vibeData);
-        }
-      }
-    } else {
-      // writeLog(tagStr, "needs update 3");
-      needs_update = 1;
-      mAccelHandler.mStatusStr =
-        Ui.loadResource(Rez.Strings.Error_abbrev) + ": " + responseCode.toString();
-      if (responseCode != lastOnSdStatusReceiveResponse) {
-        writeLog(tagStr, "Failure - code =" + responseCode);
-        writeLog(tagStr, "Failure - data =" + data);
-      } else {
-        // Don't write repeated log entries to save filling up the log file.
-      }
-    }
-    lastOnSdStatusReceiveResponse = responseCode;
-    mStatusRequestInProgress = 0;
-  }
-
   // Receive the response from the sendAccelData web request.
   function onDataReceive(responseCode, data) {
     var tagStr = "SDComms.onDataReceive()";
     var sendDuration = Time.now().subtract(mDataSendStartTime);
     writeLog(tagStr, "sendAccelData End - Send Duration = " + sendDuration.value());
     if (responseCode == 200) {
+      mAccelHandler.mStatusStr = "OK";
       if (responseCode != lastOnReceiveResponse || !data.equals(lastOnReceiveData)) {
-
-        // writeLog(tagStr, "needs update 4");
-        needs_update = 1;
         writeLog(tagStr, "Success - data =" + data);
       } else {
         // Don't write repeated log entries.
@@ -192,85 +95,17 @@ class GarminSDComms {
       if (data.equals("sendSettings")) {
         //System.println("Sending Settings");
         sendSettings();
-      } else {
-        //System.println("getting sd status");
-        getSdStatus();
       }
     } else {
-      // writeLog(tagStr, "needs update 5");
-      needs_update = 1;
       mAccelHandler.mStatusStr = "ERR: " + responseCode.toString();
-      var soundEnabled = Storage.getValue(MENUITEM_SOUND) ? true : false;
-      if (Attention has :playTone && soundEnabled) {
-        Attention.playTone(Attention.TONE_LOUD_BEEP);
-      }
-      var vibrationEnabled = Storage.getValue(MENUITEM_VIBRATION) ? true : false;
-      if (Attention has :vibrate && vibrationEnabled) {
-        var vibeData = [
-          new Attention.VibeProfile(50, 200),
-        ];
-        Attention.vibrate(vibeData);
-      }
-
-      if (responseCode != lastOnReceiveResponse) {
-        writeLog(tagStr, "Failure - code =" + responseCode);
-      } else {
-        //
-      }
     }
     lastOnReceiveResponse = responseCode;
     lastOnReceiveData = data;
-    mDataRequestInProgress = 0;
   }
 
   // Receive the response from the sendSettings web request.
   function onSettingsReceive(responseCode, data) {
     writeLog("SDComms.onSettingsReceive()", "");
     mSettingsRequestInProgress = 0;
-  }
-
-  //function onMessageReceived(msg) {
-  //  System.print("GarminSdApp.onMessageReceived - ");
-  //  System.println(msg.data.toString());
-  //}
-
-  /////////////////////////////////////////////////////////////////////
-  // Connection listener class that is used to log success and failure
-  // of message transmissions.
-  //class CommListener extends Comm.ConnectionListener {
-  //  function initialize() {
-  //   Comm.ConnectionListener.initialize();
-  // }
-
-    //function onComplete() {
-    //  System.println("Transmit Complete");
-    //}
-
-    //function onError() {
-    //  System.println("Transmit Failed");
-    //}
-  //}
-
-  function onTick() {
-    /** Called every second (by GarminSDDataHandler)
-    in case we need to do anything timed.
-    */
-    //System.println("GarminSDComms.onTick()");
-    writeLog("GarminSDComms.onTick()", "");
-    if (mDataRequestInProgress==1){
-        var waitingTime = Time.now().subtract(mDataSendStartTime);
-        if (waitingTime.greaterThan(TIMEOUT)){
-          mDataRequestInProgress = 0;
-          var tagStr = "SDComms.onTick()";
-          writeLog(tagStr, "Sending accelData failed");
-          mAccelHandler.mStatusStr = Ui.loadResource(Rez.Strings.Error_abbrev) + ": " + Ui.loadResource(Rez.Strings.Error_request_in_progress);
-          if (Attention has :vibrate) {
-            var vibeData = [
-              new Attention.VibeProfile(50, 200),
-            ];
-            Attention.vibrate(vibeData);
-          }
-        }
-    }
   }
 }

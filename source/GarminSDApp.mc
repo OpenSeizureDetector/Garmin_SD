@@ -13,7 +13,6 @@ class GarminSDApp extends App.AppBase {
   var mSdState;
   var mTimer as Toybox.Timer;
   var mainView as GarminSDView;
-  var viewDelegate as SdDelegate;
 
   function initialize() {
     writeLog("GarminSdApp.initialize", "");
@@ -52,9 +51,7 @@ class GarminSDApp extends App.AppBase {
   function getInitialView() {
     writeLog("GarminSDApp.getInitialView", "");
     mainView = new GarminSDView(mSdState);
-    viewDelegate = new SdDelegate(mainView, mSdState);
-    return [mainView, viewDelegate];
-    //return [mainView];
+    return [mainView];
   }
   function onTick() {
     /**
@@ -62,6 +59,5 @@ class GarminSDApp extends App.AppBase {
     */
     //writeLog("GarminSDView.onTick()", "Start");
     mainView.onTick();
-    viewDelegate.onTick();
   }
 }

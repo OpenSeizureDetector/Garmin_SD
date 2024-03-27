@@ -14,11 +14,3 @@ function writeLog(tagStr, msgStr) {
   System.println(timeString + " : " + tagStr + " : " + msgStr);
 }
 
-enum {
-  MENUITEM_MUTE,
-  MENUITEM_BENMODE,
-  MENUITEM_VIBRATION,
-  MENUITEM_SOUND,
-  MENUITEM_LIGHT,
-  MENUITEM_O2SENSOR,
-}

@@ -25,11 +25,9 @@
           by Steve Lee.
 
 */
-using Toybox.Sensor;
+//using Toybox.Sensor;
 using Toybox.System;
-using Toybox.WatchUi as Ui;
 using Toybox.Timer;
-using Toybox.Math;
 import Toybox.Application.Storage;
 
 
@@ -52,14 +50,12 @@ class GarminSDDataHandler {
   var mStatusStr = "---";
   var mComms = null;
   var mVersionStr = "";
-  var mO2SensorIsEnabled = true;
 
   ///////////////
   // Constructor
   function initialize(versionStr) {
     var tagStr = "DataHandler.initialize()";
     writeLog(tagStr, "");
-    mO2SensorIsEnabled = Storage.getValue(MENUITEM_O2SENSOR) ? true : false;
     mVersionStr = versionStr;
     // On Start-up we show the app version number in place of satus.
     mStatusStr = versionStr;
@@ -125,30 +121,27 @@ class GarminSDDataHandler {
   }
 
   // Prints acclerometer data that is recevied from the system
-  function accel_callback(sensorData as Toybox.Sensor.AccelerometerData) {
+  function accel_callback() {
     //var tagStr = "DataHandler.accel_callback()";
     //System.println("accel_callback()");
 
     var iStart = nSamp * SAMPLE_PERIOD * SAMPLE_FREQUENCY;
     //System.println(Lang.format("iStart=$1$, ns=$2$, nSamp=$3$",[iStart,SAMPLE_PERIOD*SAMPLE_FREQUENCY,nSamp]));
     for (var i = 0; i < SAMPLE_PERIOD * SAMPLE_FREQUENCY; i = i + 1) {
-      mSamplesX[iStart + i] = sensorData.accelerometerData.x[i];
-      mSamplesY[iStart + i] = sensorData.accelerometerData.y[i];
-      mSamplesZ[iStart + i] = sensorData.accelerometerData.z[i];
+      mSamplesX[iStart + i] = 1;
+      mSamplesY[iStart + i] = 1;
+      mSamplesZ[iStart + i] = 1;
     }
     nSamp = nSamp + 1;
 
     // It should never be above analysis period, but in case it happens, greater would prevent infinite loop.
     if (nSamp * SAMPLE_PERIOD >= ANALYSIS_PERIOD) {
       //System.println("Doing Analysis....");
-      mHR = Sensor.getInfo().heartRate;
-      if ((Sensor.getInfo() has :oxygenSaturation) && (mO2SensorIsEnabled == true)) {
-        //writeLog(tagStr,"reading o2sat value ");
-        mO2sat = Sensor.getInfo().oxygenSaturation;
-      } else {
-        //writeLog(tagStr,"setting mO2sat to zero");
-        mO2sat = 0;
-      }
+      //var sensorInfo = Sensor.getInfo();
+      //mHR = sensorInfo.heartRate;
+      mHR = 90;
+      //writeLog(tagStr,"setting mO2sat to zero");
+      mO2sat = 0;
       nSamp = 0;
       //writeLog("DataHandler.accelCallback()","Sending accel Data");
       mComms.sendAccelData();
@@ -159,8 +152,8 @@ class GarminSDDataHandler {
   // Initializes the view and registers for accelerometer data
   function onStart() {
     var tagStr = "DataHandler.onStart()";
-    var maxSampleRate = Sensor.getMaxSampleRate();
-    writeLog(tagStr, "maxSampleRate = "+maxSampleRate);
+    //var maxSampleRate = Sensor.getMaxSampleRate();
+    //writeLog(tagStr, "maxSampleRate = "+maxSampleRate);
 
     // initialize accelerometer to request the maximum amount of
     // data possible
@@ -172,33 +165,23 @@ class GarminSDDataHandler {
         }
     };
     try {
-      Sensor.registerSensorDataListener(method(:accel_callback), options);
+      //Sensor.registerSensorDataListener(method(:accel_callback), options);
       writeLog(tagStr, "Registered for Accelerometer Data");
     } catch (e) {
       writeLog("*** ERROR - "+ tagStr, e.getErrorMessage());
     }
 
-    // Intialise heart rate monitoring.
-    // But only initialise O2sat sensor if enabled in settings (default is true)
-    writeLog(tagStr,"mO2SensorIsEnabled = " + mO2SensorIsEnabled);
-    if ((Sensor has :SENSOR_PULSE_OXYMETRY) && (mO2SensorIsEnabled == true)) {
-      writeLog(tagStr,"Enabling HR and O2SAT Sensors");
-      Sensor.setEnabledSensors([
-        Sensor.SENSOR_HEARTRATE,
-        Sensor.SENSOR_PULSE_OXIMETRY,
-      ]);
-    } else {
-      writeLog(tagStr,"Enabling HR Sensor only");
-      Sensor.setEnabledSensors([Sensor.SENSOR_HEARTRATE]);
-    }
+    // Intialise heart rate monitoring
+    writeLog(tagStr,"Enabling HR Sensor only");
+    //Sensor.setEnabledSensors([Sensor.SENSOR_HEARTRATE]);
   }
 
   function onStop() {
     writeLog("DataHandler.onStop()", "");
-    Sensor.unregisterSensorDataListener();
-    Sensor.setEnabledSensors([]);
+    //Sensor.unregisterSensorDataListener();
+    //Sensor.setEnabledSensors([]);
     // this is NOT in the CIQ api and is a Garmin bug.
     // https://forums.garmin.com/developer/connect-iq/f/discussion/872/battery-drain-when-connectiq-app-is-not-running/1661071#1661071
-    Sensor.enableSensorEvents(null);
+    //Sensor.enableSensorEvents(null);
   }
 }
