@@ -27,9 +27,7 @@
 */
 using Toybox.Sensor;
 using Toybox.System;
-using Toybox.WatchUi as Ui;
 using Toybox.Timer;
-using Toybox.Math;
 import Toybox.Application.Storage;
 
 
@@ -59,6 +57,7 @@ class GarminSDDataHandler {
   function initialize(versionStr) {
     var tagStr = "DataHandler.initialize()";
     writeLog(tagStr, "");
+    mO2SensorIsEnabled = Storage.getValue(MENUITEM_O2SENSOR) ? true : false;
     mVersionStr = versionStr;
     // On Start-up we show the app version number in place of satus.
     mStatusStr = versionStr;
@@ -137,15 +136,9 @@ class GarminSDDataHandler {
     }
     nSamp = nSamp + 1;
 
-    //Toybox.System.println("Raw samples, X axis: " + mSamplesX);
-    //Toybox.System.println("Raw samples, Y axis: " + mSamplesY);
-    //Toybox.System.println("Raw samples, Z axis: " + mSamplesZ);
-
     // It should never be above analysis period, but in case it happens, greater would prevent infinite loop.
     if (nSamp * SAMPLE_PERIOD >= ANALYSIS_PERIOD) {
       //System.println("Doing Analysis....");
-      // Force reading of current heart rate and o2sat values in case the heart rate
-      // freezing issue
       mHR = Sensor.getInfo().heartRate;
       if ((Sensor.getInfo() has :oxygenSaturation) && (mO2SensorIsEnabled == true)) {
         //writeLog(tagStr,"reading o2sat value ");
@@ -155,17 +148,14 @@ class GarminSDDataHandler {
         mO2sat = 0;
       }
       nSamp = 0;
-      //System.println("DataHandler - sending Accel Data");
       //writeLog("DataHandler.accelCallback()","Sending accel Data");
       mComms.sendAccelData();
     }
-    Ui.requestUpdate();
   }
 
 
   // Initializes the view and registers for accelerometer data
   function onStart() {
-    mO2SensorIsEnabled = Storage.getValue(MENUITEM_O2SENSOR) ? true : false;
     var tagStr = "DataHandler.onStart()";
     var maxSampleRate = Sensor.getMaxSampleRate();
     writeLog(tagStr, "maxSampleRate = "+maxSampleRate);
@@ -200,19 +190,19 @@ class GarminSDDataHandler {
       Sensor.setEnabledSensors([Sensor.SENSOR_HEARTRATE]);
     }
   }
-
   function onTick() {
     /**
     Called by GarminSDView every second in case we need to do anything timed.
     */
-    //System.println("GarminSDDataHandler.onTick()");
-
+    //writeLog("GarminSDView.onTick()", "Start");
     mComms.onTick();
   }
-
   function onStop() {
     writeLog("DataHandler.onStop()", "");
     Sensor.unregisterSensorDataListener();
     Sensor.setEnabledSensors([]);
+    // this is NOT in the CIQ api and is a Garmin bug.
+    // https://forums.garmin.com/developer/connect-iq/f/discussion/872/battery-drain-when-connectiq-app-is-not-running/1661071#1661071
+    Sensor.enableSensorEvents(null);
   }
 }
