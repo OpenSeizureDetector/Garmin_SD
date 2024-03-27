@@ -18,9 +18,7 @@ class GarminSDApp extends App.AppBase {
   function initialize() {
     writeLog("GarminSdApp.initialize", "");
     AppBase.initialize();
-
     mSdState = new GarminSDState();
-    // Start a timer that calls timerCallback every second
   }
 
   // onStart() is called on application start up
@@ -30,10 +28,7 @@ class GarminSDApp extends App.AppBase {
     } else {
       writeLog("GarminSDApp.onStart()", "State= null");
     }
-    //System.println("benMode="+App.getApp().getProperty("benMode"));
-    //System.println("benmode="+App.getApp().getProperty("benmode"));
-    //System.println("prop2="+App.getApp().getProperty("prop2"));
-
+    // Start a timer that calls timerCallback every second
     mTimer = new Timer.Timer();
     mTimer.start(method(:onTick), 1000, true);
   }
