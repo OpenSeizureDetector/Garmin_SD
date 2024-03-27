@@ -28,8 +28,6 @@ using Toybox.WatchUi as Ui;
 import Toybox.Application.Storage;
 
 class GarminSDComms {
-  var listener;
-  // var mTimer;
   var mAccelHandler = null;
   var lastOnReceiveResponse = -1;
   var lastOnReceiveData = "";
@@ -44,22 +42,13 @@ class GarminSDComms {
   var needs_update = 1;
 
   function initialize(accelHandler) {
-    //listener = new CommListener();
     mAccelHandler = accelHandler;
     mDataRequestInProgress = 0;
     mSettingsRequestInProgress = 0;
     mStatusRequestInProgress = 0;
-
-    // Start a timer that calls timerCallback every second
-    // mTimer = new Timer.Timer();
-    // mTimer.start(method(:onTick), 1000, true);
-
   }
 
   function onStart() {
-    // We use http communications not phone app messages.
-    //Comm.registerForPhoneAppMessages(method(:onMessageReceived));
-    //Comm.transmit("Hello World.", null, listener);
   }
 
   function sendAccelData() {
@@ -126,10 +115,11 @@ class GarminSDComms {
         // writeLog(tagStr, "needs update 1");
         writeLog(tagStr, "Status =" + data.get("alarmPhrase"));
       }
-      mAccelHandler.mStatusStr = data.get("alarmPhrase");
-      if (data.get("alarmState") != 0) {
-        // writeLog(tagStr, "needs update 2");
+      if (!mAccelHandler.mStatusStr.equals(data.get("alarmPhrase"))){
+        mAccelHandler.mStatusStr = data.get("alarmPhrase");
         needs_update = 1;
+      }
+      if (data.get("alarmState") != 0) {
         try {
           var lightEnabled = Storage.getValue(MENUITEM_LIGHT) ? true : false;
           if (Attention has :backlight && lightEnabled) {
@@ -229,27 +219,6 @@ class GarminSDComms {
     mSettingsRequestInProgress = 0;
   }
 
-  //function onMessageReceived(msg) {
-  //  System.print("GarminSdApp.onMessageReceived - ");
-  //  System.println(msg.data.toString());
-  //}
-
-  /////////////////////////////////////////////////////////////////////
-  // Connection listener class that is used to log success and failure
-  // of message transmissions.
-  //class CommListener extends Comm.ConnectionListener {
-  //  function initialize() {
-  //   Comm.ConnectionListener.initialize();
-  // }
-
-    //function onComplete() {
-    //  System.println("Transmit Complete");
-    //}
-
-    //function onError() {
-    //  System.println("Transmit Failed");
-    //}
-  //}
 
   function onTick() {
     /** Called every second (by GarminSDDataHandler)

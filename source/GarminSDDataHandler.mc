@@ -27,9 +27,7 @@
 */
 using Toybox.Sensor;
 using Toybox.System;
-using Toybox.WatchUi as Ui;
 using Toybox.Timer;
-using Toybox.Math;
 import Toybox.Application.Storage;
 
 
