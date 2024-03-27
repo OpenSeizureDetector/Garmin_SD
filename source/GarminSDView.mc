@@ -27,7 +27,6 @@ using Toybox.WatchUi as Ui;
 using Toybox.Graphics as Gfx;
 using Toybox.System;
 using Toybox.Time;
-using Toybox.Timer;
 using Toybox.Lang;
 using Toybox.Application as App;
 import Toybox.Application.Storage;
@@ -49,6 +48,7 @@ class GarminSDView extends Ui.View {
   var heightScaleLine3;
   var heightScaleLine4;
   var heightScaleLine5;
+  var lastUpdatedMinute = -1;
 
   function initialize(sdState) {
     writeLog("GarminSDView.initialize()", "");
@@ -62,6 +62,21 @@ class GarminSDView extends Ui.View {
     batteryAbbrev = Ui.loadResource(Rez.Strings.Battery_abbrev);
     muteLabel = Ui.loadResource(Rez.Strings.Mute_label);
     writeLog("GarminSDView.initialize()", "Complete");
+  }
+
+  function onTick() {
+    /**
+    Called by GarminSDView every second in case we need to do anything timed.
+    */
+    //writeLog("GarminSDView.onTick()", "Start");
+    accelHandler.onTick();
+    var currentMinute = System.getClockTime().min;
+    if ((accelHandler.mComms.needs_update == 1)||(currentMinute != lastUpdatedMinute)){
+      writeLog("GarminSDView.onTick()", "update view");
+      Ui.requestUpdate();
+      lastUpdatedMinute = currentMinute;
+      accelHandler.mComms.needs_update = 0;
+    }
   }
 
   // Load your resources here
@@ -117,10 +132,9 @@ class GarminSDView extends Ui.View {
   // Update the view
   function onUpdate(dc) {
     var myTime = System.getClockTime();
-    var timeString = Lang.format("$1$:$2$:$3$", [
+    var timeString = Lang.format("$1$:$2$", [
         myTime.hour.format("%02d"),
-        myTime.min.format("%02d"),
-        myTime.sec.format("%02d")
+        myTime.min.format("%02d")
     ]);
     var sysStats = System.getSystemStats();
     var hrO2Str = "";
@@ -209,7 +223,6 @@ class GarminSDView extends Ui.View {
 class SdDelegate extends Ui.BehaviorDelegate {
   var mSdView;
   var mSdState;
-  var mTimer;
   var mMode;
   var mMuteDlgOpenTime;
   var mQuitDlgOpenTime;
@@ -241,14 +254,10 @@ class SdDelegate extends Ui.BehaviorDelegate {
       Storage.setValue(MENUITEM_O2SENSOR, 1);
     }
 
-    // Start a timer that calls timerCallback every second
-    mTimer = new Timer.Timer();
-    mTimer.start(method(:timerCallback), 1000, true);
-
     BehaviorDelegate.initialize();
   }
 
-  function timerCallback() {
+  function onTick() {
     //System.println("SdDelegate.timerCallback()");
     // Handle Timeout of Quit Dialog
     if (mSdState.getMode() == MODE_QUITDLG) {
@@ -396,7 +405,7 @@ class QuitDelegate extends Ui.ConfirmationDelegate {
   }
 
   function onResponse(value) {
-    writeLog("QuitDelegate.onResponse()", "Resonse = " + value);
+    writeLog("QuitDelegate.onResponse()", "Response = " + value);
     mResponseReceived = true;
     if (value == CONFIRM_YES) {
       // pop the confirmation dialog associated with this delegate

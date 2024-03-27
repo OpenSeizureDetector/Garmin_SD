@@ -1,16 +1,14 @@
 using Toybox.System;
-using Toybox.Time;
-using Toybox.Time.Gregorian;
 using Toybox.Lang;
 
 
 function writeLog(tagStr, msgStr) {
-  var dateTime = Gregorian.info(Time.now(), Time.FORMAT_MEDIUM);
+  var myTime = System.getClockTime();
   var timeString = Lang.format("$1$:$2$:$3$", [
-      dateTime.hour.format("%02d"),
-      dateTime.min.format("%02d"),
-      dateTime.sec.format("%02d"),
-    ]);
+      myTime.hour.format("%02d"),
+      myTime.min.format("%02d"),
+      myTime.sec.format("%02d")
+  ]);
   System.println(timeString + " : " + tagStr + " : " + msgStr);
 }
 
