@@ -1,6 +1,7 @@
 GarminSD CHANGELOG
 ==================
 
+
 v2.0 - 29Mar2024
 	- Many battery optmisation improvements by @pmithrandir.  
 	  Note, only sends 3d data, not magnitude, so needs android app V4.2.4
