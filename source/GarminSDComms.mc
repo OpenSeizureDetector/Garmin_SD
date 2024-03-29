@@ -28,8 +28,6 @@ using Toybox.WatchUi as Ui;
 import Toybox.Application.Storage;
 
 class GarminSDComms {
-  var listener;
-  var mTimer;
   var mAccelHandler = null;
   var lastOnReceiveResponse = -1;
   var lastOnReceiveData = "";
@@ -41,24 +39,16 @@ class GarminSDComms {
   var TIMEOUT = new Time.Duration(2);
   //var serverUrl = "http:192.168.43.1:8080";
   var serverUrl = "http://127.0.0.1:8080";
+  var needs_update = 1;
 
   function initialize(accelHandler) {
-    //listener = new CommListener();
     mAccelHandler = accelHandler;
     mDataRequestInProgress = 0;
     mSettingsRequestInProgress = 0;
     mStatusRequestInProgress = 0;
-
-    // Start a timer that calls timerCallback every second
-    mTimer = new Timer.Timer();
-    mTimer.start(method(:onTick), 1000, true);
-
   }
 
   function onStart() {
-    // We use http communications not phone app messages.
-    //Comm.registerForPhoneAppMessages(method(:onMessageReceived));
-    //Comm.transmit("Hello World.", null, listener);
   }
 
   function sendAccelData() {
@@ -118,13 +108,19 @@ class GarminSDComms {
   // Receive the data from the web request - should be a json string
   function onSdStatusReceive(responseCode, data) {
     var tagStr = "SDComms.onSdStatusReceive";
-    writeLog(tagStr, "ResponseCode="+responseCode);
+    // writeLog(tagStr, "ResponseCode="+responseCode);
     if (responseCode == 200) {
       if (responseCode != lastOnSdStatusReceiveResponse) {
-        #writeLog(tagStr, "success - data =" + data);
+        needs_update = 1;
+        // writeLog(tagStr, "needs update 1");
         writeLog(tagStr, "Status =" + data.get("alarmPhrase"));
       }
-      mAccelHandler.mStatusStr = data.get("alarmPhrase");
+      if (!mAccelHandler.mStatusStr.equals(data.get("alarmPhrase"))){
+        mAccelHandler.mStatusStr = data.get("alarmPhrase");
+
+        writeLog(tagStr, data.get("alarmPhrase"));
+        needs_update = 1;
+      }
       if (data.get("alarmState") != 0) {
         try {
           var lightEnabled = Storage.getValue(MENUITEM_LIGHT) ? true : false;
@@ -156,10 +152,12 @@ class GarminSDComms {
         }
       }
     } else {
+      // writeLog(tagStr, "needs update 3");
+      needs_update = 1;
       mAccelHandler.mStatusStr =
         Ui.loadResource(Rez.Strings.Error_abbrev) + ": " + responseCode.toString();
       if (responseCode != lastOnSdStatusReceiveResponse) {
-        writeLog(tagStr, "Failue - code =" + responseCode);
+        writeLog(tagStr, "Failure - code =" + responseCode);
         writeLog(tagStr, "Failure - data =" + data);
       } else {
         // Don't write repeated log entries to save filling up the log file.
@@ -175,7 +173,10 @@ class GarminSDComms {
     var sendDuration = Time.now().subtract(mDataSendStartTime);
     writeLog(tagStr, "sendAccelData End - Send Duration = " + sendDuration.value());
     if (responseCode == 200) {
-      if (responseCode != lastOnReceiveResponse || data != lastOnReceiveData) {
+      if (responseCode != lastOnReceiveResponse || !data.equals(lastOnReceiveData)) {
+
+        // writeLog(tagStr, "needs update 4");
+        needs_update = 1;
         writeLog(tagStr, "Success - data =" + data);
       } else {
         // Don't write repeated log entries.
@@ -188,6 +189,8 @@ class GarminSDComms {
         getSdStatus();
       }
     } else {
+      // writeLog(tagStr, "needs update 5");
+      needs_update = 1;
       mAccelHandler.mStatusStr = "ERR: " + responseCode.toString();
       var soundEnabled = Storage.getValue(MENUITEM_SOUND) ? true : false;
       if (Attention has :playTone && soundEnabled) {
@@ -218,33 +221,13 @@ class GarminSDComms {
     mSettingsRequestInProgress = 0;
   }
 
-  //function onMessageReceived(msg) {
-  //  System.print("GarminSdApp.onMessageReceived - ");
-  //  System.println(msg.data.toString());
-  //}
-
-  /////////////////////////////////////////////////////////////////////
-  // Connection listener class that is used to log success and failure
-  // of message transmissions.
-  //class CommListener extends Comm.ConnectionListener {
-  //  function initialize() {
-  //   Comm.ConnectionListener.initialize();
-  // }
-
-    //function onComplete() {
-    //  System.println("Transmit Complete");
-    //}
-
-    //function onError() {
-    //  System.println("Transmit Failed");
-    //}
-  //}
 
   function onTick() {
     /** Called every second (by GarminSDDataHandler)
     in case we need to do anything timed.
     */
     //System.println("GarminSDComms.onTick()");
+    writeLog("GarminSDComms.onTick()", "");
     if (mDataRequestInProgress==1){
         var waitingTime = Time.now().subtract(mDataSendStartTime);
         if (waitingTime.greaterThan(TIMEOUT)){
