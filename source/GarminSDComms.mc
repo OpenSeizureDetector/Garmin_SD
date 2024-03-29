@@ -36,7 +36,7 @@ class GarminSDComms {
   var mDataSendStartTime = Time.now();
   var mSettingsRequestInProgress = 0;
   var mStatusRequestInProgress = 0;
-  var TIMEOUT = new Time.Duration(2);
+  var TIMEOUT = new Time.Duration(4);
   //var serverUrl = "http:192.168.43.1:8080";
   var serverUrl = "http://127.0.0.1:8080";
   var needs_update = 1;
@@ -55,8 +55,8 @@ class GarminSDComms {
     //var tagStr = "SDComms.sendAccelData()";
     //writeLog(tagStr, "sendAccelData Start");
     var dataObj = mAccelHandler.getDataJson();
-    mDataRequestInProgress = 1;
     mDataSendStartTime = Time.now();
+    mDataRequestInProgress = 1;
     Comm.makeWebRequest(
         serverUrl + "/data",
         { "dataObj" => dataObj },
