@@ -27,9 +27,7 @@ class MemTestApp extends App.AppBase {
 
   function getInitialView() as Array<Toybox.WatchUi.Views or Toybox.WatchUi.InputDelegates> or Null {
     var mainView = new MemTestView();
-    var uiComponents = new Array<Toybox.WatchUi.InputDelegates or Toybox.WatchUi.Views>[2];
-    uiComponents.add((mainView as MemTestView));
-    return uiComponents;
+    return [mainView] as Array<Toybox.WatchUi.InputDelegates or Toybox.WatchUi.Views>;
   }
 
 }

@@ -140,13 +140,14 @@ class GarminSDComms {
           ? true
           : false;
         if (Attention has :vibrate && vibrationEnabled) {
-          var vibeData = new Array<Attention.VibeProfile>[1];
-          vibeData.add(new Attention.VibeProfile(50, 500));
-          vibeData.add(new Attention.VibeProfile(0, 500));
-          vibeData.add(new Attention.VibeProfile(50, 500));
-          vibeData.add(new Attention.VibeProfile(0, 500));
-          vibeData.add(new Attention.VibeProfile(50, 500));
-          Attention.vibrate(vibeData);
+          var vibeData = [
+            new Attention.VibeProfile(50, 500),
+            new Attention.VibeProfile(0, 500),
+            new Attention.VibeProfile(50, 500),
+            new Attention.VibeProfile(0, 500),
+            new Attention.VibeProfile(50, 500),
+          ];
+          Attention.vibrate(vibeData as Array<Attention.VibeProfile>);
         }
       }
     } else {
@@ -196,9 +197,8 @@ class GarminSDComms {
       }
       var vibrationEnabled = Storage.getValue(MENUITEM_VIBRATION) ? true : false;
       if (Attention has :vibrate && vibrationEnabled) {
-        var vibeData = new Array<Attention.VibeProfile>[1];
-        vibeData.add(new Attention.VibeProfile(50, 200));
-        Attention.vibrate(vibeData);
+        var vibeData = [new Attention.VibeProfile(50, 200)];
+        Attention.vibrate(vibeData as Array<Attention.VibeProfile>);
       }
 
       if (responseCode != lastOnReceiveResponse) {
@@ -224,7 +224,7 @@ class GarminSDComms {
     in case we need to do anything timed.
     */
     //System.println("GarminSDComms.onTick()");
-    writeLog("GarminSDComms.onTick()", "");
+    // writeLog("GarminSDComms.onTick()", "");
     if (mDataRequestInProgress==true){
         var waitingTime = Time.now().subtract(mDataSendStartTime);
         if ((waitingTime as Time.Duration).greaterThan(TIMEOUT)){
@@ -233,9 +233,8 @@ class GarminSDComms {
           writeLog(tagStr, "Sending accelData failed");
           mAccelHandler.mStatusStr = Ui.loadResource(Rez.Strings.Error_abbrev).toString() + ": " + Ui.loadResource(Rez.Strings.Error_request_in_progress).toString();
           if (Attention has :vibrate) {
-            var vibeData = new Array<Attention.VibeProfile>[1];
-            vibeData.add(new Attention.VibeProfile(50, 200));
-            Attention.vibrate(vibeData);
+            var vibeData = [new Attention.VibeProfile(50, 200)];
+            Attention.vibrate(vibeData as Array<Attention.VibeProfile>);
           }
         }
     }
