@@ -25,27 +25,30 @@ class MemTestApp extends App.AppBase {
   function onStop(state as Dictionary or Null) {
   }
 
-  function getInitialView() {
+  function getInitialView() as Array<Toybox.WatchUi.Views or Toybox.WatchUi.InputDelegates> or Null {
     var mainView = new MemTestView();
-    return [mainView];
+    var uiComponents = new Array<Toybox.WatchUi.InputDelegates or Toybox.WatchUi.Views>[2];
+    uiComponents.add((mainView as MemTestView));
+    return uiComponents;
   }
 
 }
 
 
 class MemTestView extends Ui.View {
-  var width;
-  var height;
-  var myTimer;
-  var listener;
+  var width as Number = 0;
+  var height as Number = 0;
+  var myTimer as Timer.Timer;
+  var listener as Comm.ConnectionListener;
   
   function initialize() {
     View.initialize();
     listener = new Comm.ConnectionListener();
+    myTimer = new Timer.Timer();
   }
   
   // Receive the data from the web request
-  function onReceive(responseCode, data) {
+  function onReceive(responseCode as Number, data as String) as Void {
     if (responseCode == 200) {
       System.println("onReceive() success - data =");
       System.println(data);
@@ -82,19 +85,18 @@ class MemTestView extends Ui.View {
   }
 
   // Load your resources here
-  function onLayout(dc) {
+  function onLayout(dc) as Void {
     width = dc.getWidth();
     height = dc.getHeight();
-    myTimer = new Timer.Timer();
     myTimer.start(method(:timerCallback), 1000, true);
   }
   
   // Restore the state of the app and prepare the view to be shown
-  function onShow() {
+  function onShow() as Void {
   }
   
   // Update the view
-  function onUpdate(dc) {
+  function onUpdate(dc) as Void {
     System.println("GarminSDView.onUpdate()");
     var dateTime = Gregorian.info(Time.now(), Time.FORMAT_MEDIUM);
     var timeString = format(
@@ -124,7 +126,7 @@ class MemTestView extends Ui.View {
   
   
 
-  function onHide() {
+  function onHide() as Void{
     myTimer.stop();
   }
 }

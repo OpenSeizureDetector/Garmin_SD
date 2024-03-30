@@ -34,33 +34,33 @@ import Toybox.Lang;
 
 class GarminSDView extends Ui.View {
   var accelHandler as GarminSDDataHandler;
-  var width as Number or Null;
-  var halfWidth as Number or Null;
-  var height as Number or Null;
+  var width as Number = 0;
+  var halfWidth as Number = 0;
+  var height as Number = 0;
   var mSdState as GarminSDState;
-  var beatsPerMinuteAbbrev as String or Null;
-  var batteryAbbrev as String or Null;
-  var muteLabel as String or Null;
-  var fontSizeClock as Gfx.FontDefinition or Null;
-  var fontHrO2Str as Gfx.FontDefinition or Null;
-  var heightScaleLine1 as Float or Null;
-  var heightScaleLine2 as Float or Null;
-  var heightScaleLine3 as Float or Null;
-  var heightScaleLine4 as Float or Null;
-  var heightScaleLine5 as Float or Null;
+  var beatsPerMinuteAbbrev as String = "";
+  var batteryAbbrev as String = "";
+  var muteLabel as String = "";
+  var fontSizeClock as Gfx.FontDefinition = Gfx.FONT_SYSTEM_NUMBER_HOT;
+  var fontHrO2Str as Gfx.FontDefinition = Gfx.FONT_SYSTEM_NUMBER_HOT;
+  var heightScaleLine1 as Float = 0.0;
+  var heightScaleLine2 as Float = 0.0;
+  var heightScaleLine3 as Float = 0.0;
+  var heightScaleLine4 as Float = 0.0;
+  var heightScaleLine5 as Float = 0.0;
   var lastUpdatedMinute as Number = -1;
 
-  function initialize(sdState) {
+  function initialize(sdState as GarminSDState) {
     writeLog("GarminSDView.initialize()", "");
     View.initialize();
     mSdState = sdState;
     accelHandler = new GarminSDDataHandler(
-      Ui.loadResource(Rez.Strings.VersionId)
+      Ui.loadResource(Rez.Strings.VersionId).toString()
     );
     //loading resources locally
-    beatsPerMinuteAbbrev = Ui.loadResource(Rez.Strings.Beats_per_minute_abbrev);
-    batteryAbbrev = Ui.loadResource(Rez.Strings.Battery_abbrev);
-    muteLabel = Ui.loadResource(Rez.Strings.Mute_label);
+    beatsPerMinuteAbbrev = Ui.loadResource(Rez.Strings.Beats_per_minute_abbrev).toString();
+    batteryAbbrev = Ui.loadResource(Rez.Strings.Battery_abbrev).toString();
+    muteLabel = Ui.loadResource(Rez.Strings.Mute_label).toString();
     writeLog("GarminSDView.initialize()", "Complete");
   }
 
@@ -71,11 +71,11 @@ class GarminSDView extends Ui.View {
     //writeLog("GarminSDView.onTick()", "Start");
     accelHandler.onTick();
     var currentMinute = System.getClockTime().min;
-    if ((accelHandler.mComms.needs_update == 1)||(currentMinute != lastUpdatedMinute)){
+    if ((accelHandler.mComms.needs_update == true)||(currentMinute != lastUpdatedMinute)){
       writeLog("GarminSDView.onTick()", "update view");
       Ui.requestUpdate();
       lastUpdatedMinute = currentMinute;
-      accelHandler.mComms.needs_update = 0;
+      accelHandler.mComms.needs_update = false;
     }
   }
 
@@ -223,9 +223,7 @@ class GarminSDView extends Ui.View {
 class SdDelegate extends Ui.BehaviorDelegate {
   var mSdView as GarminSDView;
   var mSdState as GarminSDState;
-  var mMode;
-  var mMuteDlgOpenTime;
-  var mQuitDlgOpenTime;
+  var mQuitDlgOpenTime as Number = 0;
   const QUIT_TIMEOUT = 10; // Seconds
   const QUIT_TIMEOUT_BENMODE = 1; // Second
   const MUTE_TIMEOUT = 10; // Seconds
@@ -284,8 +282,8 @@ class SdDelegate extends Ui.BehaviorDelegate {
     /*var boolean = mSdView.accelHandler.mMute ? true : false;
     menu.addItem(
       new Ui.ToggleMenuItem(
-        Ui.loadResource(Rez.Strings.Mute_title),
-        Ui.loadResource(Rez.Strings.Mute_desc),
+        Ui.loadResource(Rez.Strings.Mute_title).toString(),
+        Ui.loadResource(Rez.Strings.Mute_desc).toString(),
         MENUITEM_MUTE,
         boolean,
         null
@@ -297,8 +295,8 @@ class SdDelegate extends Ui.BehaviorDelegate {
     boolean = Storage.getValue(MENUITEM_VIBRATION) ? true : false;
     menu.addItem(
       new Ui.ToggleMenuItem(
-        Ui.loadResource(Rez.Strings.Vibration_title),
-        Ui.loadResource(Rez.Strings.Vibration_desc),
+        Ui.loadResource(Rez.Strings.Vibration_title).toString(),
+        Ui.loadResource(Rez.Strings.Vibration_desc).toString(),
         MENUITEM_VIBRATION,
         boolean,
         null
@@ -308,8 +306,8 @@ class SdDelegate extends Ui.BehaviorDelegate {
     boolean = Storage.getValue(MENUITEM_SOUND) ? true : false;
     menu.addItem(
       new Ui.ToggleMenuItem(
-        Ui.loadResource(Rez.Strings.Sound_title),
-        Ui.loadResource(Rez.Strings.Sound_desc),
+        Ui.loadResource(Rez.Strings.Sound_title).toString(),
+        Ui.loadResource(Rez.Strings.Sound_desc).toString(),
         MENUITEM_SOUND,
         boolean,
         null
@@ -319,8 +317,8 @@ class SdDelegate extends Ui.BehaviorDelegate {
     boolean = Storage.getValue(MENUITEM_LIGHT) ? true : false;
     menu.addItem(
       new Ui.ToggleMenuItem(
-        Ui.loadResource(Rez.Strings.Light_title),
-        Ui.loadResource(Rez.Strings.Light_desc),
+        Ui.loadResource(Rez.Strings.Light_title).toString(),
+        Ui.loadResource(Rez.Strings.Light_desc).toString(),
         MENUITEM_LIGHT,
         boolean,
         null
@@ -330,8 +328,8 @@ class SdDelegate extends Ui.BehaviorDelegate {
     boolean = Storage.getValue(MENUITEM_O2SENSOR) ? true : false;
     menu.addItem(
       new Ui.ToggleMenuItem(
-        Ui.loadResource(Rez.Strings.O2_sensor_title),
-        Ui.loadResource(Rez.Strings.O2_sensor_desc),
+        Ui.loadResource(Rez.Strings.O2_sensor_title).toString(),
+        Ui.loadResource(Rez.Strings.O2_sensor_desc).toString(),
         MENUITEM_O2SENSOR,
         boolean,
         null
@@ -341,8 +339,8 @@ class SdDelegate extends Ui.BehaviorDelegate {
     boolean = Storage.getValue(MENUITEM_BENMODE) ? true : false;
     menu.addItem(
       new Ui.ToggleMenuItem(
-        Ui.loadResource(Rez.Strings.BenMode_title),
-        Ui.loadResource(Rez.Strings.BenMode_desc),
+        Ui.loadResource(Rez.Strings.BenMode_title).toString(),
+        Ui.loadResource(Rez.Strings.BenMode_desc).toString(),
         MENUITEM_BENMODE,
         boolean,
         null
@@ -362,7 +360,7 @@ class SdDelegate extends Ui.BehaviorDelegate {
     // Handled by setting mMode to MODE_QUITDLG and initialising the time that we open the dialog.
     // timeout is handled in the timerCallback function.
     writeLog("SdDelegate.onBack()", "");
-    var quitString = Ui.loadResource(Rez.Strings.Exit_app_confirmation);
+    var quitString = Ui.loadResource(Rez.Strings.Exit_app_confirmation).toString();
     var cd = new Ui.Confirmation(quitString);
     mSdState.setMode(MODE_QUITDLG);
     mQuitDlgOpenTime = Time.now().value();

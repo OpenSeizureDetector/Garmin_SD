@@ -45,19 +45,22 @@ class GarminSDApp extends App.AppBase {
   }
 
   // Return the initial view of your application here
-  function getInitialView() {
+  function getInitialView() as Array<Toybox.WatchUi.Views or Toybox.WatchUi.InputDelegates> or Null {
     writeLog("GarminSDApp.getInitialView", "");
     mainView = new GarminSDView(mSdState);
     viewDelegate = new SdDelegate(mainView, mSdState);
-    return [mainView, viewDelegate];
-    //return [mainView];
+    var uiComponents = new Array<Toybox.WatchUi.InputDelegates or Toybox.WatchUi.Views>[2];
+    uiComponents.add((mainView as GarminSDView));
+    uiComponents.add((viewDelegate as SdDelegate));
+    return uiComponents;
   }
+
   function onTick() as Void {
     /**
     Called by GarminSDView every second in case we need to do anything timed.
     */
     //writeLog("GarminSDView.onTick()", "Start");
-    mainView.onTick();
-    viewDelegate.onTick();
+    (mainView as GarminSDView).onTick();
+    (viewDelegate as SdDelegate).onTick();
   }
 }
