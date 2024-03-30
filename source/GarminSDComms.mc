@@ -26,6 +26,7 @@ using Toybox.Communications as Comm;
 using Toybox.Attention as Attention;
 using Toybox.WatchUi as Ui;
 import Toybox.Application.Storage;
+import Toybox.Lang;
 
 class GarminSDComms {
   var mAccelHandler = null;
@@ -106,7 +107,7 @@ class GarminSDComms {
   }
 
   // Receive the data from the web request - should be a json string
-  function onSdStatusReceive(responseCode, data) {
+  function onSdStatusReceive(responseCode as Number, data as Dictionary) as Void {
     var tagStr = "SDComms.onSdStatusReceive";
     // writeLog(tagStr, "ResponseCode="+responseCode);
     if (responseCode == 200) {
@@ -168,7 +169,7 @@ class GarminSDComms {
   }
 
   // Receive the response from the sendAccelData web request.
-  function onDataReceive(responseCode, data) {
+  function onDataReceive(responseCode as Number, data as String) as Void  {
     var tagStr = "SDComms.onDataReceive()";
     var sendDuration = Time.now().subtract(mDataSendStartTime);
     writeLog(tagStr, "sendAccelData End - Send Duration = " + sendDuration.value());
@@ -216,13 +217,13 @@ class GarminSDComms {
   }
 
   // Receive the response from the sendSettings web request.
-  function onSettingsReceive(responseCode, data) {
+  function onSettingsReceive(responseCode as Number, data as String) as Void {
     writeLog("SDComms.onSettingsReceive()", "");
     mSettingsRequestInProgress = 0;
   }
 
 
-  function onTick() {
+  function onTick() as Void {
     /** Called every second (by GarminSDDataHandler)
     in case we need to do anything timed.
     */

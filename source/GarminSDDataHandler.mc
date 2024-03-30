@@ -29,22 +29,26 @@ using Toybox.Sensor;
 using Toybox.System;
 using Toybox.Timer;
 import Toybox.Application.Storage;
+import Toybox.Lang;
 
 
 class GarminSDDataHandler {
-  const ANALYSIS_PERIOD = 5;
-  const SAMPLE_PERIOD = 1;
-  const SAMPLE_FREQUENCY = 25;
-  const MUTE_TIMER_PERIOD = 5 * 60 * 1000; // 5 min in ms
+  const ANALYSIS_PERIOD as Number = 5;
+  const SAMPLE_PERIOD as Number = 1;
+  const SAMPLE_FREQUENCY as Number = 25;
+  const MUTE_TIMER_PERIOD as Number = 5 * 60 * 1000; // 5 min in ms
   //const MUTE_TIMER_PERIOD = 20 * 1000;   // 20 sec in ms
 
-  var mSamplesX = new [ANALYSIS_PERIOD * SAMPLE_FREQUENCY];
-  var mSamplesY = new [ANALYSIS_PERIOD * SAMPLE_FREQUENCY];
-  var mSamplesZ = new [ANALYSIS_PERIOD * SAMPLE_FREQUENCY];
+  //var mSamplesX as Dictionary<Number, Float or Number> = new [ANALYSIS_PERIOD * SAMPLE_FREQUENCY];
+  //var mSamplesY as Dictionary<Number, Float or Number>  = new [ANALYSIS_PERIOD * SAMPLE_FREQUENCY];
+  //var mSamplesZ as Dictionary<Number, Float or Number>  = new [ANALYSIS_PERIOD * SAMPLE_FREQUENCY];
+  var mSamplesX as Array<Float or Number> = new [ANALYSIS_PERIOD * SAMPLE_FREQUENCY];
+  var mSamplesY as Array<Float or Number>  = new [ANALYSIS_PERIOD * SAMPLE_FREQUENCY];
+  var mSamplesZ as Array<Float or Number>  = new [ANALYSIS_PERIOD * SAMPLE_FREQUENCY];
 
-  var nSamp = 0;
-  var mHR = 0;
-  var mO2sat = 0;
+  var nSamp as Number = 0;
+  var mHR as Number = 0;
+  var mO2sat as Number = 0;
   var mMute = 0;
   var mMuteTimer;
   var mStatusStr = "---";
@@ -93,7 +97,7 @@ class GarminSDDataHandler {
     var sysStats = System.getSystemStats();
     var deviceSettings = System.getDeviceSettings();
     var ciqVer = deviceSettings.monkeyVersion;
-    var ciqVerStr = Lang.format("$1$.$2$.$3$", ciqVer);
+    var ciqVerStr = format("$1$.$2$.$3$", ciqVer);
     var jsonStr = "{ dataType: 'settings'";
     jsonStr = jsonStr + ", analysisPeriod: " + ANALYSIS_PERIOD;
     jsonStr = jsonStr + ", sampleFreq: " + SAMPLE_FREQUENCY;
@@ -106,7 +110,7 @@ class GarminSDDataHandler {
     return jsonStr;
   }
 
-  function muteTimerCallback() {
+  function muteTimerCallback() as Void {
     writeLog("muteTimerCallback()", "");
     mMute = 0;
   }
@@ -123,12 +127,12 @@ class GarminSDDataHandler {
   }
 
   // Prints acclerometer data that is recevied from the system
-  function accel_callback(sensorData as Toybox.Sensor.AccelerometerData) {
+  function accel_callback(sensorData as Toybox.Sensor.SensorData) as Void {
     //var tagStr = "DataHandler.accel_callback()";
     //System.println("accel_callback()");
 
     var iStart = nSamp * SAMPLE_PERIOD * SAMPLE_FREQUENCY;
-    //System.println(Lang.format("iStart=$1$, ns=$2$, nSamp=$3$",[iStart,SAMPLE_PERIOD*SAMPLE_FREQUENCY,nSamp]));
+    //System.println(format("iStart=$1$, ns=$2$, nSamp=$3$",[iStart,SAMPLE_PERIOD*SAMPLE_FREQUENCY,nSamp]));
     for (var i = 0; i < SAMPLE_PERIOD * SAMPLE_FREQUENCY; i = i + 1) {
       mSamplesX[iStart + i] = sensorData.accelerometerData.x[i];
       mSamplesY[iStart + i] = sensorData.accelerometerData.y[i];
@@ -190,7 +194,7 @@ class GarminSDDataHandler {
       Sensor.setEnabledSensors([Sensor.SENSOR_HEARTRATE]);
     }
   }
-  function onTick() {
+  function onTick() as Void {
     /**
     Called by GarminSDView every second in case we need to do anything timed.
     */
