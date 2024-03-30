@@ -2,7 +2,7 @@ using Toybox.System;
 import Toybox.Lang;
 
 
-function writeLog(tagStr, msgStr) as Void {
+function writeLog(tagStr as String, msgStr as String?) as Void {
   var myTime = System.getClockTime();
   var timeString = Lang.format("$1$:$2$:$3$", [
       myTime.hour.format("%02d"),
