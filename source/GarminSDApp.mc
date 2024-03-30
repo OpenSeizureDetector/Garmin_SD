@@ -7,34 +7,35 @@
 using Toybox.Application as App;
 using Toybox.System;
 using Toybox.Timer;
+import Toybox.Lang;
 
 
 class GarminSDApp extends App.AppBase {
-  var mSdState;
-  var mTimer as Toybox.Timer;
-  var mainView as GarminSDView;
-  var viewDelegate as SdDelegate;
+  var mSdState as GarminSDState;
+  var mTimer as Toybox.Timer.Timer;
+  var mainView as GarminSDView or Null;
+  var viewDelegate as SdDelegate or Null;
 
   function initialize() {
     writeLog("GarminSdApp.initialize", "");
     AppBase.initialize();
     mSdState = new GarminSDState();
+    mTimer = new Timer.Timer();
   }
 
   // onStart() is called on application start up
-  function onStart(state) {
+  function onStart(state as Dictionary or Null) {
     if (state != null) {
       writeLog("GarminSDApp.onStart()", "State=" + state.toString());
     } else {
       writeLog("GarminSDApp.onStart()", "State= null");
     }
     // Start a timer that calls timerCallback every second
-    mTimer = new Timer.Timer();
     mTimer.start(method(:onTick), 1000, true);
   }
 
   // onStop() is called when your application is exiting
-  function onStop(state) {
+  function onStop(state as Dictionary or Null) {
     if (state != null) {
       writeLog("GarminSDApp.onStop()", "State=" + state.toString());
     } else {
@@ -51,7 +52,7 @@ class GarminSDApp extends App.AppBase {
     return [mainView, viewDelegate];
     //return [mainView];
   }
-  function onTick() {
+  function onTick() as Void {
     /**
     Called by GarminSDView every second in case we need to do anything timed.
     */

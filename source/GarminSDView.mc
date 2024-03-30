@@ -27,28 +27,28 @@ using Toybox.WatchUi as Ui;
 using Toybox.Graphics as Gfx;
 using Toybox.System;
 using Toybox.Time;
-using Toybox.Lang;
 using Toybox.Application as App;
 import Toybox.Application.Storage;
+import Toybox.Lang;
 
 
 class GarminSDView extends Ui.View {
-  var accelHandler;
-  var width;
-  var halfWidth;
-  var height;
-  var mSdState;
-  var beatsPerMinuteAbbrev;
-  var batteryAbbrev;
-  var muteLabel;
-  var fontSizeClock;
-  var fontHrO2Str;
-  var heightScaleLine1;
-  var heightScaleLine2;
-  var heightScaleLine3;
-  var heightScaleLine4;
-  var heightScaleLine5;
-  var lastUpdatedMinute = -1;
+  var accelHandler as GarminSDDataHandler;
+  var width as Number or Null;
+  var halfWidth as Number or Null;
+  var height as Number or Null;
+  var mSdState as GarminSDState;
+  var beatsPerMinuteAbbrev as String or Null;
+  var batteryAbbrev as String or Null;
+  var muteLabel as String or Null;
+  var fontSizeClock as Gfx.FontDefinition or Null;
+  var fontHrO2Str as Gfx.FontDefinition or Null;
+  var heightScaleLine1 as Float or Null;
+  var heightScaleLine2 as Float or Null;
+  var heightScaleLine3 as Float or Null;
+  var heightScaleLine4 as Float or Null;
+  var heightScaleLine5 as Float or Null;
+  var lastUpdatedMinute as Number = -1;
 
   function initialize(sdState) {
     writeLog("GarminSDView.initialize()", "");
@@ -64,7 +64,7 @@ class GarminSDView extends Ui.View {
     writeLog("GarminSDView.initialize()", "Complete");
   }
 
-  function onTick() {
+  function onTick() as Void {
     /**
     Called by GarminSDView every second in case we need to do anything timed.
     */
@@ -221,8 +221,8 @@ class GarminSDView extends Ui.View {
 }
 
 class SdDelegate extends Ui.BehaviorDelegate {
-  var mSdView;
-  var mSdState;
+  var mSdView as GarminSDView;
+  var mSdState as GarminSDState;
   var mMode;
   var mMuteDlgOpenTime;
   var mQuitDlgOpenTime;
@@ -231,7 +231,7 @@ class SdDelegate extends Ui.BehaviorDelegate {
   const MUTE_TIMEOUT = 10; // Seconds
 
 
-  function initialize(sdView, sdState) {
+  function initialize(sdView as GarminSDView, sdState as GarminSDState) {
     writeLog("SdDelegate.initialize()", "");
     mSdView = sdView;
     mSdState = sdState;
@@ -257,7 +257,7 @@ class SdDelegate extends Ui.BehaviorDelegate {
     BehaviorDelegate.initialize();
   }
 
-  function onTick() {
+  function onTick() as Void {
     //System.println("SdDelegate.timerCallback()");
     // Handle Timeout of Quit Dialog
     if (mSdState.getMode() == MODE_QUITDLG) {
@@ -391,11 +391,11 @@ class SdDelegate extends Ui.BehaviorDelegate {
 
 class QuitDelegate extends Ui.ConfirmationDelegate {
   // Handles user response to the quit confirmation dialog.
-  var mResponseReceived;
-  var mSdView;
-  var mSdState;
+  var mResponseReceived as Boolean;
+  var mSdView as GarminSDView;
+  var mSdState as GarminSDState;
 
-  function initialize(sdView, sdState) {
+  function initialize(sdView as GarminSDView, sdState as GarminSDState) {
     writeLog("QuitDelegate.initialize()", "");
     mSdView = sdView;
     mSdState = sdState;
@@ -432,9 +432,9 @@ class GarminSDSettingsMenu extends Ui.Menu2 {
 
 //! Input handler for the app settings menu
 class GarminSDSettingsMenuDelegate extends Ui.Menu2InputDelegate {
-  var mAccelHandler;
+  var mAccelHandler as GarminSDDataHandler;
   //! Constructor
-  public function initialize(accelHandler) {
+  public function initialize(accelHandler as GarminSDDataHandler) {
     Menu2InputDelegate.initialize();
     mAccelHandler = accelHandler;
   }
@@ -442,9 +442,9 @@ class GarminSDSettingsMenuDelegate extends Ui.Menu2InputDelegate {
   //! Handle a menu item being selected
   //! @param menuItem The menu item selected
   public function onSelect(menuItem as Ui.MenuItem) as Void {
-    if (menuItem instanceof ToggleMenuItem) {
+    if (menuItem instanceof Ui.ToggleMenuItem) {
         writeLog("menuDelegate.onSelect()", "id=" + menuItem.getId());
-        Storage.setValue(menuItem.getId() as Ui.Number, menuItem.isEnabled());
+        Storage.setValue(menuItem.getId() as Lang.Number, menuItem.isEnabled());
     }
   }
 }
