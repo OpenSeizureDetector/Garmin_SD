@@ -40,8 +40,8 @@ class GarminSDDataHandler {
   //const MUTE_TIMER_PERIOD = 20 * 1000;   // 20 sec in ms
 
   var mSamplesX as Array<Float or Number> = new Array<Float or Number>[ANALYSIS_PERIOD * SAMPLE_FREQUENCY];
-  var mSamplesY as Array<Float or Number>  = new Array<Float or Number>[ANALYSIS_PERIOD * SAMPLE_FREQUENCY];
-  var mSamplesZ as Array<Float or Number>  = new Array<Float or Number>[ANALYSIS_PERIOD * SAMPLE_FREQUENCY];
+  var mSamplesY as Array<Float or Number> = new Array<Float or Number>[ANALYSIS_PERIOD * SAMPLE_FREQUENCY];
+  var mSamplesZ as Array<Float or Number> = new Array<Float or Number>[ANALYSIS_PERIOD * SAMPLE_FREQUENCY];
 
   var nSamp as Number = 0;
   var mHR as Number or Null = 0;
@@ -181,13 +181,14 @@ class GarminSDDataHandler {
     // Intialise heart rate monitoring.
     // But only initialise O2sat sensor if enabled in settings (default is true)
     writeLog(tagStr,"mO2SensorIsEnabled = " + mO2SensorIsEnabled);
-    var sensors = new Array<Sensor.SensorType>[2];
-    sensors.add(Sensor.SENSOR_HEARTRATE);
     if ((Sensor has :SENSOR_PULSE_OXYMETRY) && (mO2SensorIsEnabled == true)) {
       writeLog(tagStr,"Enabling HR and O2SAT Sensors");
-      sensors.add(Sensor.SENSOR_PULSE_OXIMETRY);
+      Sensor.setEnabledSensors(([Sensor.SENSOR_HEARTRATE, Sensor.SENSOR_PULSE_OXIMETRY] as Array<Sensor.SensorType>));
     }
-    Sensor.setEnabledSensors(sensors);
+    else {
+      writeLog(tagStr,"Enabling HR only");
+      Sensor.setEnabledSensors(([Sensor.SENSOR_HEARTRATE] as Array<Sensor.SensorType>));
+    }
   }
   function onTick() as Void {
     /**
@@ -199,8 +200,7 @@ class GarminSDDataHandler {
   function onStop() as Void {
     writeLog("DataHandler.onStop()", "");
     Sensor.unregisterSensorDataListener();
-    var sensors = new Array<Sensor.SensorType>[0];
-    Sensor.setEnabledSensors(sensors);
+      Sensor.setEnabledSensors(([] as Array<Sensor.SensorType>));
     // this is NOT in the CIQ api and is a Garmin bug.
     // https://forums.garmin.com/developer/connect-iq/f/discussion/872/battery-drain-when-connectiq-app-is-not-running/1661071#1661071
     Sensor.enableSensorEvents(null);
