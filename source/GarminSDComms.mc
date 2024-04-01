@@ -229,6 +229,7 @@ class GarminSDComms {
         var waitingTime = Time.now().subtract(mDataSendStartTime);
         if ((waitingTime as Time.Duration).greaterThan(TIMEOUT)){
           mDataRequestInProgress = false;
+          Comm.cancelAllRequests();
           var tagStr = "SDComms.onTick()";
           writeLog(tagStr, "Sending accelData failed");
           mAccelHandler.mStatusStr = Ui.loadResource(Rez.Strings.Error_abbrev).toString() + ": " + Ui.loadResource(Rez.Strings.Error_request_in_progress).toString();
