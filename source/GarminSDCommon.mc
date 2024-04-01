@@ -1,8 +1,8 @@
 using Toybox.System;
-using Toybox.Lang;
+import Toybox.Lang;
 
 
-function writeLog(tagStr, msgStr) {
+function writeLog(tagStr as String, msgStr as String?) as Void {
   var myTime = System.getClockTime();
   var timeString = Lang.format("$1$:$2$:$3$", [
       myTime.hour.format("%02d"),

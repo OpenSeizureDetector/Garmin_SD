@@ -29,32 +29,33 @@ using Toybox.Sensor;
 using Toybox.System;
 using Toybox.Timer;
 import Toybox.Application.Storage;
+import Toybox.Lang;
 
 
 class GarminSDDataHandler {
-  const ANALYSIS_PERIOD = 5;
-  const SAMPLE_PERIOD = 1;
-  const SAMPLE_FREQUENCY = 25;
-  const MUTE_TIMER_PERIOD = 5 * 60 * 1000; // 5 min in ms
+  const ANALYSIS_PERIOD as Number = 5;
+  const SAMPLE_PERIOD as Number = 1;
+  const SAMPLE_FREQUENCY as Number = 25;
+  const MUTE_TIMER_PERIOD as Number = 5 * 60 * 1000; // 5 min in ms
   //const MUTE_TIMER_PERIOD = 20 * 1000;   // 20 sec in ms
 
-  var mSamplesX = new [ANALYSIS_PERIOD * SAMPLE_FREQUENCY];
-  var mSamplesY = new [ANALYSIS_PERIOD * SAMPLE_FREQUENCY];
-  var mSamplesZ = new [ANALYSIS_PERIOD * SAMPLE_FREQUENCY];
+  var mSamplesX as Array<Float or Number> = new Array<Float or Number>[ANALYSIS_PERIOD * SAMPLE_FREQUENCY];
+  var mSamplesY as Array<Float or Number> = new Array<Float or Number>[ANALYSIS_PERIOD * SAMPLE_FREQUENCY];
+  var mSamplesZ as Array<Float or Number> = new Array<Float or Number>[ANALYSIS_PERIOD * SAMPLE_FREQUENCY];
 
-  var nSamp = 0;
-  var mHR = 0;
-  var mO2sat = 0;
-  var mMute = 0;
-  var mMuteTimer;
-  var mStatusStr = "---";
-  var mComms = null;
-  var mVersionStr = "";
-  var mO2SensorIsEnabled = true;
+  var nSamp as Number = 0;
+  var mHR as Number or Null = 0;
+  var mO2sat as Number or Null = 0;
+  var mMute as Boolean = false;
+  var mMuteTimer as Toybox.Timer.Timer or Null;
+  var mStatusStr as String = "---";
+  var mComms as GarminSDComms;
+  var mVersionStr as String = "";
+  var mO2SensorIsEnabled as Boolean = true;
 
   ///////////////
   // Constructor
-  function initialize(versionStr) {
+  function initialize(versionStr as String) {
     var tagStr = "DataHandler.initialize()";
     writeLog(tagStr, "");
     mO2SensorIsEnabled = Storage.getValue(MENUITEM_O2SENSOR) ? true : false;
@@ -66,7 +67,7 @@ class GarminSDDataHandler {
   }
 
   // Return the current set of data as a JSON String
-  function getDataJson() {
+  function getDataJson() as String {
     var i;
     var jsonStr = "{dataType:'raw',";
 
@@ -83,56 +84,57 @@ class GarminSDDataHandler {
 
     jsonStr = jsonStr + "HR:" + mHR;
     jsonStr = jsonStr + ",O2sat:" + mO2sat;
-    jsonStr = jsonStr + ",Mute:" + mMute;
+    jsonStr = jsonStr + ",Mute:" + mMute.toString();
     jsonStr = jsonStr + "}";
-    return jsonStr;
+    return jsonStr as String;
   }
 
   // Return the current set of data as a JSON String
-  function getSettingsJson() {
+  function getSettingsJson() as String {
     var sysStats = System.getSystemStats();
     var deviceSettings = System.getDeviceSettings();
     var ciqVer = deviceSettings.monkeyVersion;
-    var ciqVerStr = Lang.format("$1$.$2$.$3$", ciqVer);
+    var ciqVerStr = format("$1$.$2$.$3$", ciqVer);
     var jsonStr = "{ dataType: 'settings'";
-    jsonStr = jsonStr + ", analysisPeriod: " + ANALYSIS_PERIOD;
-    jsonStr = jsonStr + ", sampleFreq: " + SAMPLE_FREQUENCY;
-    jsonStr = jsonStr + ", battery: " + sysStats.battery;
-    jsonStr = jsonStr + ", watchPartNo: " + deviceSettings.partNumber;
+    jsonStr = jsonStr + ", analysisPeriod: " + ANALYSIS_PERIOD.toString();
+    jsonStr = jsonStr + ", sampleFreq: " + SAMPLE_FREQUENCY.toString();
+    jsonStr = jsonStr + ", battery: " + sysStats.battery.toString();
+    jsonStr = jsonStr + ", watchPartNo: " + deviceSettings.partNumber.toString();
     jsonStr = jsonStr + ", watchFwVersion: " + ciqVerStr;
     jsonStr = jsonStr + ", sdVersion: " + mVersionStr;
     jsonStr = jsonStr + ", sdName: GarminSD";
     jsonStr = jsonStr + "}";
-    return jsonStr;
+    return jsonStr as String;
   }
 
-  function muteTimerCallback() {
+  function muteTimerCallback() as Void {
     writeLog("muteTimerCallback()", "");
-    mMute = 0;
+    mMute = false;
   }
 
-  function muteAlarms() {
+  function muteAlarms() as Void{
     writeLog("muteAlarms()","");
     // If the timer is already running, stop it then re-start it.
-    if (mMute == 1) {
-      mMuteTimer.stop();
+    if (mMute == true) {
+      (mMuteTimer as Timer.Timer).stop();
     }
     mMuteTimer = new Timer.Timer();
     mMuteTimer.start(method(:muteTimerCallback), MUTE_TIMER_PERIOD, false);
-    mMute = 1;
+    mMute = true;
   }
 
   // Prints acclerometer data that is recevied from the system
-  function accel_callback(sensorData as Toybox.Sensor.AccelerometerData) {
+  function accel_callback(sensorData as Toybox.Sensor.SensorData) as Void {
     //var tagStr = "DataHandler.accel_callback()";
     //System.println("accel_callback()");
 
     var iStart = nSamp * SAMPLE_PERIOD * SAMPLE_FREQUENCY;
-    //System.println(Lang.format("iStart=$1$, ns=$2$, nSamp=$3$",[iStart,SAMPLE_PERIOD*SAMPLE_FREQUENCY,nSamp]));
+    //System.println(format("iStart=$1$, ns=$2$, nSamp=$3$",[iStart,SAMPLE_PERIOD*SAMPLE_FREQUENCY,nSamp]));
+    var accelData = sensorData.accelerometerData;
     for (var i = 0; i < SAMPLE_PERIOD * SAMPLE_FREQUENCY; i = i + 1) {
-      mSamplesX[iStart + i] = sensorData.accelerometerData.x[i];
-      mSamplesY[iStart + i] = sensorData.accelerometerData.y[i];
-      mSamplesZ[iStart + i] = sensorData.accelerometerData.z[i];
+      mSamplesX[iStart + i] = (accelData as Sensor.AccelerometerData).x[i];
+      mSamplesY[iStart + i] = (accelData as Sensor.AccelerometerData).y[i];
+      mSamplesZ[iStart + i] = (accelData as Sensor.AccelerometerData).z[i];
     }
     nSamp = nSamp + 1;
 
@@ -155,7 +157,7 @@ class GarminSDDataHandler {
 
 
   // Initializes the view and registers for accelerometer data
-  function onStart() {
+  function onStart() as Void {
     var tagStr = "DataHandler.onStart()";
     var maxSampleRate = Sensor.getMaxSampleRate();
     writeLog(tagStr, "maxSampleRate = "+maxSampleRate);
@@ -181,26 +183,24 @@ class GarminSDDataHandler {
     writeLog(tagStr,"mO2SensorIsEnabled = " + mO2SensorIsEnabled);
     if ((Sensor has :SENSOR_PULSE_OXYMETRY) && (mO2SensorIsEnabled == true)) {
       writeLog(tagStr,"Enabling HR and O2SAT Sensors");
-      Sensor.setEnabledSensors([
-        Sensor.SENSOR_HEARTRATE,
-        Sensor.SENSOR_PULSE_OXIMETRY,
-      ]);
-    } else {
-      writeLog(tagStr,"Enabling HR Sensor only");
-      Sensor.setEnabledSensors([Sensor.SENSOR_HEARTRATE]);
+      Sensor.setEnabledSensors(([Sensor.SENSOR_HEARTRATE, Sensor.SENSOR_PULSE_OXIMETRY] as Array<Sensor.SensorType>));
+    }
+    else {
+      writeLog(tagStr,"Enabling HR only");
+      Sensor.setEnabledSensors(([Sensor.SENSOR_HEARTRATE] as Array<Sensor.SensorType>));
     }
   }
-  function onTick() {
+  function onTick() as Void {
     /**
     Called by GarminSDView every second in case we need to do anything timed.
     */
     //writeLog("GarminSDView.onTick()", "Start");
     mComms.onTick();
   }
-  function onStop() {
+  function onStop() as Void {
     writeLog("DataHandler.onStop()", "");
     Sensor.unregisterSensorDataListener();
-    Sensor.setEnabledSensors([]);
+      Sensor.setEnabledSensors(([] as Array<Sensor.SensorType>));
     // this is NOT in the CIQ api and is a Garmin bug.
     // https://forums.garmin.com/developer/connect-iq/f/discussion/872/battery-drain-when-connectiq-app-is-not-running/1661071#1661071
     Sensor.enableSensorEvents(null);
