@@ -19,8 +19,8 @@ and sends it to the phone.
 If the user is doing an activity that is likely to result in a false alarm he/she can press one of the watch buttons or screen to mute the system for 5 minutes to avoid a false alarm.
 
 # Build Environment
-  * Install the latest stable release of the Garmin ConnectIQ Software Development Kit (SDK) from (https://developer.garmin.com/connect-iq/sdk/).  This installs the Garmin SDK Manager.
-  * Use the SDK manager to install the latest stable SDK (version 6.4.2 minimum)
+  * Install the latest stable release of the Garmin ConnectIQ Software Developmetn Kit (SDK) from (https://developer.garmin.com/connect-iq/sdk/).  This installs the Garmin SDK Manager.
+  * Use the SDK manager to install the latest stable SDK.   **SDK version 6.4.2 or higher is required** to avoid type checking errors.
   * Use the SDK manager to install some watch emulators (in particular the VenuSQ which is the current 'reference' device).
 
 # Build Instructions (command line)
@@ -40,7 +40,7 @@ Note, this used to be easy until Garmin introduced the SDK manager - now you nee
   * Install [Visual Studio Code](https://code.visualstudio.com/), and start it, opening the WatchApp folder of this repository
   * Install the Monkey C extension from within vscode.
   * Set up the Monkey C extension to use the installed SDK.
-  * In the Monkey C extension settings, set Monkey C: Type Check Level to 'OFF' - this is because the GarminSD code is written without veriable types specified, but the newer versions of the compiler now do type checking (see Issue #21).
+  * In the Monkey C extension settings, set Monkey C: Type Check Level to 'INFORMATIVE' ('Srict' typechecking results in an error).)
   * Press the Run and Debug (triangle) icon on the left hand side of the screen).   This opens an extra panel with a Run (triangle) icon at the top of the screen.
   * Select Run (Triange Icon)
   * A popup window should appear showing your installed watches - select one of them (e.g. VenuSQ).
