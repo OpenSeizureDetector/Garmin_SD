@@ -71,7 +71,7 @@ class GarminSDComms {
 
   function sendSettings() as Void {
     var dataObj = mAccelHandler.getSettingsJson();
-    writeLog("SDComms.sendSettings()", "");
+    // writeLog("SDComms.sendSettings()", "");
     mSettingsRequestInProgress = true;
     Comm.makeWebRequest(
       serverUrl + "/settings",
@@ -87,7 +87,7 @@ class GarminSDComms {
   }
 
   function getSdStatus() as Void {
-    writeLog("SDComms.getSdStatus()", "");
+    // writeLog("SDComms.getSdStatus()", "");
     mStatusRequestInProgress = true;
     Comm.makeWebRequest(
       serverUrl + "/data",
@@ -170,13 +170,13 @@ class GarminSDComms {
   function onDataReceive(responseCode as Number, data as String) as Void  {
     var tagStr = "SDComms.onDataReceive()";
     var sendDuration = Time.now().subtract(mDataSendStartTime);
-    writeLog(tagStr, "sendAccelData End - Send Duration = " + sendDuration.value());
+    //writeLog(tagStr, "sendAccelData End - Send Duration = " + sendDuration.value());
     if (responseCode == 200) {
       if (responseCode != lastOnReceiveResponse || !data.equals(lastOnReceiveData)) {
 
         // writeLog(tagStr, "needs update 4");
         needs_update = true;
-        writeLog(tagStr, "Success - data =" + data);
+        //writeLog(tagStr, "Success - data =" + data);
       } else {
         // Don't write repeated log entries.
       }
@@ -214,7 +214,7 @@ class GarminSDComms {
 
   // Receive the response from the sendSettings web request.
   function onSettingsReceive(responseCode as Number, data as String) as Void {
-    writeLog("SDComms.onSettingsReceive()", "");
+    //writeLog("SDComms.onSettingsReceive()", "");
     mSettingsRequestInProgress = false;
   }
 
