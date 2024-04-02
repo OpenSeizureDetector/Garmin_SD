@@ -232,7 +232,9 @@ class GarminSDComms {
           var tagStr = "SDComms.onTick()";
           writeLog(tagStr, "Sending accelData failed");
           mAccelHandler.mStatusStr = Ui.loadResource(Rez.Strings.Error_abbrev).toString() + ": " + Ui.loadResource(Rez.Strings.Error_request_in_progress).toString();
-          if (Attention has :vibrate) {
+
+      var vibrationEnabled = Storage.getValue(MENUITEM_VIBRATION) ? true : false;
+      if (Attention has :vibrate && vibrationEnabled) {
             var vibeData = [new Attention.VibeProfile(50, 200)];
             Attention.vibrate(vibeData as Array<Attention.VibeProfile>);
           }
