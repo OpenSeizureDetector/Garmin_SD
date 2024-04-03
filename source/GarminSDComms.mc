@@ -89,18 +89,18 @@ class GarminSDComms {
   function getSdStatus() as Void {
     writeLog("SDComms.getSdStatus()", "");
     mStatusRequestInProgress = true;
-    //Comm.makeWebRequest(
-    //  serverUrl + "/data",
-    //  {},
-    //  {
-    //    :method => Communications.HTTP_REQUEST_METHOD_GET,
-    //    :headers => {
-    //     "Content-Type" => Communications.REQUEST_CONTENT_TYPE_URL_ENCODED,
-    //    },
-    //    :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON,
-    //  },
-    //  method(:onSdStatusReceive)
-    //);
+    Comm.makeWebRequest(
+      serverUrl + "/data",
+      {},
+      {
+        :method => Communications.HTTP_REQUEST_METHOD_GET,
+        :headers => {
+         "Content-Type" => Communications.REQUEST_CONTENT_TYPE_URL_ENCODED,
+        },
+        :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON,
+      },
+      method(:onSdStatusReceive)
+    );
     //System.println("getSdStatus Exiting");
   }
 
