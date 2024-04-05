@@ -95,7 +95,7 @@ class GarminSDComms {
       {
         :method => Communications.HTTP_REQUEST_METHOD_GET,
         :headers => {
-          "Content-Type" => Communications.REQUEST_CONTENT_TYPE_URL_ENCODED,
+         "Content-Type" => Communications.REQUEST_CONTENT_TYPE_URL_ENCODED,
         },
         :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON,
       },
@@ -172,6 +172,8 @@ class GarminSDComms {
     var sendDuration = Time.now().subtract(mDataSendStartTime);
     //writeLog(tagStr, "sendAccelData End - Send Duration = " + sendDuration.value());
     if (responseCode == 200) {
+      mAccelHandler.mStatusStr = "---";
+
       if (responseCode != lastOnReceiveResponse || !data.equals(lastOnReceiveData)) {
 
         // writeLog(tagStr, "needs update 4");
@@ -227,13 +229,15 @@ class GarminSDComms {
     // writeLog("GarminSDComms.onTick()", "");
     if (mDataRequestInProgress==true){
         var waitingTime = Time.now().subtract(mDataSendStartTime);
-        if ((waitingTime as Time.Duration).greaterThan(TIMEOUT)){
-          mDataRequestInProgress = false;
+        if ((waitingTime as Time.Duration).compare(TIMEOUT) >= 0){
           Comm.cancelAllRequests();
           var tagStr = "SDComms.onTick()";
           writeLog(tagStr, "Sending accelData failed");
           mAccelHandler.mStatusStr = Ui.loadResource(Rez.Strings.Error_abbrev).toString() + ": " + Ui.loadResource(Rez.Strings.Error_request_in_progress).toString();
-          if (Attention has :vibrate) {
+          mDataRequestInProgress = false;
+
+      var vibrationEnabled = Storage.getValue(MENUITEM_VIBRATION) ? true : false;
+      if (Attention has :vibrate && vibrationEnabled) {
             var vibeData = [new Attention.VibeProfile(50, 200)];
             Attention.vibrate(vibeData as Array<Attention.VibeProfile>);
           }
