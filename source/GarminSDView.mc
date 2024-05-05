@@ -72,7 +72,7 @@ class GarminSDView extends Ui.View {
     accelHandler.onTick();
     var currentMinute = System.getClockTime().min;
     if ((accelHandler.mComms.needs_update == true)||(currentMinute != lastUpdatedMinute)){
-      writeLog("GarminSDView.onTick()", "update view");
+      //writeLog("GarminSDView.onTick()", "update view");
       Ui.requestUpdate();
       lastUpdatedMinute = currentMinute;
       accelHandler.mComms.needs_update = false;
@@ -81,7 +81,7 @@ class GarminSDView extends Ui.View {
 
   // Load your resources here
   function onLayout(dc) {
-    writeLog("GarminSDView.onLayout()", "");
+    //writeLog("GarminSDView.onLayout()", "");
     width = dc.getWidth();
     halfWidth = width/2;
     height = dc.getHeight();
