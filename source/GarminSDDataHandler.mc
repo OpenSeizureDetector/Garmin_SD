@@ -70,7 +70,10 @@ class GarminSDDataHandler {
   function getDataJson() as String {
     var i;
     var jsonStr = "{dataType:'raw',";
-
+    var localNMute = 0;
+    if (mMute == true) {
+      localNMute = 1;
+    }
     jsonStr = jsonStr + "data3D:[";
     for (i = 0; i < ANALYSIS_PERIOD * SAMPLE_FREQUENCY; i = i + 1) {
         if (i > 0) {
@@ -84,7 +87,7 @@ class GarminSDDataHandler {
 
     jsonStr = jsonStr + "HR:" + mHR;
     jsonStr = jsonStr + ",O2sat:" + mO2sat;
-    jsonStr = jsonStr + ",Mute:" + mMute.toString();
+    jsonStr = jsonStr + ",Mute:" + localNMute.toString();
     jsonStr = jsonStr + "}";
     return jsonStr as String;
   }
