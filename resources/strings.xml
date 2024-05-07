@@ -1,6 +1,6 @@
 <resources>
   <string id="AppName">GarminSD</string>
-  <string id="VersionId">V2.0.5</string>
+  <string id="VersionId">V2.0.6</string>
   <string id="Beats_per_minute_abbrev">bpm</string>
   <string id="Battery_abbrev">bat</string>
   <string id="Error_abbrev">ERR</string>
