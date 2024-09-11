@@ -25,66 +25,135 @@
 
 using Toybox.WatchUi as Ui;
 using Toybox.Graphics as Gfx;
+using Toybox.System;
 using Toybox.Time;
-using Toybox.Time.Gregorian;
-using Toybox.Timer;
-using Toybox.Lang;
 using Toybox.Application as App;
 import Toybox.Application.Storage;
+import Toybox.Lang;
 
 
 class GarminSDView extends Ui.View {
-  var accelHandler;
-  var width;
-  var height;
-  var mSdState;
+  var accelHandler as GarminSDDataHandler;
+  var width as Number = 0;
+  var halfWidth as Number = 0;
+  var height as Number = 0;
+  var mSdState as GarminSDState;
+  var beatsPerMinuteAbbrev as String = "";
+  var batteryAbbrev as String = "";
+  var muteLabel as String = "";
+  var fontSizeClock as Gfx.FontDefinition = Gfx.FONT_SYSTEM_NUMBER_HOT;
+  var fontHrO2Str as Gfx.FontDefinition = Gfx.FONT_SYSTEM_NUMBER_HOT;
+  var heightScaleLine1 as Float = 0.0;
+  var heightScaleLine2 as Float = 0.0;
+  var heightScaleLine3 as Float = 0.0;
+  var heightScaleLine4 as Float = 0.0;
+  var heightScaleLine5 as Float = 0.0;
+  var lastUpdatedMinute as Number = -1;
 
-  function initialize(sdState) {
+  function initialize(sdState as GarminSDState) {
     writeLog("GarminSDView.initialize()", "");
     View.initialize();
     mSdState = sdState;
     accelHandler = new GarminSDDataHandler(
-      Ui.loadResource(Rez.Strings.VersionId)
+      Ui.loadResource(Rez.Strings.VersionId).toString()
     );
+    //loading resources locally
+    beatsPerMinuteAbbrev = Ui.loadResource(Rez.Strings.Beats_per_minute_abbrev).toString();
+    batteryAbbrev = Ui.loadResource(Rez.Strings.Battery_abbrev).toString();
+    muteLabel = Ui.loadResource(Rez.Strings.Mute_label).toString();
     writeLog("GarminSDView.initialize()", "Complete");
+  }
+
+  function onTick() as Void {
+    /**
+    Called by GarminSDView every second in case we need to do anything timed.
+    */
+    //writeLog("GarminSDView.onTick()", "Start");
+    accelHandler.onTick();
+    var currentMinute = System.getClockTime().min;
+    if ((accelHandler.mComms.needs_update == true)||(currentMinute != lastUpdatedMinute)){
+      //writeLog("GarminSDView.onTick()", "update view");
+      Ui.requestUpdate();
+      lastUpdatedMinute = currentMinute;
+      accelHandler.mComms.needs_update = false;
+    }
   }
 
   // Load your resources here
   function onLayout(dc) {
-    writeLog("GarminSDView.onLayout()", "");
+    //writeLog("GarminSDView.onLayout()", "");
     width = dc.getWidth();
+    halfWidth = width/2;
     height = dc.getHeight();
+    // Nominal height of display for positioning text - values are for a 240px high display.
+    var heightScale = height / 240.0;
+    heightScaleLine1=heightScale*20;
+    heightScaleLine2=heightScale*45;
+    heightScaleLine3=heightScale*120;
+    heightScaleLine4=heightScale*150;
+    heightScaleLine5=heightScale*180;
+    //precalculate font size
+    // There is an issue with some devices having different font sizes, so
+    // we check the width of the text for our preferred font size, and if it is too long
+    // we use a smaller font.
+    var timeTextDims = dc.getTextDimensions(
+      "23:59:52",
+      Gfx.FONT_SYSTEM_NUMBER_HOT
+    );
+    if (timeTextDims[0] < width) {
+      fontSizeClock = Gfx.FONT_SYSTEM_NUMBER_HOT;
+    }
+    else{
+      fontSizeClock = Gfx.FONT_SYSTEM_NUMBER_MEDIUM;
+    }
+    //precalculate HRO2 string size from dummy values
+    var hrO2Str = "";
+    if (accelHandler.mO2SensorIsEnabled == true){
+        hrO2Str = Lang.format("150 $1$ / 100% Ox", [beatsPerMinuteAbbrev]);
+    }
+    else {
+        hrO2Str = Lang.format("150 $1$", [beatsPerMinuteAbbrev]);
+    }
+    var hrTextDims = dc.getTextDimensions(hrO2Str, Gfx.FONT_LARGE);
+    if (hrTextDims[0] < width) {
+      fontHrO2Str = Gfx.FONT_LARGE;
+    }
+    else{
+      fontHrO2Str = Gfx.FONT_SMALL;
+    }
+    writeLog("GarminSDView.on_layout()", "Start accelHandler");
+    accelHandler.onStart();
   }
 
   // Restore the state of the app and prepare the view to be shown
   function onShow() {
-    writeLog("GarminSDView.onShow()", "Starting accelHandler");
-    accelHandler.onStart();
   }
 
   // Update the view
   function onUpdate(dc) {
-    // see https://developer.garmin.com/downloads/connect-iq/monkey-c/doc/Toybox/Time.html
-    var heightScale = height / 240.0; // Nominal height of display for positioning text - values are for a 240px high display.
-    //System.print("height = ");
-    //System.println(height);
-    //System.print("heightScale = ");
-    //System.println(heightScale);
-    var dateTime = Gregorian.info(Time.now(), Time.FORMAT_MEDIUM);
-    var timeString = Lang.format("$1$:$2$:$3$", [
-      dateTime.hour.format("%02d"),
-      dateTime.min.format("%02d"),
-      dateTime.sec.format("%02d"),
+    var myTime = System.getClockTime();
+    var timeString = Lang.format("$1$:$2$", [
+        myTime.hour.format("%02d"),
+        myTime.min.format("%02d")
     ]);
     var sysStats = System.getSystemStats();
-    var hrO2Str = Lang.format("$1$ $2$ / $3$% Ox", [
-      accelHandler.mHR,
-      Ui.loadResource(Rez.Strings.Beats_per_minute_abbrev),
-      accelHandler.mO2sat,
-    ]);
+    var hrO2Str = "";
+    if (accelHandler.mO2SensorIsEnabled == true){
+        hrO2Str = Lang.format("$1$ $2$ / $3$% Ox", [
+          accelHandler.mHR,
+          beatsPerMinuteAbbrev,
+          accelHandler.mO2sat,
+        ]);
+    }
+    else {
+        hrO2Str = Lang.format("$1$ $2$", [
+          accelHandler.mHR,
+          beatsPerMinuteAbbrev,
+        ]);
+    }
 
     var hrBatStr = Lang.format("$1$: $2$%", [
-      Ui.loadResource(Rez.Strings.Battery_abbrev),
+      batteryAbbrev,
       sysStats.battery.format("%02.0f"),
     ]);
 
@@ -92,87 +161,52 @@ class GarminSDView extends Ui.View {
     dc.clear();
     dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
     dc.drawText(
-      width / 2,
+      halfWidth,
       0,
       Gfx.FONT_MEDIUM,
       "OpenSeizure",
       Gfx.TEXT_JUSTIFY_CENTER
     );
     dc.drawText(
-      width / 2,
-      20 * heightScale,
+      halfWidth,
+      heightScaleLine1,
       Gfx.FONT_MEDIUM,
       "Detector",
       Gfx.TEXT_JUSTIFY_CENTER
     );
-    // There is an issue with some devices having different font sizes, so
-    // we check the width of the text for our preferred font size, and if it is too long
-    // we use a smaller font.
-    var timeTextDims = dc.getTextDimensions(
+    dc.drawText(
+      halfWidth,
+      heightScaleLine2,
+      fontSizeClock,
       timeString,
-      Gfx.FONT_SYSTEM_NUMBER_HOT
+      Gfx.TEXT_JUSTIFY_CENTER
     );
-    if (timeTextDims[0] < width) {
-      dc.drawText(
-        width / 2,
-        45 * heightScale,
-        Gfx.FONT_SYSTEM_NUMBER_HOT,
-        timeString,
-        Gfx.TEXT_JUSTIFY_CENTER
-      );
-    } else {
-      dc.drawText(
-        width / 2,
-        45 * heightScale,
-        Gfx.FONT_SYSTEM_NUMBER_MEDIUM,
-        timeString,
-        Gfx.TEXT_JUSTIFY_CENTER
-      );
-    }
-    var hrTextDims = dc.getTextDimensions(hrO2Str, Gfx.FONT_LARGE);
-    if (hrTextDims[0] < width) {
-      dc.drawText(
-        width / 2,
-        120 * heightScale,
-        Gfx.FONT_LARGE,
-        hrO2Str,
-        Gfx.TEXT_JUSTIFY_CENTER
-      );
-      dc.drawText(
-        width / 2,
-        150 * heightScale,
-        Gfx.FONT_LARGE,
-        hrBatStr,
-        Gfx.TEXT_JUSTIFY_CENTER
-      );
-    } else {
-      dc.drawText(
-        width / 2,
-        120 * heightScale,
-        Gfx.FONT_SMALL,
-        hrO2Str,
-        Gfx.TEXT_JUSTIFY_CENTER
-      );
-      dc.drawText(
-        width / 2,
-        150 * heightScale,
-        Gfx.FONT_SMALL,
-        hrBatStr,
-        Gfx.TEXT_JUSTIFY_CENTER
-      );
-    }
+    dc.drawText(
+      halfWidth,
+      heightScaleLine3,
+      fontHrO2Str,
+      hrO2Str,
+      Gfx.TEXT_JUSTIFY_CENTER
+    );
+    dc.drawText(
+      halfWidth,
+      heightScaleLine4,
+      fontHrO2Str,
+      hrBatStr,
+      Gfx.TEXT_JUSTIFY_CENTER
+    );
     if (accelHandler.mMute) {
       dc.drawText(
-        width / 2,
-        180 * heightScale,
+        halfWidth,
+        heightScaleLine5,
         Gfx.FONT_LARGE,
-        Ui.loadResource(Rez.Strings.Mute_label),
+        muteLabel,
         Gfx.TEXT_JUSTIFY_CENTER
       );
     } else {
       dc.drawText(
-        width / 2,
-        180 * heightScale,
+        halfWidth,
+        heightScaleLine5,
         Gfx.FONT_LARGE,
         accelHandler.mStatusStr,
         Gfx.TEXT_JUSTIFY_CENTER
@@ -183,24 +217,19 @@ class GarminSDView extends Ui.View {
   // Called when this View is removed from the screen. Save the
   // state of your app here.
   function onHide() {
-    writeLog("GarminSDView.onHide", "Stopping accelHandler");
-    accelHandler.onStop();
   }
 }
 
 class SdDelegate extends Ui.BehaviorDelegate {
-  var mSdView;
-  var mSdState;
-  var mTimer;
-  var mMode;
-  var mMuteDlgOpenTime;
-  var mQuitDlgOpenTime;
+  var mSdView as GarminSDView;
+  var mSdState as GarminSDState;
+  var mQuitDlgOpenTime as Number = 0;
   const QUIT_TIMEOUT = 10; // Seconds
   const QUIT_TIMEOUT_BENMODE = 1; // Second
   const MUTE_TIMEOUT = 10; // Seconds
 
 
-  function initialize(sdView, sdState) {
+  function initialize(sdView as GarminSDView, sdState as GarminSDState) {
     writeLog("SdDelegate.initialize()", "");
     mSdView = sdView;
     mSdState = sdState;
@@ -219,25 +248,14 @@ class SdDelegate extends Ui.BehaviorDelegate {
     if (Storage.getValue(MENUITEM_LIGHT) == null) {
       Storage.setValue(MENUITEM_LIGHT, 0);
     }
-    if (Storage.getValue(MENUITEM_RETRY_WARNING) == null) {
-      Storage.setValue(MENUITEM_RETRY_WARNING, 0);
-    }
-    writeLog("sdDelegate.initialize()", "LOWDATAMODE="+Storage.getValue(MENUITEM_LOWDATAMODE));
-    if (Storage.getValue(MENUITEM_LOWDATAMODE) == null) {
-      Storage.setValue(MENUITEM_LOWDATAMODE, 0);
-    }
     if (Storage.getValue(MENUITEM_O2SENSOR) == null) {
       Storage.setValue(MENUITEM_O2SENSOR, 1);
     }
 
-    // Start a timer that calls timerCallback every second
-    mTimer = new Timer.Timer();
-    mTimer.start(method(:timerCallback), 1000, true);
-
     BehaviorDelegate.initialize();
   }
 
-  function timerCallback() {
+  function onTick() as Void {
     //System.println("SdDelegate.timerCallback()");
     // Handle Timeout of Quit Dialog
     if (mSdState.getMode() == MODE_QUITDLG) {
@@ -264,8 +282,8 @@ class SdDelegate extends Ui.BehaviorDelegate {
     /*var boolean = mSdView.accelHandler.mMute ? true : false;
     menu.addItem(
       new Ui.ToggleMenuItem(
-        Ui.loadResource(Rez.Strings.Mute_title),
-        Ui.loadResource(Rez.Strings.Mute_desc),
+        Ui.loadResource(Rez.Strings.Mute_title).toString(),
+        Ui.loadResource(Rez.Strings.Mute_desc).toString(),
         MENUITEM_MUTE,
         boolean,
         null
@@ -277,8 +295,8 @@ class SdDelegate extends Ui.BehaviorDelegate {
     boolean = Storage.getValue(MENUITEM_VIBRATION) ? true : false;
     menu.addItem(
       new Ui.ToggleMenuItem(
-        Ui.loadResource(Rez.Strings.Vibration_title),
-        Ui.loadResource(Rez.Strings.Vibration_desc),
+        Ui.loadResource(Rez.Strings.Vibration_title).toString(),
+        Ui.loadResource(Rez.Strings.Vibration_desc).toString(),
         MENUITEM_VIBRATION,
         boolean,
         null
@@ -288,8 +306,8 @@ class SdDelegate extends Ui.BehaviorDelegate {
     boolean = Storage.getValue(MENUITEM_SOUND) ? true : false;
     menu.addItem(
       new Ui.ToggleMenuItem(
-        Ui.loadResource(Rez.Strings.Sound_title),
-        Ui.loadResource(Rez.Strings.Sound_desc),
+        Ui.loadResource(Rez.Strings.Sound_title).toString(),
+        Ui.loadResource(Rez.Strings.Sound_desc).toString(),
         MENUITEM_SOUND,
         boolean,
         null
@@ -299,31 +317,9 @@ class SdDelegate extends Ui.BehaviorDelegate {
     boolean = Storage.getValue(MENUITEM_LIGHT) ? true : false;
     menu.addItem(
       new Ui.ToggleMenuItem(
-        Ui.loadResource(Rez.Strings.Light_title),
-        Ui.loadResource(Rez.Strings.Light_desc),
+        Ui.loadResource(Rez.Strings.Light_title).toString(),
+        Ui.loadResource(Rez.Strings.Light_desc).toString(),
         MENUITEM_LIGHT,
-        boolean,
-        null
-      )
-    );
-
-    boolean = Storage.getValue(MENUITEM_RETRY_WARNING) ? true : false;
-    menu.addItem(
-      new Ui.ToggleMenuItem(
-        Ui.loadResource(Rez.Strings.Retry_title),
-        Ui.loadResource(Rez.Strings.Retry_desc),
-        MENUITEM_RETRY_WARNING,
-        boolean,
-        null
-      )
-    );
-
-    boolean = Storage.getValue(MENUITEM_LOWDATAMODE) ? true : false;
-    menu.addItem(
-      new Ui.ToggleMenuItem(
-        Ui.loadResource(Rez.Strings.Low_data_title),
-        Ui.loadResource(Rez.Strings.Low_data_desc),
-        MENUITEM_LOWDATAMODE,
         boolean,
         null
       )
@@ -332,8 +328,8 @@ class SdDelegate extends Ui.BehaviorDelegate {
     boolean = Storage.getValue(MENUITEM_O2SENSOR) ? true : false;
     menu.addItem(
       new Ui.ToggleMenuItem(
-        Ui.loadResource(Rez.Strings.O2_sensor_title),
-        Ui.loadResource(Rez.Strings.O2_sensor_desc),
+        Ui.loadResource(Rez.Strings.O2_sensor_title).toString(),
+        Ui.loadResource(Rez.Strings.O2_sensor_desc).toString(),
         MENUITEM_O2SENSOR,
         boolean,
         null
@@ -343,8 +339,8 @@ class SdDelegate extends Ui.BehaviorDelegate {
     boolean = Storage.getValue(MENUITEM_BENMODE) ? true : false;
     menu.addItem(
       new Ui.ToggleMenuItem(
-        Ui.loadResource(Rez.Strings.BenMode_title),
-        Ui.loadResource(Rez.Strings.BenMode_desc),
+        Ui.loadResource(Rez.Strings.BenMode_title).toString(),
+        Ui.loadResource(Rez.Strings.BenMode_desc).toString(),
         MENUITEM_BENMODE,
         boolean,
         null
@@ -364,7 +360,7 @@ class SdDelegate extends Ui.BehaviorDelegate {
     // Handled by setting mMode to MODE_QUITDLG and initialising the time that we open the dialog.
     // timeout is handled in the timerCallback function.
     writeLog("SdDelegate.onBack()", "");
-    var quitString = Ui.loadResource(Rez.Strings.Exit_app_confirmation);
+    var quitString = Ui.loadResource(Rez.Strings.Exit_app_confirmation).toString();
     var cd = new Ui.Confirmation(quitString);
     mSdState.setMode(MODE_QUITDLG);
     mQuitDlgOpenTime = Time.now().value();
@@ -393,11 +389,11 @@ class SdDelegate extends Ui.BehaviorDelegate {
 
 class QuitDelegate extends Ui.ConfirmationDelegate {
   // Handles user response to the quit confirmation dialog.
-  var mResponseReceived;
-  var mSdView;
-  var mSdState;
+  var mResponseReceived as Boolean;
+  var mSdView as GarminSDView;
+  var mSdState as GarminSDState;
 
-  function initialize(sdView, sdState) {
+  function initialize(sdView as GarminSDView, sdState as GarminSDState) {
     writeLog("QuitDelegate.initialize()", "");
     mSdView = sdView;
     mSdState = sdState;
@@ -407,7 +403,7 @@ class QuitDelegate extends Ui.ConfirmationDelegate {
   }
 
   function onResponse(value) {
-    writeLog("QuitDelegate.onResponse()", "Resonse = " + value);
+    writeLog("QuitDelegate.onResponse()", "Response = " + value);
     mResponseReceived = true;
     if (value == CONFIRM_YES) {
       // pop the confirmation dialog associated with this delegate
@@ -434,9 +430,9 @@ class GarminSDSettingsMenu extends Ui.Menu2 {
 
 //! Input handler for the app settings menu
 class GarminSDSettingsMenuDelegate extends Ui.Menu2InputDelegate {
-  var mAccelHandler;
+  var mAccelHandler as GarminSDDataHandler;
   //! Constructor
-  public function initialize(accelHandler) {
+  public function initialize(accelHandler as GarminSDDataHandler) {
     Menu2InputDelegate.initialize();
     mAccelHandler = accelHandler;
   }
@@ -444,9 +440,9 @@ class GarminSDSettingsMenuDelegate extends Ui.Menu2InputDelegate {
   //! Handle a menu item being selected
   //! @param menuItem The menu item selected
   public function onSelect(menuItem as Ui.MenuItem) as Void {
-    if (menuItem instanceof ToggleMenuItem) {
+    if (menuItem instanceof Ui.ToggleMenuItem) {
         writeLog("menuDelegate.onSelect()", "id=" + menuItem.getId());
-        Storage.setValue(menuItem.getId() as Ui.Number, menuItem.isEnabled());
+        Storage.setValue(menuItem.getId() as Lang.Number, menuItem.isEnabled());
     }
   }
 }

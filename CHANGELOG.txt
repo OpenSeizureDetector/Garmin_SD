@@ -1,6 +1,13 @@
 GarminSD CHANGELOG
 ==================
 
+
+v2.0 - 29Mar2024
+	- Many battery optmisation improvements by @pmithrandir.  
+	  Note, only sends 3d data, not magnitude, so needs android app V4.2.4
+	        or higher.
+	- Fixed mute function
+
 v1.4 - 18aug2023:
 	- Added configuration menu to allow user to select whether to play a sound, light up the watch or vibrate when 
 	  an alarm or error occurs.

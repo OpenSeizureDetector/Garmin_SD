@@ -47,11 +47,8 @@
             <iq:product id="vivoactive4s"/>
         </iq:products>
         <iq:permissions>
-            <iq:uses-permission id="Fit"/>
             <iq:uses-permission id="Sensor"/>
-            <iq:uses-permission id="SensorLogging"/>
             <iq:uses-permission id="Communications"/>
-            <iq:uses-permission id="Positioning"/>
         </iq:permissions>
         <iq:languages>
             <iq:language>eng</iq:language>

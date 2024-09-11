@@ -10,7 +10,7 @@ using Toybox.WatchUi as Ui;
 using Toybox.Graphics as Gfx;
 using Toybox.Time;
 using Toybox.Time.Gregorian;
-using Toybox.Lang;
+import Toybox.Lang;
 using Toybox.Timer;
 using Toybox.Communications as Comm;
 
@@ -19,33 +19,34 @@ class MemTestApp extends App.AppBase {
     AppBase.initialize();
   }
     
-  function onStart(state) {
+  function onStart(state as Dictionary or Null) {
   }
 
-  function onStop(state) {
+  function onStop(state as Dictionary or Null) {
   }
 
-  function getInitialView() {
+  function getInitialView() as Array<Toybox.WatchUi.Views or Toybox.WatchUi.InputDelegates> or Null {
     var mainView = new MemTestView();
-    return [mainView];
+    return [mainView] as Array<Toybox.WatchUi.InputDelegates or Toybox.WatchUi.Views>;
   }
 
 }
 
 
 class MemTestView extends Ui.View {
-  var width;
-  var height;
-  var myTimer;
-  var listener;
+  var width as Number = 0;
+  var height as Number = 0;
+  var myTimer as Timer.Timer;
+  var listener as Comm.ConnectionListener;
   
   function initialize() {
     View.initialize();
     listener = new Comm.ConnectionListener();
+    myTimer = new Timer.Timer();
   }
   
   // Receive the data from the web request
-  function onReceive(responseCode, data) {
+  function onReceive(responseCode as Number, data as String) as Void {
     if (responseCode == 200) {
       System.println("onReceive() success - data =");
       System.println(data);
@@ -55,7 +56,7 @@ class MemTestView extends Ui.View {
     }
   }
   
-  function timerCallback() {
+  function timerCallback() as Void {
     var dataObj = {
       "HR"=> 60,
       "X" => 0,
@@ -82,22 +83,21 @@ class MemTestView extends Ui.View {
   }
 
   // Load your resources here
-  function onLayout(dc) {
+  function onLayout(dc) as Void {
     width = dc.getWidth();
     height = dc.getHeight();
-    myTimer = new Timer.Timer();
     myTimer.start(method(:timerCallback), 1000, true);
   }
   
   // Restore the state of the app and prepare the view to be shown
-  function onShow() {
+  function onShow() as Void {
   }
   
   // Update the view
-  function onUpdate(dc) {
+  function onUpdate(dc) as Void {
     System.println("GarminSDView.onUpdate()");
     var dateTime = Gregorian.info(Time.now(), Time.FORMAT_MEDIUM);
-    var timeString = Lang.format(
+    var timeString = format(
 				 "$1$:$2$:$3$",
 				 [
 				  dateTime.hour.format("%02d"),
@@ -106,9 +106,9 @@ class MemTestView extends Ui.View {
 				  ]
 				 );
     var sysStats = System.getSystemStats();
-    var batString = Lang.format("Bat = $1$%",[sysStats.battery.format("%02.0f")]);
-    var memStr = Lang.format("Mem = $1$",[sysStats.freeMemory]);
-    var usedMemStr = Lang.format("Used = $1$",[sysStats.usedMemory]);
+    var batString = format("Bat = $1$%",[sysStats.battery.format("%02.0f")]);
+    var memStr = format("Mem = $1$",[sysStats.freeMemory]);
+    var usedMemStr = format("Used = $1$",[sysStats.usedMemory]);
     dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_WHITE);
     dc.clear();
     dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
@@ -124,7 +124,7 @@ class MemTestView extends Ui.View {
   
   
 
-  function onHide() {
+  function onHide() as Void{
     myTimer.stop();
   }
 }

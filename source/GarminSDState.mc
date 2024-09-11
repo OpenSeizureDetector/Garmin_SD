@@ -4,7 +4,7 @@
 *
 * Copyright Graham Jones, 2023
 */
-enum {
+enum Mode {
     MODE_RUNNING,
     MODE_MUTEDLG,
     MODE_QUITDLG,
@@ -12,18 +12,18 @@ enum {
 
 
 class GarminSDState  {
-    var mMode;
+    var mMode as Mode;
   function initialize() {
     System.println("GarminSdState.initialize");
     mMode = MODE_RUNNING;
   }
 
   // onStart() is called on application start up
-  function getMode() {
+  function getMode() as Mode {
     return mMode;
   }
 
-  function setMode(newMode) {
+  function setMode(newMode as Mode) as Void {
     mMode = newMode;
     System.println("GarminSdState.setMode - mMode="+mMode);
   }
