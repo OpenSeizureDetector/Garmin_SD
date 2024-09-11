@@ -134,12 +134,24 @@ class GarminSDDataHandler {
     var iStart = nSamp * SAMPLE_PERIOD * SAMPLE_FREQUENCY;
     //System.println(format("iStart=$1$, ns=$2$, nSamp=$3$",[iStart,SAMPLE_PERIOD*SAMPLE_FREQUENCY,nSamp]));
     var accelData = sensorData.accelerometerData;
-    for (var i = 0; i < SAMPLE_PERIOD * SAMPLE_FREQUENCY; i = i + 1) {
-      mSamplesX[iStart + i] = (accelData as Sensor.AccelerometerData).x[i];
-      mSamplesY[iStart + i] = (accelData as Sensor.AccelerometerData).y[i];
-      mSamplesZ[iStart + i] = (accelData as Sensor.AccelerometerData).z[i];
+    if ((accelData as Sensor.AccelerometerData).x.size() != SAMPLE_PERIOD * SAMPLE_FREQUENCY or
+      (accelData as Sensor.AccelerometerData).y.size() != SAMPLE_PERIOD * SAMPLE_FREQUENCY or
+      (accelData as Sensor.AccelerometerData).z.size() != SAMPLE_PERIOD * SAMPLE_FREQUENCY) {
+      writeLog("accel_callback()","Invalid amount of event in accel callback.");
+      for (var i = 0; i < SAMPLE_PERIOD * SAMPLE_FREQUENCY; i = i + 1) {
+        mSamplesX[iStart + i] = 0;
+        mSamplesY[iStart + i] = 0;
+        mSamplesZ[iStart + i] = 0;
+      }
     }
-    nSamp = nSamp + 1;
+    else {
+      for (var i = 0; i < SAMPLE_PERIOD * SAMPLE_FREQUENCY; i = i + 1) {
+        mSamplesX[iStart + i] = (accelData as Sensor.AccelerometerData).x[i];
+        mSamplesY[iStart + i] = (accelData as Sensor.AccelerometerData).y[i];
+        mSamplesZ[iStart + i] = (accelData as Sensor.AccelerometerData).z[i];
+      }
+      nSamp = nSamp + 1;
+    }
 
     // It should never be above analysis period, but in case it happens, greater would prevent infinite loop.
     if (nSamp * SAMPLE_PERIOD >= ANALYSIS_PERIOD) {
