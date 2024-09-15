@@ -1,6 +1,8 @@
 GarminSD CHANGELOG
 ==================
-
+v2.0.7 - 15sep2024
+	- Added check that we receive the expected amount of data from the accelerometer.  If not,
+	  the data is assumed to be corrupt and set to zero (fixes issue #73)
 
 v2.0 - 29Mar2024
 	- Many battery optmisation improvements by @pmithrandir.  
