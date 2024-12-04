@@ -1,0 +1,33 @@
+//devcontainer.json
+{
+    "name": "MonkeyC",
+  
+    // Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+    "dockerFile": "./Dockerfile",
+  
+    // Features to add to the dev container. More info: https://containers.dev/features.
+    // "features": {},
+  
+    "customizations": {
+      "vscode": {
+        "settings": {},
+        "extensions": [
+            "Garmin.monkey-c"
+        ]
+      }
+    },
+  
+    // "forwardPorts": [3000],
+  
+    "portsAttributes": {
+      "3000": {
+        "label": "Hello Remote World",
+        "onAutoForward": "notify"
+      }
+    },
+  
+    "postCreateCommand": ""
+  
+    // "remoteUser": "root"
+  }
+  
