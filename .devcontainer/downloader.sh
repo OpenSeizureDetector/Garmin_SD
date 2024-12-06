@@ -27,9 +27,19 @@ url="${CONNECTIQ_SDK_URL}/${filename}"
 echo "Downloading from $url"
 
 /usr/bin/wget -q "${url}" -O /tmp/connectiq.zip;
-/usr/bin/unzip /tmp/connectiq.zip -d "${PATH}"
 
-/usr/bin/wget -q "https://developer.garmin.com/downloads/connect-iq/sdk-manager/connectiq-sdk-manager-linux.zip" -O /tmp/sdkmanager.zip
-/usr/bin/unzip /tmp/sdkmanager.zip -d "${PATH}"
+SDK_PATH="${PATH}/Sdks/${filename}"
+/usr/bin/mkdir -p ${SDK_PATH}
+/usr/bin/unzip /tmp/connectiq.zip -d ${SDK_PATH} 
 
-echo "$VERSION"
+# Create the current-sdk.cfg file to trick vscode into thinking that we have used sdkmanager to download the sdk so it picks it up.
+CURR_SDK_CFG_FNAME="${PATH}/current-sdk.cfg"
+echo "Creating sdk configuration file: ${CURR_SDK_CFG_FNAME}"
+if [[ -e ${CURR_SDK_CFG_FNAME} ]]
+then
+	rm ${CURR_SDK_CFG_FNAME}
+fi
+echo "${SDK_PATH}" > ${CURR_SDK_CFG_FNAME}
+
+echo "Set current sdk to "`/usr/bin/cat ${CURR_SDK_CFG_FNAME}`
+
