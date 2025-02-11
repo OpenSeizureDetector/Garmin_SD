@@ -68,28 +68,21 @@ class GarminSDDataHandler {
 
   // Return the current set of data as a JSON String
   function getDataJson() as String {
-    var i;
-    var jsonStr = "{dataType:'raw',";
-    var localNMute = 0;
-    if (mMute == true) {
-      localNMute = 1;
-    }
-    jsonStr = jsonStr + "data3D:[";
-    for (i = 0; i < ANALYSIS_PERIOD * SAMPLE_FREQUENCY; i = i + 1) {
-        if (i > 0) {
-          jsonStr = jsonStr +",";
-        }
-        jsonStr = jsonStr + mSamplesX[i] + ",";
-        jsonStr = jsonStr + mSamplesY[i] + ",";
-        jsonStr = jsonStr + mSamplesZ[i];
-    }
-    jsonStr = jsonStr +"],";
+      var jsonStr = "{ \"dataType\": \"raw\", \"data3D\": [";
 
-    jsonStr = jsonStr + "HR:" + mHR;
-    jsonStr = jsonStr + ",O2sat:" + mO2sat;
-    jsonStr = jsonStr + ",Mute:" + localNMute.toString();
-    jsonStr = jsonStr + "}";
-    return jsonStr as String;
+      for (var i = 0; i < ANALYSIS_PERIOD * SAMPLE_FREQUENCY; i += 1) {
+          if (i > 0){
+            jsonStr += ",";
+          }
+          jsonStr += Lang.format("$1$,$2$,$3$", [mSamplesX[i], mSamplesY[i], mSamplesZ[i]]);
+      }
+
+      jsonStr += "], \"HR\": " + mHR.toString();
+      jsonStr += ", \"O2sat\": " + mO2sat.toString();
+      jsonStr += ", \"Mute\": " + (mMute ? "1" : "0");
+      jsonStr += " }";
+
+      return jsonStr;
   }
 
   // Return the current set of data as a JSON String
@@ -132,27 +125,24 @@ class GarminSDDataHandler {
     //System.println("accel_callback()");
 
     var iStart = nSamp * SAMPLE_PERIOD * SAMPLE_FREQUENCY;
-    //System.println(format("iStart=$1$, ns=$2$, nSamp=$3$",[iStart,SAMPLE_PERIOD*SAMPLE_FREQUENCY,nSamp]));
     var accelData = sensorData.accelerometerData;
-    if ((accelData as Sensor.AccelerometerData).x.size() != SAMPLE_PERIOD * SAMPLE_FREQUENCY or
-      (accelData as Sensor.AccelerometerData).y.size() != SAMPLE_PERIOD * SAMPLE_FREQUENCY or
-      (accelData as Sensor.AccelerometerData).z.size() != SAMPLE_PERIOD * SAMPLE_FREQUENCY) {
-      writeLog("accel_callback()","Invalid amount of event in accel callback.");
-      for (var i = 0; i < SAMPLE_PERIOD * SAMPLE_FREQUENCY; i = i + 1) {
-        mSamplesX[iStart + i] = 0;
-        mSamplesY[iStart + i] = 0;
-        mSamplesZ[iStart + i] = 0;
-      }
-    }
-    else {
-      for (var i = 0; i < SAMPLE_PERIOD * SAMPLE_FREQUENCY; i = i + 1) {
-        mSamplesX[iStart + i] = (accelData as Sensor.AccelerometerData).x[i];
-        mSamplesY[iStart + i] = (accelData as Sensor.AccelerometerData).y[i];
-        mSamplesZ[iStart + i] = (accelData as Sensor.AccelerometerData).z[i];
-      }
-      nSamp = nSamp + 1;
-    }
 
+    // Vérification du nombre d'échantillons
+    if ((accelData as Sensor.AccelerometerData).x.size() == SAMPLE_PERIOD * SAMPLE_FREQUENCY) {
+        for (var i = 0; i < SAMPLE_PERIOD * SAMPLE_FREQUENCY; i += 1) {
+            mSamplesX[iStart + i] = (accelData as Sensor.AccelerometerData).x[i];
+            mSamplesY[iStart + i] = (accelData as Sensor.AccelerometerData).y[i];
+            mSamplesZ[iStart + i] = (accelData as Sensor.AccelerometerData).z[i];
+        }
+    } else {
+        writeLog("accel_callback()", "Invalid number of samples.");
+        for (var i = 0; i < SAMPLE_PERIOD * SAMPLE_FREQUENCY; i += 1) {
+            mSamplesX[iStart + i] = 0;
+            mSamplesY[iStart + i] = 0;
+            mSamplesZ[iStart + i] = 0;
+        }
+    }
+    nSamp += 1;
     // It should never be above analysis period, but in case it happens, greater would prevent infinite loop.
     if (nSamp * SAMPLE_PERIOD >= ANALYSIS_PERIOD) {
       enableHRO2Sensors();
