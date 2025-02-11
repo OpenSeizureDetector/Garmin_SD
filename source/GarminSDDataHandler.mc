@@ -155,6 +155,7 @@ class GarminSDDataHandler {
 
     // It should never be above analysis period, but in case it happens, greater would prevent infinite loop.
     if (nSamp * SAMPLE_PERIOD >= ANALYSIS_PERIOD) {
+      enableHRO2Sensors();
       //System.println("Doing Analysis....");
       mHR = Sensor.getInfo().heartRate;
       if ((Sensor.getInfo() has :oxygenSaturation) && (mO2SensorIsEnabled == true)) {
@@ -164,12 +165,30 @@ class GarminSDDataHandler {
         //writeLog(tagStr,"setting mO2sat to zero");
         mO2sat = 0;
       }
+      disableHRO2Sensors();
       nSamp = 0;
       writeLog("DataHandler.accelCallback()","Sending accel Data");
       mComms.sendAccelData();
     }
   }
 
+  function enableHRO2Sensors() as Void{
+    // Intialise heart rate monitoring.
+    // But only initialise O2sat sensor if enabled in settings (default is true)
+    if ((Sensor has :SENSOR_PULSE_OXYMETRY) && (mO2SensorIsEnabled == true)) {
+      Sensor.setEnabledSensors(([Sensor.SENSOR_HEARTRATE, Sensor.SENSOR_PULSE_OXIMETRY] as Array<Sensor.SensorType>));
+    }
+    else {
+      Sensor.setEnabledSensors(([Sensor.SENSOR_HEARTRATE] as Array<Sensor.SensorType>));
+    }
+  }
+
+  function disableHRO2Sensors() as Void{
+    Sensor.setEnabledSensors(([] as Array<Sensor.SensorType>));
+    // this is NOT in the CIQ api and is a Garmin bug.
+    // https://forums.garmin.com/developer/connect-iq/f/discussion/872/battery-drain-when-connectiq-app-is-not-running/1661071#1661071
+    Sensor.enableSensorEvents(null);
+   }
 
   // Initializes the view and registers for accelerometer data
   function onStart() as Void {
@@ -192,18 +211,6 @@ class GarminSDDataHandler {
     } catch (e) {
       writeLog("*** ERROR - "+ tagStr, e.getErrorMessage());
     }
-
-    // Intialise heart rate monitoring.
-    // But only initialise O2sat sensor if enabled in settings (default is true)
-    writeLog(tagStr,"mO2SensorIsEnabled = " + mO2SensorIsEnabled);
-    if ((Sensor has :SENSOR_PULSE_OXYMETRY) && (mO2SensorIsEnabled == true)) {
-      writeLog(tagStr,"Enabling HR and O2SAT Sensors");
-      Sensor.setEnabledSensors(([Sensor.SENSOR_HEARTRATE, Sensor.SENSOR_PULSE_OXIMETRY] as Array<Sensor.SensorType>));
-    }
-    else {
-      writeLog(tagStr,"Enabling HR only");
-      Sensor.setEnabledSensors(([Sensor.SENSOR_HEARTRATE] as Array<Sensor.SensorType>));
-    }
   }
   function onTick() as Void {
     /**
@@ -215,9 +222,6 @@ class GarminSDDataHandler {
   function onStop() as Void {
     writeLog("DataHandler.onStop()", "");
     Sensor.unregisterSensorDataListener();
-      Sensor.setEnabledSensors(([] as Array<Sensor.SensorType>));
-    // this is NOT in the CIQ api and is a Garmin bug.
-    // https://forums.garmin.com/developer/connect-iq/f/discussion/872/battery-drain-when-connectiq-app-is-not-running/1661071#1661071
-    Sensor.enableSensorEvents(null);
+    disableHRO2Sensors();
   }
 }
