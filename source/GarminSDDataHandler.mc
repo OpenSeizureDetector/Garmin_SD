@@ -77,8 +77,8 @@ class GarminSDDataHandler {
           jsonStr += Lang.format("$1$,$2$,$3$", [mSamplesX[i], mSamplesY[i], mSamplesZ[i]]);
       }
 
-      jsonStr += "], \"HR\": " + mHR.toString();
-      jsonStr += ", \"O2sat\": " + mO2sat.toString();
+      jsonStr += "], \"HR\": " + mHR;
+      jsonStr += ", \"O2sat\": " + mO2sat;
       jsonStr += ", \"Mute\": " + (mMute ? "1" : "0");
       jsonStr += " }";
 
