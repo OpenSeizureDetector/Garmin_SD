@@ -18,10 +18,16 @@ and sends it to the phone.
 
 If the user is doing an activity that is likely to result in a false alarm he/she can press one of the watch buttons or screen to mute the system for 5 minutes to avoid a false alarm.
 
+# Build using VSCode Dev Container
+Opening this project in Visual Studio Code should result in a prompt to open the project in a DevContainer.   This will set up a linux development environment which contains the Garmin SDK and simulators - see the [DevContainer README](.devcontainer/README.md)
+When the code is run in the DevContainer the output appears as bin/GarminSD.prg.
+
+**FIXME**:  The resulting .prg file is owned by root, rather than the user who is running vscode.
+
 # Build Environment
   * Install the latest stable release of the Garmin ConnectIQ Software Developmetn Kit (SDK) from (https://developer.garmin.com/connect-iq/sdk/).  This installs the Garmin SDK Manager.
   * Use the SDK manager to install the latest stable SDK.   **SDK version 6.4.2 or higher is required** to avoid type checking errors.
-  * Use the SDK manager to install some watch emulators (in particular the VenuSQ which is the current 'reference' device).
+  * Use the SDK manager to install some watch emulators (in particular the Forerunner 245 which is the current 'reference' device).
 
 # Build Instructions (command line)
 Note, this used to be easy until Garmin introduced the SDK manager - now you need to find out where Garmin SDK Manager has installed your SDK as you do it yourself.

@@ -165,7 +165,7 @@ class GarminSDDataHandler {
         mO2sat = 0;
       }
       nSamp = 0;
-      //writeLog("DataHandler.accelCallback()","Sending accel Data");
+      writeLog("DataHandler.accelCallback()","Sending accel Data");
       mComms.sendAccelData();
     }
   }

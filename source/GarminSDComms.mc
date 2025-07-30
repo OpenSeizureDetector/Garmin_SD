@@ -170,8 +170,10 @@ class GarminSDComms {
   function onDataReceive(responseCode as Number, data as String) as Void  {
     var tagStr = "SDComms.onDataReceive()";
     var sendDuration = Time.now().subtract(mDataSendStartTime);
-    //writeLog(tagStr, "sendAccelData End - Send Duration = " + sendDuration.value());
+    writeLog(tagStr, "sendAccelData End - Send Duration = " + sendDuration.value());
     if (responseCode == 200) {
+      writeLog(tagStr, "Data SentOK - parsing response");
+      System.println(data);
       mAccelHandler.mStatusStr = "---";
 
       if (responseCode != lastOnReceiveResponse || !data.equals(lastOnReceiveData)) {
