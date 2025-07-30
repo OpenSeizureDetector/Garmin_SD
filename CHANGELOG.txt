@@ -1,5 +1,8 @@
 GarminSD CHANGELOG
 ==================
+v2.0.8 - 30jul2025
+    - Re-built v2.0.7 using latest SDK (v8.2.2) to provide compatibility with latest watches such as Vivoactive 6
+
 v2.0.7 - 15sep2024
 	- Added check that we receive the expected amount of data from the accelerometer.  If not,
 	  the data is assumed to be corrupt and set to zero (fixes issue #73)
