@@ -105,7 +105,7 @@ class GarminSDComms {
   }
 
   // Receive the data from the web request - should be a json string
-  function onSdStatusReceive(responseCode as Number, data as Dictionary<String, String>) as Void {
+  function onSdStatusReceive(responseCode as Number, data as Dictionary) as Void {
     var tagStr = "SDComms.onSdStatusReceive";
     // writeLog(tagStr, "ResponseCode="+responseCode);
     if (responseCode == 200) {
@@ -117,7 +117,7 @@ class GarminSDComms {
       if (!mAccelHandler.mStatusStr.equals(data.get("alarmPhrase"))){
         mAccelHandler.mStatusStr = (data.get("alarmPhrase") as String);
 
-        writeLog(tagStr, data.get("alarmPhrase"));
+        writeLog(tagStr, data.get("alarmPhrase") as String);
         needs_update = true;
       }
       if (data.get("alarmState") != 0) {
@@ -169,7 +169,7 @@ class GarminSDComms {
   // Receive the response from the sendAccelData web request.
   function onDataReceive(responseCode as Number, data as String) as Void  {
     var tagStr = "SDComms.onDataReceive()";
-    var sendDuration = Time.now().subtract(mDataSendStartTime);
+    //var sendDuration = Time.now().subtract(mDataSendStartTime);
     //writeLog(tagStr, "sendAccelData End - Send Duration = " + sendDuration.value());
     if (responseCode == 200) {
       mAccelHandler.mStatusStr = "---";

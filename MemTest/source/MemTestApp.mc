@@ -25,9 +25,9 @@ class MemTestApp extends App.AppBase {
   function onStop(state as Dictionary or Null) {
   }
 
-  function getInitialView() as Array<Toybox.WatchUi.Views or Toybox.WatchUi.InputDelegates> or Null {
+  function getInitialView() as [Toybox.WatchUi.Views] or [Toybox.WatchUi.Views, Toybox.WatchUi.InputDelegates] {
     var mainView = new MemTestView();
-    return [mainView] as Array<Toybox.WatchUi.InputDelegates or Toybox.WatchUi.Views>;
+    return [mainView] as [Toybox.WatchUi.Views];
   }
 
 }
