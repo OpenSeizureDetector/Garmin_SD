@@ -105,22 +105,23 @@ class GarminSDComms {
   }
 
   // Receive the data from the web request - should be a json string
-  function onSdStatusReceive(responseCode as Number, data as Dictionary<String, String>) as Void {
+  function onSdStatusReceive(responseCode as Number, data as Null or Dictionary or String or Toybox.PersistedContent.Iterator) as Void {
+    var dataDict = data as Dictionary<String, String>;
     var tagStr = "SDComms.onSdStatusReceive";
     // writeLog(tagStr, "ResponseCode="+responseCode);
     if (responseCode == 200) {
       if (responseCode != lastOnSdStatusReceiveResponse) {
         needs_update = true;
         // writeLog(tagStr, "needs update 1");
-        writeLog(tagStr, "Status =" + data.get("alarmPhrase"));
+        writeLog(tagStr, "Status =" + dataDict.get("alarmPhrase"));
       }
-      if (!mAccelHandler.mStatusStr.equals(data.get("alarmPhrase"))){
-        mAccelHandler.mStatusStr = (data.get("alarmPhrase") as String);
+      if (!mAccelHandler.mStatusStr.equals(dataDict.get("alarmPhrase"))){
+        mAccelHandler.mStatusStr = (dataDict.get("alarmPhrase") as String);
 
-        writeLog(tagStr, data.get("alarmPhrase"));
+        writeLog(tagStr, dataDict.get("alarmPhrase"));
         needs_update = true;
       }
-      if (data.get("alarmState") != 0) {
+      if (dataDict.get("alarmState") != 0) {
         try {
           var lightEnabled = Storage.getValue(MENUITEM_LIGHT) ? true : false;
           if (Attention has :backlight && lightEnabled) {
@@ -134,7 +135,7 @@ class GarminSDComms {
           Attention.playTone(Attention.TONE_ALERT_HI);
         }
       }
-      if (data.get("alarmState") == 2) {
+      if (dataDict.get("alarmState") == 2) {
         // ALARM
         var vibrationEnabled = Storage.getValue(MENUITEM_VIBRATION)
           ? true
@@ -157,7 +158,7 @@ class GarminSDComms {
         Ui.loadResource(Rez.Strings.Error_abbrev) + ": " + responseCode.toString();
       if (responseCode != lastOnSdStatusReceiveResponse) {
         writeLog(tagStr, "Failure - code =" + responseCode);
-        writeLog(tagStr, "Failure - data =" + data);
+        writeLog(tagStr, "Failure - data =" + dataDict);
       } else {
         // Don't write repeated log entries to save filling up the log file.
       }
@@ -167,16 +168,17 @@ class GarminSDComms {
   }
 
   // Receive the response from the sendAccelData web request.
-  function onDataReceive(responseCode as Number, data as String) as Void  {
+  function onDataReceive(responseCode as Number, data as Null or Dictionary or String or Toybox.PersistedContent.Iterator) as Void  {
+    var dataStr = data as String;
     var tagStr = "SDComms.onDataReceive()";
     var sendDuration = Time.now().subtract(mDataSendStartTime);
     writeLog(tagStr, "sendAccelData End - Send Duration = " + sendDuration.value());
     if (responseCode == 200) {
       writeLog(tagStr, "Data SentOK - parsing response");
-      System.println(data);
+      System.println(dataStr);
       mAccelHandler.mStatusStr = "---";
 
-      if (responseCode != lastOnReceiveResponse || !data.equals(lastOnReceiveData)) {
+      if (responseCode != lastOnReceiveResponse || !dataStr.equals(lastOnReceiveData)) {
 
         // writeLog(tagStr, "needs update 4");
         needs_update = true;
@@ -184,7 +186,7 @@ class GarminSDComms {
       } else {
         // Don't write repeated log entries.
       }
-      if (data.equals("sendSettings")) {
+      if (dataStr.equals("sendSettings")) {
         //System.println("Sending Settings");
         sendSettings();
       } else {
@@ -212,12 +214,12 @@ class GarminSDComms {
       }
     }
     lastOnReceiveResponse = responseCode;
-    lastOnReceiveData = data;
+    lastOnReceiveData = dataStr;
     mDataRequestInProgress = false;
   }
 
   // Receive the response from the sendSettings web request.
-  function onSettingsReceive(responseCode as Number, data as String) as Void {
+  function onSettingsReceive(responseCode as Number, data as Null or Dictionary or String or Toybox.PersistedContent.Iterator) as Void {
     //writeLog("SDComms.onSettingsReceive()", "");
     mSettingsRequestInProgress = false;
   }

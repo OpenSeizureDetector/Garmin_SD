@@ -128,16 +128,16 @@ class GarminSDDataHandler {
 
   // Prints acclerometer data that is recevied from the system
   function accel_callback(sensorData as Toybox.Sensor.SensorData) as Void {
-    //var tagStr = "DataHandler.accel_callback()";
+    var tagStr = "DataHandler.accel_callback()";
     //System.println("accel_callback()");
 
     var iStart = nSamp * SAMPLE_PERIOD * SAMPLE_FREQUENCY;
-    //System.println(format("iStart=$1$, ns=$2$, nSamp=$3$",[iStart,SAMPLE_PERIOD*SAMPLE_FREQUENCY,nSamp]));
+    writeLog(tagStr, format("accel_callback(): iStart=$1$, ns=$2$, nSamp=$3$",[iStart,SAMPLE_PERIOD*SAMPLE_FREQUENCY,nSamp]));
     var accelData = sensorData.accelerometerData;
     if ((accelData as Sensor.AccelerometerData).x.size() != SAMPLE_PERIOD * SAMPLE_FREQUENCY or
       (accelData as Sensor.AccelerometerData).y.size() != SAMPLE_PERIOD * SAMPLE_FREQUENCY or
       (accelData as Sensor.AccelerometerData).z.size() != SAMPLE_PERIOD * SAMPLE_FREQUENCY) {
-      writeLog("accel_callback()","Invalid amount of event in accel callback.");
+      writeLog(tagStr,"Invalid amount of event in accel callback.");
       for (var i = 0; i < SAMPLE_PERIOD * SAMPLE_FREQUENCY; i = i + 1) {
         mSamplesX[iStart + i] = 0;
         mSamplesY[iStart + i] = 0;
@@ -155,17 +155,17 @@ class GarminSDDataHandler {
 
     // It should never be above analysis period, but in case it happens, greater would prevent infinite loop.
     if (nSamp * SAMPLE_PERIOD >= ANALYSIS_PERIOD) {
-      //System.println("Doing Analysis....");
+      writeLog(tagStr,"getting Heart Rate....");
       mHR = Sensor.getInfo().heartRate;
       if ((Sensor.getInfo() has :oxygenSaturation) && (mO2SensorIsEnabled == true)) {
-        //writeLog(tagStr,"reading o2sat value ");
+        writeLog(tagStr,"reading o2sat value ");
         mO2sat = Sensor.getInfo().oxygenSaturation;
       } else {
-        //writeLog(tagStr,"setting mO2sat to zero");
+        writeLog(tagStr,"setting mO2sat to zero");
         mO2sat = 0;
       }
       nSamp = 0;
-      writeLog("DataHandler.accelCallback()","Sending accel Data");
+      writeLog(tagStr,"Sending accel Data");
       mComms.sendAccelData();
     }
   }
