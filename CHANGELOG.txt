@@ -1,8 +1,10 @@
 GarminSD CHANGELOG
 ==================
-v2.0.8 - 30jul2025
+v2.0.9 - 03jun26
 	- Changed function signatures so it compiles on the latest sdk (9.1.0)
-
+	- Tidied up dev container for use in vscode
+v2.0.8 - 30jul2025
+    - not published - testing forerunner55 issues
 v2.0.7 - 15sep2024
 	- Added check that we receive the expected amount of data from the accelerometer.  If not,
 	  the data is assumed to be corrupt and set to zero (fixes issue #73)
