@@ -20,6 +20,7 @@ sudo apt-get update && sudo apt-get install -y \
     libxdamage1 \
     libxrandr2 \
     libgbm1 \
+    libusb-1.0-0 \
     libsm6 \
     libice6
 
