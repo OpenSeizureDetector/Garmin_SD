@@ -1,0 +1,20 @@
+{
+  "name": "Garmin Connect IQ Development",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-22.04",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "garmin.monkey-c"
+      ]
+    }
+  },
+  "postCreateCommand": "bash .devcontainer/install_garmin.sh",
+  
+  "containerEnv": {
+    "DISPLAY": "${localEnv:DISPLAY}"
+  },
+  "mounts": [
+    "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.Garmin,target=/home/vscode/.Garmin,type=bind,consistency=cached"
+  ]
+}
