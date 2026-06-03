@@ -41,7 +41,7 @@ Note, this used to be easy until Garmin introduced the SDK manager - now you nee
   * execute ./mb_runner.sh build   (requires the Garmin SDK to be installed).
   * It should generate a GarminSD.prg file.
 
-# Build Instructions (Visual Studio Code)
+# Build Instructions (Visual Studio Code with Garmin SDK pre-installed)
   * Clone this repository
   * Install [Visual Studio Code](https://code.visualstudio.com/), and start it, opening the WatchApp folder of this repository
   * Install the Monkey C extension from within vscode.
@@ -56,6 +56,111 @@ Note, this used to be easy until Garmin introduced the SDK manager - now you nee
   * Check the terminal output - sometimes if the manifest.xml contains a watch which you do not have installed it will fail with an error.
   * If it works, the watch emulator should shart, showing the app running.
   * It will also have produced a GarminSD.prg file.
+
+# VS Code Devcontainer Quick Start (recommended)
+
+Use this workflow if you want a reproducible Linux build + emulator environment directly in VS Code.
+
+## 1) Open in Dev Container
+  * Open this repository in VS Code.
+  * Run: `Dev Containers: Reopen in Container`.
+  * Wait for post-create setup to finish (it runs `.devcontainer/install_garmin.sh`).
+  * When you see `Done. Press any key to close the terminal`, close that terminal.
+  * Open a fresh container terminal: `Terminal -> New Terminal`.
+
+## 2) Install SDK and emulator devices with Garmin SDK Manager
+  * Start the SDK manager from the container terminal:
+    * `~/sdkmanager/sdkmanager`
+  * In SDK Manager, install:
+    * a Connect IQ SDK version 
+    * at least one emulator device profile (for example VenuSQ)
+
+## 3) Configure project files and signing key
+  * Create working config files from templates:
+    * `cp monkey.jungle.template monkey.jungle`
+    * `cp manifest.xml.template manifest.xml`
+    * `cp mb_runner.cfg.template mb_runner.cfg`
+  * You need one developer private key for signing.
+  * Typical key filenames you may already have are:
+    * `developer_key`
+    * `developer_key.der`
+    * `garmin_key.der`
+  * If you need to generate a new key:
+    * Open Command Palette (ctrl-shift-p) and run `Monkey C: Generate a Developer Key`.
+    * This usually creates a file named `developer_key` (no extension) unless you choose a different filename.
+  * If you already have a key file:
+    * Configure VS Code to use it in `monkeyC.developerKeyPath` (User or Workspace settings, such as .vscode/settings.json).
+    * Example value: `/workspaces/Garmin_SD/garmin_key.der` (inside this repo) or your own absolute path.
+  * For terminal/script builds (`./mb_runner.sh`), also set `MB_PRIVATE_KEY` in your shell session:
+    * `export MB_PRIVATE_KEY="/workspaces/Garmin_SD/garmin_key.der"`
+
+### Create .vscode/settings.json (if missing)
+If this repository does not already contain `.vscode/settings.json`, create it from VS Code:
+
+  * Open Command Palette (Ctrl+Shift+P).
+  * Run `Preferences: Open Workspace Settings (JSON)`.
+  * VS Code will create `.vscode/settings.json` if it does not exist.
+  * Add your key path, for example:
+
+```json
+{
+  "monkeyC.developerKeyPath": "/workspaces/Garmin_SD/garmin_key.der"
+}
+```
+
+Alternative manual method:
+
+  * Create folder `.vscode` at repository root (if missing).
+  * Create file `.vscode/settings.json`.
+  * Paste the JSON above and update the path for your machine.
+
+### Key Config Notes (important)
+  * VS Code Monkey C launch/build uses `monkeyC.developerKeyPath`.
+  * `mb_runner.sh` uses the `MB_PRIVATE_KEY` environment variable.
+  * If VS Code build output shows `-y undefined`, `monkeyC.developerKeyPath` is not set (or points to a missing file).
+
+## 4) Set MB_HOME to your installed SDK
+The build helper script needs `MB_HOME` to point to one SDK install folder (the folder that contains `bin/monkeyc`).
+
+Example helper command to set `MB_HOME` to the newest installed SDK:
+
+```bash
+export MB_HOME="$(find "$HOME/.Garmin/ConnectIQ/Sdks" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -n 1)"
+echo "MB_HOME=$MB_HOME"
+test -x "$MB_HOME/bin/monkeyc" && echo "monkeyc found"
+```
+
+## 5) Build from terminal
+  * Build app PRG:
+    * `./mb_runner.sh build`
+  * Output file:
+    * `GarminSD.prg` in the repository root.
+
+## 6) Build and run in emulator from VS Code
+This repository already includes a VS Code launch config (`.vscode/launch.json`).
+
+  * Open `Run and Debug` in VS Code.
+  * Select `Run App`.
+  * Press Start (triangle).
+  * Choose your emulator device when prompted.
+  * VS Code will compile and launch in the Garmin emulator.
+
+## 7) Run tests in emulator from VS Code
+  * In `Run and Debug`, select `Run Tests`.
+  * Press Start and choose a device.
+
+## Troubleshooting
+  * `MB_HOME not set!`:
+    * Export `MB_HOME` as shown above.
+  * `MB_PRIVATE_KEY not set!`:
+    * Export `MB_PRIVATE_KEY` to your developer key file.
+  * Compiler called with `-y undefined`:
+    * Set `monkeyC.developerKeyPath` to a valid key file path.
+    * Verify the key file exists and is readable.
+  * SDK manager exists but fails to launch with shared library errors:
+    * Re-run `.devcontainer/install_garmin.sh` or rebuild container so required libs are installed.
+  * Terminal closed after container setup:
+    * This is normal for post-create tasks. Open a new terminal via `Terminal -> New Terminal`.
   
 
 

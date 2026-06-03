@@ -106,13 +106,13 @@ class GarminSDComms {
 
   // Receive the data from the web request - should be a json string
   function onSdStatusReceive(responseCode as Number, data as Null or Dictionary or String or Toybox.PersistedContent.Iterator) as Void {
-    var dataDict = data as Dictionary<String, String>;
     var tagStr = "SDComms.onSdStatusReceive";
+    // FIXME - we could add some nicer guard code to check the return type and contents before using it.
+    var dataDict = data as Dictionary<String, String>;
     // writeLog(tagStr, "ResponseCode="+responseCode);
     if (responseCode == 200) {
       if (responseCode != lastOnSdStatusReceiveResponse) {
         needs_update = true;
-        // writeLog(tagStr, "needs update 1");
         writeLog(tagStr, "Status =" + dataDict.get("alarmPhrase"));
       }
       if (!mAccelHandler.mStatusStr.equals(dataDict.get("alarmPhrase"))){
