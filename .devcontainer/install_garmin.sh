@@ -8,6 +8,7 @@ set -euo pipefail
 sudo apt-get update && sudo apt-get install -y \
     wget \
     unzip \
+    openjdk-17-jre-headless \
     libwebkit2gtk-4.0-37 \
     libgtk-3-0 \
     libnss3 \
@@ -43,6 +44,14 @@ ln -sf ~/sdkmanager/bin/sdkmanager ~/sdkmanager/sdkmanager
 
 # 5. Post-install checks and next-step guidance
 echo "Running post-install checks..."
+
+if ! command -v java >/dev/null 2>&1; then
+    echo "ERROR: Java runtime not found on PATH."
+    echo "Install it with: sudo apt-get update && sudo apt-get install -y openjdk-17-jre-headless"
+    exit 1
+fi
+
+echo "Java runtime check passed: $(java -version 2>&1 | head -n 1)"
 
 if [[ ! -x ~/sdkmanager/bin/sdkmanager ]]; then
     echo "ERROR: ~/sdkmanager/bin/sdkmanager not found or not executable."
