@@ -161,11 +161,80 @@ This repository already includes a VS Code launch config (`.vscode/launch.json`)
     * Re-run `.devcontainer/install_garmin.sh` or rebuild container so required libs are installed.
   * Terminal closed after container setup:
     * This is normal for post-create tasks. Open a new terminal via `Terminal -> New Terminal`.
+
+# Maintainer Release Builds (old/new PRG)
+
+This project is distributed as sideloaded PRG files, not as Connect IQ Store IQ packages.
+
+The maintainer release process is to build two PRG variants:
+
+  * Old variant: target an older device profile such as `fr245`.
+  * New variant: target a newer device profile such as `vivoactive5`.
+
+The repository includes a helper script to do this and copy outputs into `build/`:
+
+  * `scripts/build_release_prgs.sh`
+
+Default command:
+
+```bash
+scripts/build_release_prgs.sh
+```
+
+This builds:
+
+  * `build/GarminSD_old.prg` (default old device target: `fr245`)
+  * `build/GarminSD_new.prg` (default new device target: `vivoactive5`)
+
+You can override device targets:
+
+```bash
+scripts/build_release_prgs.sh fr245 vivoactive5
+```
+
+To test one built PRG across multiple simulator devices:
+
+```bash
+scripts/test_prg_matrix.sh build/GarminSD_old.prg fr245 fr245m fr945
+scripts/test_prg_matrix.sh build/GarminSD_new.prg vivoactive5 fr255 fr965
+```
+
+Prerequisites:
+
+  * Preferred signing key file is `garmin_key.der` in the project root.
+  * If your key is elsewhere, set `MB_PRIVATE_KEY` before running the script.
+
+Defaults used by the script:
+
+  * `MB_HOME`: auto-detected from `~/.Garmin/ConnectIQ/current-sdk.cfg`, then `~/.Garmin/ConnectIQ/Sdks/`.
+  * `MB_PRIVATE_KEY`: defaults to `<project>/garmin_key.der`.
+  * `APP_NAME`: defaults to `GarminSD` (override with `APP_NAME=...` if needed).
+  * `mb_runner.cfg`: generated temporarily by the script (existing file is restored unchanged).
+
+# Which PRG Should a User Install?
+
+Use the watch's Connect IQ version from Garmin's compatible device list:
+
+  * https://developer.garmin.com/connect-iq/compatible-devices/
+
+Install guide for public users:
+
+  * If your watch shows Connect IQ version `2.4`, `3.0`, `3.1`, `3.2`, `3.3`, or `3.4`:
+    * install `GarminSD_old.prg`
+  * If your watch shows Connect IQ version `5.0`, `5.1`, `5.2`, or `6.0`:
+    * install `GarminSD_new.prg`
+
+Examples:
+
+  * Forerunner 245 (CIQ 3.3): use `GarminSD_old.prg`
+  * Forerunner 255 (CIQ 5.2): use `GarminSD_new.prg`
+  * vivoactive 5 (CIQ 5.2): use `GarminSD_new.prg`
+  * fēnix 8 / Forerunner 970 class devices (CIQ 6.0): use `GarminSD_new.prg`
   
 
 
 # Installation Instructions
-  * Copy GarminSD.prg into the folder GARMIN/APS on the watch.   
+  * Copy the selected PRG file (for example `GarminSD_old.prg` or `GarminSD_new.prg`) into the folder GARMIN/APS on the watch.   
   * GarminSD should appear as an app on the watch (like Running, Bike etc.).
   * To be able to see the debug output, create an empty file GARMIN/APPS/LOGS/GarminSD.Log - this file will be populated when the app runs.
 

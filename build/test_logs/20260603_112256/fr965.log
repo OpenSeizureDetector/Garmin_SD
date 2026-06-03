@@ -1,0 +1,14 @@
+11:24:25 : GarminSdApp.initialize : 
+GarminSdState.initialize
+11:24:25 : GarminSDApp.onStart() : State= null
+11:24:25 : GarminSDApp.getInitialView : 
+11:24:25 : GarminSDView.initialize() : 
+11:24:25 : DataHandler.initialize() : 
+11:24:25 : GarminSDView.initialize() : Complete
+11:24:25 : SdDelegate.initialize() : 
+GarminSdState.setMode - mMode=0
+11:24:25 : GarminSDView.on_layout() : Start accelHandler
+11:24:25 : DataHandler.onStart() : maxSampleRate = 50
+11:24:25 : DataHandler.onStart() : Registered for Accelerometer Data
+11:24:25 : DataHandler.onStart() : mO2SensorIsEnabled = true
+11:24:25 : DataHandler.onStart() : Enabling HR only
