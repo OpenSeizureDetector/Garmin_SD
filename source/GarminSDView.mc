@@ -157,9 +157,20 @@ class GarminSDView extends Ui.View {
       sysStats.battery.format("%02.0f"),
     ]);
 
-    dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_WHITE);
+    var bg;
+    var fg;
+    var invertColors = Toybox.Application.Storage.getValue(MENUITEM_INVERTCOLORS);
+    if (invertColors == null || (invertColors ? false : true)) {
+        fg = Gfx.COLOR_BLACK;
+        bg = Gfx.COLOR_WHITE;
+    } else {
+        fg = Gfx.COLOR_WHITE;
+        bg = Gfx.COLOR_BLACK;
+    }
+
+    dc.setColor(fg, bg);
     dc.clear();
-    dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
+    dc.setColor(fg, Gfx.COLOR_TRANSPARENT);
     dc.drawText(
       halfWidth,
       0,
@@ -250,6 +261,9 @@ class SdDelegate extends Ui.BehaviorDelegate {
     }
     if (Storage.getValue(MENUITEM_O2SENSOR) == null) {
       Storage.setValue(MENUITEM_O2SENSOR, 1);
+    }
+    if (Storage.getValue(MENUITEM_INVERTCOLORS) == null) {
+      Storage.setValue(MENUITEM_INVERTCOLORS, 0);
     }
 
     BehaviorDelegate.initialize();
@@ -342,6 +356,17 @@ class SdDelegate extends Ui.BehaviorDelegate {
         Ui.loadResource(Rez.Strings.BenMode_title).toString(),
         Ui.loadResource(Rez.Strings.BenMode_desc).toString(),
         MENUITEM_BENMODE,
+        boolean,
+        null
+      )
+    );
+
+    boolean = Storage.getValue(MENUITEM_INVERTCOLORS) ? true : false;
+    menu.addItem(
+      new Ui.ToggleMenuItem(
+        Ui.loadResource(Rez.Strings.Invert_colors_title).toString(),
+        Ui.loadResource(Rez.Strings.Invert_colors_desc).toString(),
+        MENUITEM_INVERTCOLORS,
         boolean,
         null
       )
@@ -444,5 +469,16 @@ class GarminSDSettingsMenuDelegate extends Ui.Menu2InputDelegate {
         writeLog("menuDelegate.onSelect()", "id=" + menuItem.getId());
         Storage.setValue(menuItem.getId() as Lang.Number, menuItem.isEnabled());
     }
+  }
+  
+  //! Handle the back button being pressed to exit the menu
+  public function onBack() as Void {
+    writeLog("menuDelegate.onBack()", "Exiting menu, requesting screen update.");
+
+    // 1. Close current menu (this removes the Menu View from the stack)
+    Ui.popView(Ui.SLIDE_IMMEDIATE);
+
+    // 2. Force the underlying main screen to immediately redraw with the new colors
+    Ui.requestUpdate();
   }
 }
