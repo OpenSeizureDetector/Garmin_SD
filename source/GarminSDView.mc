@@ -157,15 +157,33 @@ class GarminSDView extends Ui.View {
       sysStats.battery.format("%02.0f"),
     ]);
 
+    // 1. Fetch the user's toggle state
+    var invertColors = Toybox.Application.Storage.getValue(MENUITEM_INVERTCOLORS) ? true : false;
+    
+    // 2. Detect if the device has an AMOLED screen
+    var deviceSettings = System.getDeviceSettings();
+    var isAmoled = false;
+    if (deviceSettings has :requiresBurnInProtection) {
+        isAmoled = deviceSettings.requiresBurnInProtection;
+    }
+
+    // 3. Establish the base layout (AMOLED wants Black background by default)
+    var useBlackBackground = isAmoled;
+
+    // 4. If the user turned on the toggle, invert the hardware choice
+    if (invertColors) {
+        useBlackBackground = !useBlackBackground;
+    }
+
+    // 4. Assign the colors based on the final decision
     var bg;
     var fg;
-    var invertColors = Toybox.Application.Storage.getValue(MENUITEM_INVERTCOLORS);
-    if (invertColors == null || (invertColors ? false : true)) {
-        fg = Gfx.COLOR_BLACK;
-        bg = Gfx.COLOR_WHITE;
-    } else {
-        fg = Gfx.COLOR_WHITE;
+    if (useBlackBackground) {
+        fg = Gfx.COLOR_WHITE; // System Red Shift handles this automatically
         bg = Gfx.COLOR_BLACK;
+    } else {
+        fg = Gfx.COLOR_BLACK;
+        bg = Gfx.COLOR_WHITE; // System Red Shift handles this automatically
     }
 
     dc.setColor(fg, bg);
