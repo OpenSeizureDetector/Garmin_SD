@@ -24,4 +24,6 @@
   <string id="Low_data_desc">Minimise data transmission to phone</string>
   <string id="O2_sensor_title">O2 Sensor Enabled</string>
   <string id="O2_sensor_desc">Enable / disable O2 sensor</string>
+  <string id="Invert_colors_title">Invert Colors</string>
+  <string id="Invert_colors_desc">Enable / disable color inversion</string>
 </resources>
